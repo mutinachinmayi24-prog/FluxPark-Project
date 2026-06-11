@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - FluxPark{% endblock %}
+
+{% block content %}
+  {% set name = role_profile.data.get('name') or role_profile.data.get('tenant_name')
+                 or role_profile.data.get('head_name') or role_profile.data.get('employee_name') %}
+  <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-4">
+    <div>
+      <h3 class="fw-bold mb-1">Welcome{% if name %}, {{ name }}{% endif %}!</h3>
+      <p class="text-muted mb-0">
+        {{ property.name }}{% if sub_room %} &mdash; {{ sub_room.company_name }}{% endif %}
+        &middot; {{ property.address }}
+      </p>
+    </div>
+    <span class="badge bg-brand fs-6 text-capitalize px-3 py-2">{{ role_profile.role }}</span>
+  </div>
+
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+      <h5 class="card-title">
+        <i class="bi bi-check-circle-fill text-success me-1"></i> You're all set!
+      </h5>
+      <p class="card-text text-muted mb-0">
+        Your account has been created and linked to <strong>{{ property.name }}</strong> as
+        <strong class="text-capitalize">{{ role_profile.role }}</strong>. The full dashboard
+        &mdash; live parking availability, visitor approvals, QR-based access, and reports &mdash;
+        is on its way in the next phase.
+      </p>
+    </div>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-md-6">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <h6 class="text-muted text-uppercase small mb-3">Property</h6>
+          <p class="mb-1"><i class="bi bi-buildings me-2 text-brand"></i>{{ property.name }}</p>
+          <p class="mb-1"><i class="bi bi-geo-alt me-2 text-brand"></i>{{ property.address }}</p>
+          <p class="mb-0 text-capitalize"><i class="bi bi-tag me-2 text-brand"></i>{{ property.property_type.replace('_', ' ') }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <h6 class="text-muted text-uppercase small mb-3">Your Role</h6>
+          <p class="mb-1 text-capitalize"><i class="bi bi-person-badge me-2 text-brand"></i>{{ role_profile.role }}</p>
+          {% if sub_room %}
+            <p class="mb-1"><i class="bi bi-building me-2 text-brand"></i>{{ sub_room.company_name }}</p>
+          {% endif %}
+          <a href="{{ url_for('my_profile') }}" class="btn btn-sm btn-outline-brand mt-2">
+            <i class="bi bi-person-circle me-1"></i> View My Profile
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

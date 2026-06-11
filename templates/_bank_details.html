@@ -1,0 +1,23 @@
+<div class="section-title">Bank Account Details</div>
+<div class="row g-3">
+  <div class="col-md-6">
+    <label for="bank_name" class="form-label">Bank Name</label>
+    <input type="text" class="form-control" id="bank_name" name="bank_name" value="{{ form_data.get('bank_name', '') }}" required>
+  </div>
+  <div class="col-md-6">
+    <label for="branch" class="form-label">Bank Branch</label>
+    <input type="text" class="form-control" id="branch" name="branch" value="{{ form_data.get('branch', '') }}" required>
+  </div>
+  <div class="col-md-6">
+    <label for="ifsc_code" class="form-label">IFSC Code</label>
+    <input type="text" class="form-control text-uppercase" id="ifsc_code" name="ifsc_code" value="{{ form_data.get('ifsc_code', '') }}" required>
+  </div>
+  <div class="col-md-6">
+    <label for="account_number" class="form-label">Account Number</label>
+    <input type="text" class="form-control" id="account_number" name="account_number" value="{{ form_data.get('account_number', '') }}" required>
+  </div>
+  <div class="col-md-6">
+    <label for="expiry_date" class="form-label">Expiry Date</label>
+    <input type="month" class="form-control" id="expiry_date" name="expiry_date" value="{{ form_data.get('expiry_date', '') }}" required>
+  </div>
+</div>

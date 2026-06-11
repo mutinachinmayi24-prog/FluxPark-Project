@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Create Property - FluxPark{% endblock %}
+{% block card_size %}auth-card-wide{% endblock %}
+
+{% block content %}
+  <h5 class="fw-semibold mb-1">Let's set up your property</h5>
+  <p class="text-muted">Choose the type of property you'd like to create.</p>
+
+  <form method="POST">
+    <div class="row g-3 mb-4">
+      {% set icons = {"apartment": "bi-building", "gated_community": "bi-houses", "office": "bi-briefcase"} %}
+      {% for value, label in property_types %}
+        <div class="col-12 col-md-4">
+          <input type="radio" class="btn-check" name="property_type" id="pt_{{ value }}" value="{{ value }}" autocomplete="off" required>
+          <label class="option-card card text-center p-4 w-100" for="pt_{{ value }}">
+            <i class="bi {{ icons[value] }}"></i>
+            <div class="fw-semibold mt-2">{{ label }}</div>
+          </label>
+        </div>
+      {% endfor %}
+    </div>
+
+    <button type="submit" class="btn btn-brand btn-lg w-100">
+      <i class="bi bi-arrow-right-circle me-1"></i> Continue
+    </button>
+  </form>
+{% endblock %}

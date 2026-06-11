@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Security Details - FluxPark{% endblock %}
+
+{% block content %}
+  <h5 class="fw-semibold mb-1">Security Details</h5>
+  <p class="text-muted">{{ property.name }}{% if sub_room %} &mdash; {{ sub_room.company_name }}{% endif %}</p>
+
+  <form method="POST">
+    <div class="row g-3">
+      <div class="col-12">
+        <label for="name" class="form-label">Name</label>
+        <input type="text" class="form-control" id="name" name="name" value="{{ form_data.get('name', '') }}" required>
+      </div>
+      <div class="col-12">
+        <label for="phone" class="form-label">Phone Number</label>
+        <input type="tel" class="form-control" id="phone" name="phone" pattern="[6-9][0-9]{9}" maxlength="10" value="{{ form_data.get('phone', '') }}" required>
+      </div>
+      <div class="col-md-6">
+        <label for="shift_from" class="form-label">Shift Timing &mdash; From</label>
+        <input type="time" class="form-control" id="shift_from" name="shift_from" value="{{ form_data.get('shift_from', '') }}" required>
+      </div>
+      <div class="col-md-6">
+        <label for="shift_to" class="form-label">Shift Timing &mdash; To</label>
+        <input type="time" class="form-control" id="shift_to" name="shift_to" value="{{ form_data.get('shift_to', '') }}" required>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-brand btn-lg w-100 mt-4">
+      <i class="bi bi-box-arrow-in-right me-1"></i> Enter Room
+    </button>
+  </form>
+{% endblock %}

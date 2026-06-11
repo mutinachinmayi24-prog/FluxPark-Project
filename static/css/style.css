@@ -1,0 +1,171 @@
+:root {
+  --fp-primary: #4f46e5;
+  --fp-primary-dark: #3730a3;
+  --fp-accent: #06b6d4;
+  --fp-bg: #f1f5f9;
+}
+
+body {
+  background-color: var(--fp-bg);
+  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Brand helpers */
+/* ---------------------------------------------------------------------- */
+
+.bg-brand {
+  background: linear-gradient(180deg, var(--fp-primary) 0%, var(--fp-primary-dark) 100%);
+}
+
+.text-brand {
+  color: var(--fp-primary);
+}
+
+.btn-brand {
+  background-color: var(--fp-primary);
+  border-color: var(--fp-primary);
+  color: #fff;
+}
+
+.btn-brand:hover,
+.btn-brand:focus {
+  background-color: var(--fp-primary-dark);
+  border-color: var(--fp-primary-dark);
+  color: #fff;
+}
+
+.btn-outline-brand {
+  border-color: var(--fp-primary);
+  color: var(--fp-primary);
+}
+
+.btn-outline-brand:hover {
+  background-color: var(--fp-primary);
+  color: #fff;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Auth / form pages */
+/* ---------------------------------------------------------------------- */
+
+.auth-wrapper {
+  background: linear-gradient(135deg, #eef2ff 0%, #e0f2fe 100%);
+  padding: 1rem;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 480px;
+  border-radius: 1rem;
+}
+
+.auth-card.auth-card-wide {
+  max-width: 960px;
+}
+
+.auth-card.auth-card-xwide {
+  max-width: 1140px;
+}
+
+.option-card {
+  cursor: pointer;
+  border: 2px solid #e2e8f0;
+  border-radius: 0.75rem;
+  transition: all 0.15s ease-in-out;
+  height: 100%;
+}
+
+.option-card:hover {
+  border-color: var(--fp-primary);
+  box-shadow: 0 0.25rem 0.75rem rgba(79, 70, 229, 0.1);
+}
+
+.option-card.selected,
+.option-card input:checked ~ .option-card-body,
+input:checked + .option-card {
+  border-color: var(--fp-primary);
+  background-color: #eef2ff;
+}
+
+.option-card .bi {
+  font-size: 2rem;
+  color: var(--fp-primary);
+}
+
+.contact-toggle .btn-check:checked + .btn {
+  background-color: var(--fp-primary);
+  border-color: var(--fp-primary);
+  color: #fff;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Sidebar layout (dashboard / profile) */
+/* ---------------------------------------------------------------------- */
+
+.sidebar {
+  width: 250px;
+  min-height: 100vh;
+}
+
+.sidebar .nav-link {
+  border-radius: 0.5rem;
+  font-weight: 500;
+}
+
+.sidebar .nav-link.active {
+  background-color: rgba(255, 255, 255, 0.18);
+}
+
+.sidebar .nav-link:hover:not(.active) {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.main-content {
+  min-height: 100vh;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Dynamic tables (vehicles / companies) */
+/* ---------------------------------------------------------------------- */
+
+.dynamic-table th {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #64748b;
+  white-space: nowrap;
+}
+
+.dynamic-table td {
+  vertical-align: middle;
+}
+
+.invite-link-box {
+  background-color: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  word-break: break-all;
+  font-size: 0.9rem;
+}
+
+.section-title {
+  font-weight: 600;
+  color: var(--fp-primary-dark);
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 0.4rem;
+  margin-bottom: 1rem;
+  margin-top: 1.5rem;
+}
+
+.section-title:first-of-type {
+  margin-top: 0;
+}
+
+@media (max-width: 767.98px) {
+  .auth-card.auth-card-wide,
+  .auth-card.auth-card-xwide {
+    max-width: 100%;
+  }
+}

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Committee Details - FluxPark{% endblock %}
+{% block card_size %}auth-card-wide{% endblock %}
+
+{% block content %}
+  <h5 class="fw-semibold mb-1">Committee Details</h5>
+  <p class="text-muted">{{ property.name }}</p>
+
+  <form method="POST">
+    <div class="section-title">Committee Head Details</div>
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label for="head_name" class="form-label">Committee Head Name</label>
+        <input type="text" class="form-control" id="head_name" name="head_name" value="{{ form_data.get('head_name', '') }}" required>
+      </div>
+      <div class="col-md-6">
+        <label for="head_phone" class="form-label">Committee Head Phone Number</label>
+        <input type="tel" class="form-control" id="head_phone" name="head_phone" pattern="[6-9][0-9]{9}" maxlength="10" value="{{ form_data.get('head_phone', '') }}" required>
+      </div>
+      <div class="col-md-4">
+        <label for="head_flat_no" class="form-label">Committee Head Flat No.</label>
+        <input type="text" class="form-control" id="head_flat_no" name="head_flat_no" value="{{ form_data.get('head_flat_no', '') }}" required>
+      </div>
+      <div class="col-md-4">
+        <label for="num_parking_slots" class="form-label">No. of Parking Slots</label>
+        <input type="number" min="0" class="form-control" id="num_parking_slots" name="num_parking_slots" value="{{ form_data.get('num_parking_slots', '') }}" required>
+      </div>
+      <div class="col-md-4">
+        <label for="parking_space_number" class="form-label">Parking Space Number</label>
+        <input type="text" class="form-control" id="parking_space_number" name="parking_space_number" value="{{ form_data.get('parking_space_number', '') }}" required>
+      </div>
+    </div>
+
+    {% include "_vehicle_table.html" %}
+
+    <div class="section-title">Commission</div>
+    <div class="row g-3">
+      <div class="col-md-4">
+        <label for="commission_percent" class="form-label">Commission %</label>
+        <div class="input-group">
+          <input type="number" min="0" max="100" step="0.1" class="form-control" id="commission_percent" name="commission_percent" value="{{ form_data.get('commission_percent', '') }}" required>
+          <span class="input-group-text">%</span>
+        </div>
+        <div class="form-text">
+          Charged on top of every parking transaction. e.g. if the rent is &#8377;50/hr and this is 5%, visitors pay &#8377;52.5/hr &mdash; the &#8377;2.5 difference goes to this account.
+        </div>
+      </div>
+    </div>
+
+    {% include "_bank_details.html" %}
+
+    <button type="submit" class="btn btn-brand btn-lg w-100 mt-4">
+      <i class="bi bi-box-arrow-in-right me-1"></i> Enter Room
+    </button>
+  </form>
+{% endblock %}

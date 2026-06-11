@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% block title %}My Profile - FluxPark{% endblock %}
+
+{% macro field(label, value) %}
+  <div class="col-sm-6 col-lg-4">
+    <div class="text-muted small">{{ label }}</div>
+    <div class="fw-semibold mb-3">{{ value if value not in (None, "") else "—" }}</div>
+  </div>
+{% endmacro %}
+
+{% block content %}
+  {% set d = role_profile.data %}
+  <h3 class="fw-bold mb-1">My Profile</h3>
+  <p class="text-muted mb-4">
+    {{ property.name }}{% if sub_room %} &mdash; {{ sub_room.company_name }}{% endif %}
+    &middot; <span class="text-capitalize">{{ role_profile.role }}</span>
+  </p>
+
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+      <h6 class="section-title">Details</h6>
+      <div class="row">
+        {% if role_profile.role == 'owner' %}
+          {{ field("Name", d.name) }}
+          {{ field("Phone Number", d.phone) }}
+          {{ field("Flat No.", d.flat_no) }}
+          {{ field("No. of Parking Slots", d.num_parking_slots) }}
+          {{ field("Parking Space Number", d.parking_space_number) }}
+        {% elif role_profile.role == 'tenant' %}
+          {{ field("Owner Name", d.owner_name) }}
+          {{ field("Owner Phone Number", d.owner_phone) }}
+          {{ field("Tenant Name", d.tenant_name) }}
+          {{ field("Tenant Phone Number", d.tenant_phone) }}
+          {{ field("Flat No.", d.flat_no) }}
+          {{ field("No. of Parking Slots", d.num_parking_slots) }}
+          {{ field("Parking Space Number", d.parking_space_number) }}
+        {% elif role_profile.role == 'committee' %}
+          {{ field("Committee Head Name", d.head_name) }}
+          {{ field("Committee Head Phone Number", d.head_phone) }}
+          {{ field("Committee Head Flat No.", d.head_flat_no) }}
+          {{ field("No. of Parking Slots", d.num_parking_slots) }}
+          {{ field("Parking Space Number", d.parking_space_number) }}
+          {{ field("Commission %", role_profile.bank_detail.commission_percent ~ '%' if role_profile.bank_detail else None) }}
+        {% elif role_profile.role == 'security' %}
+          {{ field("Name", d.name) }}
+          {{ field("Phone Number", d.phone) }}
+        {% elif role_profile.role in ('employee', 'manager') %}
+          {{ field("Employee Name", d.employee_name) }}
+          {{ field("Employee ID", d.employee_id) }}
+          {{ field("Employee Address", d.employee_address) }}
+        {% endif %}
+      </div>
+
+      {% if role_profile.vehicles %}
+        <h6 class="section-title">Vehicles</h6>
+        <div class="table-responsive">
+          <table class="table table-sm align-middle">
+            <thead>
+              <tr><th>S.No</th><th>Vehicle Type</th><th>Vehicle Number</th></tr>
+            </thead>
+            <tbody>
+              {% for v in role_profile.vehicles %}
+                <tr><td>{{ v.s_no }}</td><td>{{ v.vehicle_type }}</td><td>{{ v.vehicle_number }}</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% endif %}
+
+      {% if role_profile.role in ('owner', 'tenant', 'committee') and role_profile.bank_detail %}
+        <h6 class="section-title">Bank Account Details</h6>
+        <div class="row">
+          {{ field("Bank Name", role_profile.bank_detail.bank_name) }}
+          {{ field("Bank Branch", role_profile.bank_detail.branch) }}
+          {{ field("IFSC Code", role_profile.bank_detail.ifsc_code) }}
+          {{ field("Account Number", role_profile.bank_detail.account_number) }}
+          {{ field("Expiry Date", role_profile.bank_detail.expiry_date) }}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if role_profile.role in ('security', 'employee', 'manager') %}
+    <form method="POST">
+      <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+          <h6 class="section-title">Shift Timing <span class="badge bg-secondary fw-normal">editable</span></h6>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="shift_from" class="form-label">From</label>
+              <input type="time" class="form-control" id="shift_from" name="shift_from" value="{{ d.shift_from }}" required>
+            </div>
+            <div class="col-md-6">
+              <label for="shift_to" class="form-label">To</label>
+              <input type="time" class="form-control" id="shift_to" name="shift_to" value="{{ d.shift_to }}" required>
+            </div>
+          </div>
+
+          {% if role_profile.role in ('employee', 'manager') %}
+            <h6 class="section-title">Commute</h6>
+            {% if d.transport == 'self' %}
+              <div class="row g-3 mb-2" id="self-transport-fields">
+                <div class="col-md-6">
+                  <label for="vehicle_type" class="form-label">Vehicle Type <span class="badge bg-secondary fw-normal">editable</span></label>
+                  <select class="form-select" id="vehicle_type" name="vehicle_type">
+                    {% for vt in vehicle_types %}
+                      <option value="{{ vt }}" {% if d.vehicle_type == vt %}selected{% endif %}>{{ vt }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label for="vehicle_number" class="form-label">Vehicle Number <span class="badge bg-secondary fw-normal">editable</span></label>
+                  <input type="text" class="form-control text-uppercase" id="vehicle_number" name="vehicle_number" value="{{ d.vehicle_number }}">
+                </div>
+              </div>
+            {% else %}
+              <p class="mb-0"><i class="bi bi-taxi-front me-2 text-brand"></i>Commutes by Cab</p>
+            {% endif %}
+          {% endif %}
+
+          {% if role_profile.role == 'manager' and role_profile.bank_detail %}
+            <h6 class="section-title">Bank Account Details <span class="badge bg-secondary fw-normal">editable</span></h6>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="bank_name" class="form-label">Bank Name</label>
+                <input type="text" class="form-control" id="bank_name" name="bank_name" value="{{ role_profile.bank_detail.bank_name }}" required>
+              </div>
+              <div class="col-md-6">
+                <label for="branch" class="form-label">Bank Branch</label>
+                <input type="text" class="form-control" id="branch" name="branch" value="{{ role_profile.bank_detail.branch }}" required>
+              </div>
+              <div class="col-md-6">
+                <label for="ifsc_code" class="form-label">IFSC Code</label>
+                <input type="text" class="form-control text-uppercase" id="ifsc_code" name="ifsc_code" value="{{ role_profile.bank_detail.ifsc_code }}" required>
+              </div>
+              <div class="col-md-6">
+                <label for="account_number" class="form-label">Account Number</label>
+                <input type="text" class="form-control" id="account_number" name="account_number" value="{{ role_profile.bank_detail.account_number }}" required>
+              </div>
+              <div class="col-md-6">
+                <label for="expiry_date" class="form-label">Expiry Date</label>
+                <input type="month" class="form-control" id="expiry_date" name="expiry_date" value="{{ role_profile.bank_detail.expiry_date }}" required>
+              </div>
+              <div class="col-md-6">
+                <label for="rent_per_hour" class="form-label">Rent of a Parking Slot per Hour</label>
+                <div class="input-group">
+                  <span class="input-group-text">&#8377;</span>
+                  <input type="number" min="0" step="0.5" class="form-control" id="rent_per_hour" name="rent_per_hour" value="{{ role_profile.bank_detail.rent_per_hour }}" required>
+                  <span class="input-group-text">/ hr</span>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+
+          <button type="submit" class="btn btn-brand mt-3">
+            <i class="bi bi-save me-1"></i> Save Changes
+          </button>
+        </div>
+      </div>
+    </form>
+  {% endif %}
+{% endblock %}

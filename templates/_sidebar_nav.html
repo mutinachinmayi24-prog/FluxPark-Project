@@ -1,0 +1,21 @@
+<a href="{{ url_for('dashboard') }}" class="d-flex align-items-center mb-3 text-white text-decoration-none">
+  <i class="bi bi-p-circle-fill fs-3 me-2"></i>
+  <span class="fs-4 fw-bold">FluxPark</span>
+</a>
+<hr class="text-white-50">
+<ul class="nav nav-pills flex-column mb-auto gap-1">
+  <li class="nav-item">
+    <a href="{{ url_for('dashboard') }}" class="nav-link text-white {% if request.endpoint == 'dashboard' %}active{% endif %}">
+      <i class="bi bi-speedometer2 me-2"></i> Dashboard
+    </a>
+  </li>
+  <li class="nav-item">
+    <a href="{{ url_for('my_profile') }}" class="nav-link text-white {% if request.endpoint == 'my_profile' %}active{% endif %}">
+      <i class="bi bi-person-circle me-2"></i> My Profile
+    </a>
+  </li>
+</ul>
+<hr class="text-white-50">
+<a href="{{ url_for('logout') }}" class="nav-link text-white">
+  <i class="bi bi-box-arrow-right me-2"></i> Logout
+</a>

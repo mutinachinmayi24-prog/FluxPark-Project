@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Owner Details - FluxPark{% endblock %}
+{% block card_size %}auth-card-wide{% endblock %}
+
+{% block content %}
+  <h5 class="fw-semibold mb-1">Owner Details</h5>
+  <p class="text-muted">{{ property.name }}</p>
+
+  <form method="POST">
+    <div class="section-title">Personal Details</div>
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label for="name" class="form-label">Name</label>
+        <input type="text" class="form-control" id="name" name="name" value="{{ form_data.get('name', '') }}" required>
+      </div>
+      <div class="col-md-6">
+        <label for="phone" class="form-label">Phone Number</label>
+        <input type="tel" class="form-control" id="phone" name="phone" pattern="[6-9][0-9]{9}" maxlength="10" value="{{ form_data.get('phone', '') }}" required>
+      </div>
+      <div class="col-md-4">
+        <label for="flat_no" class="form-label">Flat No.</label>
+        <input type="text" class="form-control" id="flat_no" name="flat_no" value="{{ form_data.get('flat_no', '') }}" required>
+      </div>
+      <div class="col-md-4">
+        <label for="num_parking_slots" class="form-label">No. of Parking Slots</label>
+        <input type="number" min="0" class="form-control" id="num_parking_slots" name="num_parking_slots" value="{{ form_data.get('num_parking_slots', '') }}" required>
+      </div>
+      <div class="col-md-4">
+        <label for="parking_space_number" class="form-label">Parking Space Number</label>
+        <input type="text" class="form-control" id="parking_space_number" name="parking_space_number" value="{{ form_data.get('parking_space_number', '') }}" required>
+      </div>
+    </div>
+
+    {% include "_vehicle_table.html" %}
+    {% include "_bank_details.html" %}
+
+    <button type="submit" class="btn btn-brand btn-lg w-100 mt-4">
+      <i class="bi bi-box-arrow-in-right me-1"></i> Enter Room
+    </button>
+  </form>
+{% endblock %}
