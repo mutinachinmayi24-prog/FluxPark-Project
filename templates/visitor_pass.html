@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <div class="card shadow">
+
+        <div class="card-body">
+
+            <h2>Visitor Pass Generated</h2>
+
+            <hr>
+
+            <p>
+                <strong>Name:</strong>
+                {{ visitor.visitor_name }}
+            </p>
+
+            <p>
+                <strong>Phone:</strong>
+                {{ visitor.phone }}
+            </p>
+
+            <p>
+                <strong>Vehicle:</strong>
+                {{ visitor.vehicle_number }}
+            </p>
+
+            <p>
+                <strong>Status:</strong>
+                {{ visitor.status }}
+            </p>
+
+            <p>
+                <strong>QR Code:</strong>
+            </p>
+
+            <img
+                src="{{ url_for('static', filename='qr/' + visitor.qr_code) }}"
+                width="250"
+            >
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

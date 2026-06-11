@@ -7,67 +7,63 @@
 <div class="row mt-4">
 
     <div class="col-md-3">
-
         <div class="card shadow">
-
             <div class="card-body">
-
                 <h5>Total Members</h5>
-
                 <h2>{{ total_members }}</h2>
-
             </div>
-
         </div>
-
     </div>
 
     <div class="col-md-3">
-
         <div class="card shadow">
-
             <div class="card-body">
-
                 <h5>Visitors</h5>
-
-                <h2>0</h2>
-
+                <h2>{{ total_visitors }}</h2>
             </div>
-
         </div>
-
     </div>
 
     <div class="col-md-3">
-
         <div class="card shadow">
-
             <div class="card-body">
-
                 <h5>Parking Slots</h5>
-
-                <h2>0</h2>
-
+                <h2>{{ total_parking }}</h2>
             </div>
-
         </div>
-
     </div>
 
     <div class="col-md-3">
-
         <div class="card shadow">
-
             <div class="card-body">
-
                 <h5>Requests</h5>
-
-                <h2>0</h2>
-
+                <h2>{{ total_visitors }}</h2>
             </div>
-
         </div>
+    </div>
 
+</div>
+
+<hr class="my-4">
+
+<div class="row">
+
+    <div class="col-md-4">
+        <a href="/create-visitor" class="btn btn-primary w-100">
+            Create Visitor Request
+        </a>
+    </div>
+
+    <div class="col-md-4">
+        <a href="/parking-availability" class="btn btn-success w-100">
+            Generate Parking Slot
+        </a>
+    </div>
+
+    <div class="col-md-4">
+        <a href="/visitor-list" class="btn btn-warning w-100">
+            View Visitor Requests
+        </a>
     </div>
 
 </div>

@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+
+    <h2 class="mb-4">
+        Generate Parking Slot
+    </h2>
+
+    <form action="/save-parking" method="POST">
+
+        <div class="mb-3">
+            <label class="form-label">
+                Owner Name
+            </label>
+
+            <input
+                type="text"
+                name="owner_name"
+                class="form-control"
+                required
+            >
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">
+                Flat Number
+            </label>
+
+            <input
+                type="text"
+                name="flat_no"
+                class="form-control"
+                required
+            >
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">
+                Parking Slot Number
+            </label>
+
+            <input
+                type="text"
+                name="slot_number"
+                class="form-control"
+                required
+            >
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">
+                Date
+            </label>
+
+            <input
+                type="date"
+                name="available_date"
+                class="form-control"
+                required
+            >
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">
+                From Time
+            </label>
+
+            <input
+                type="time"
+                name="from_time"
+                class="form-control"
+                required
+            >
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">
+                To Time
+            </label>
+
+            <input
+                type="time"
+                name="to_time"
+                class="form-control"
+                required
+            >
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">
+                Rent Per Hour
+            </label>
+
+            <input
+                type="number"
+                name="rent_per_hour"
+                class="form-control"
+                required
+            >
+        </div>
+
+        <button
+            type="submit"
+            class="btn btn-success"
+        >
+            Generate Parking Slot
+        </button>
+
+    </form>
+
+</div>
+
+{% endblock %}
