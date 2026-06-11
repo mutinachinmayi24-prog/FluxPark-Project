@@ -4,16 +4,16 @@
 </a>
 <hr class="text-white-50">
 <ul class="nav nav-pills flex-column mb-auto gap-1">
-  <li class="nav-item">
-    <a href="{{ url_for('dashboard') }}" class="nav-link text-white {% if request.endpoint == 'dashboard' %}active{% endif %}">
-      <i class="bi bi-speedometer2 me-2"></i> Dashboard
-    </a>
-  </li>
-  <li class="nav-item">
-    <a href="{{ url_for('my_profile') }}" class="nav-link text-white {% if request.endpoint == 'my_profile' %}active{% endif %}">
-      <i class="bi bi-person-circle me-2"></i> My Profile
-    </a>
-  </li>
+  {% for item in nav_items %}
+    <li class="nav-item">
+      <a href="{{ url_for(item.endpoint) }}" class="nav-link text-white d-flex align-items-center justify-content-between {% if request.endpoint == item.endpoint %}active{% endif %}">
+        <span><i class="bi {{ item.icon }} me-2"></i> {{ item.label }}</span>
+        {% if item.endpoint == 'notifications' and unread_notifications %}
+          <span class="badge bg-danger rounded-pill">{{ unread_notifications }}</span>
+        {% endif %}
+      </a>
+    </li>
+  {% endfor %}
 </ul>
 <hr class="text-white-50">
 <a href="{{ url_for('logout') }}" class="nav-link text-white">

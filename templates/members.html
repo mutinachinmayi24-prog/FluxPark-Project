@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Members - FluxPark{% endblock %}
+
+{% macro member_name(p) -%}
+  {{ p.data.get('name') or p.data.get('tenant_name') or p.data.get('head_name') or p.data.get('employee_name') or '—' }}
+{%- endmacro %}
+
+{% macro member_flat(p) -%}
+  {{ p.data.get('flat_no') or p.data.get('head_flat_no') or '—' }}
+{%- endmacro %}
+
+{% block content %}
+  <h3 class="fw-bold mb-1">Members</h3>
+  <p class="text-muted mb-4">Everyone registered in your property.</p>
+
+  <div class="card border-0 shadow-sm">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-sm align-middle">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Role</th>
+              <th>Flat / Unit</th>
+              <th>Contact</th>
+              <th>Vehicles</th>
+              {% if can_remove %}<th></th>{% endif %}
+            </tr>
+          </thead>
+          <tbody>
+            {% for p in profiles %}
+              <tr>
+                <td>{{ member_name(p) }}</td>
+                <td class="text-capitalize">{{ p.role }}</td>
+                <td>{{ member_flat(p) }}</td>
+                <td>{{ p.user.contact or '—' }}</td>
+                <td>
+                  {% if p.vehicles %}
+                    {% for v in p.vehicles %}{{ v.vehicle_number }}{% if not loop.last %}, {% endif %}{% endfor %}
+                  {% else %}
+                    &mdash;
+                  {% endif %}
+                </td>
+                {% if can_remove %}
+                  <td>
+                    {% if p.id != role_profile.id %}
+                      <form method="POST" action="{{ url_for('remove_member', member_id=p.id) }}" onsubmit="return confirm('Remove this member? This cannot be undone.');">
+                        <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                      </form>
+                    {% endif %}
+                  </td>
+                {% endif %}
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}

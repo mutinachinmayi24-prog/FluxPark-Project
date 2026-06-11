@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Scan Entry / Exit - FluxPark{% endblock %}
+
+{% block content %}
+  <h3 class="fw-bold mb-1">Scan Visitor QR</h3>
+  <p class="text-muted mb-4">Scan a visitor's QR pass, or enter their pass code manually.</p>
+
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-body text-center">
+      <div id="qr-reader"></div>
+      <p class="text-muted small mt-2 mb-0" id="qr-reader-status">Allow camera access to start scanning.</p>
+    </div>
+  </div>
+
+  <div class="card border-0 shadow-sm">
+    <div class="card-body">
+      <h6 class="section-title">Manual Entry</h6>
+      <form method="POST" class="row g-3 align-items-end">
+        <div class="col-sm-8">
+          <label for="token" class="form-label">Pass Code</label>
+          <input type="text" class="form-control" id="token" name="token" placeholder="Paste the visitor's pass code or link" required>
+        </div>
+        <div class="col-sm-4">
+          <button type="submit" class="btn btn-brand w-100"><i class="bi bi-search me-1"></i> Look Up</button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var statusEl = document.getElementById('qr-reader-status');
+      if (typeof Html5Qrcode === 'undefined') {
+        statusEl.textContent = 'Camera scanner unavailable. Use manual entry below.';
+        return;
+      }
+
+      var scanner = new Html5Qrcode('qr-reader');
+      var handled = false;
+
+      var onSuccess = function (decodedText) {
+        if (handled) return;
+        handled = true;
+        statusEl.textContent = 'Code detected, looking up visitor...';
+        var token = decodedText.trim().split('/').filter(Boolean).pop();
+        scanner.stop().finally(function () {
+          window.location.href = '/security/visitor/' + encodeURIComponent(token);
+        });
+      };
+
+      Html5Qrcode.getCameras().then(function (cameras) {
+        if (!cameras || !cameras.length) {
+          statusEl.textContent = 'No camera found. Use manual entry below.';
+          return;
+        }
+        var cameraId = cameras[0].id;
+        scanner.start(cameraId, { fps: 10, qrbox: 250 }, onSuccess).then(function () {
+          statusEl.textContent = "Point the camera at the visitor's QR pass.";
+        }).catch(function () {
+          statusEl.textContent = 'Could not start the camera. Use manual entry below.';
+        });
+      }).catch(function () {
+        statusEl.textContent = 'Camera access denied. Use manual entry below.';
+      });
+    });
+  </script>
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Notifications - FluxPark{% endblock %}
+
+{% block content %}
+  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+    <h3 class="fw-bold mb-0">Notifications</h3>
+    {% if notifications %}
+      <form method="POST" action="{{ url_for('mark_all_notifications_read') }}">
+        <button type="submit" class="btn btn-sm btn-outline-brand">
+          <i class="bi bi-check2-all me-1"></i> Mark all as read
+        </button>
+      </form>
+    {% endif %}
+  </div>
+
+  {% if pending_requests %}
+    <div class="card border-0 shadow-sm mb-4">
+      <div class="card-body">
+        <h6 class="section-title">Visitor Approvals Needed</h6>
+        {% for r in pending_requests %}
+          <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 border rounded p-3 mb-2">
+            <div>
+              <strong>{{ r.visitor_name }}</strong> ({{ r.visitor_phone }}) &mdash;
+              {{ r.vehicle_type }} {{ r.vehicle_number }}<br>
+              <span class="text-muted small">
+                {{ r.date.strftime('%d %b %Y') }}, {{ r.from_time.strftime('%H:%M') }} - {{ r.to_time.strftime('%H:%M') }}
+                {% if r.purpose %} &middot; {{ r.purpose }}{% endif %}
+              </span>
+            </div>
+            <div class="d-flex gap-2">
+              <form method="POST" action="{{ url_for('approve_visitor_request', request_id=r.id) }}">
+                <button type="submit" class="btn btn-sm btn-success"><i class="bi bi-check-lg me-1"></i> Approve</button>
+              </form>
+              <form method="POST" action="{{ url_for('deny_visitor_request', request_id=r.id) }}">
+                <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-x-lg me-1"></i> Deny</button>
+              </form>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="card border-0 shadow-sm">
+    <div class="card-body">
+      {% if notifications %}
+        {% for n in notifications %}
+          <div class="d-flex justify-content-between align-items-start gap-3 py-3 {% if not loop.last %}border-bottom{% endif %}">
+            <div>
+              <div class="fw-semibold {% if not n.is_read %}text-brand{% endif %}">
+                {% if not n.is_read %}<i class="bi bi-circle-fill me-1" style="font-size:0.5rem;"></i>{% endif %}
+                {{ n.title }}
+              </div>
+              <div class="text-muted small mb-1">{{ n.message }}</div>
+              <div class="text-muted" style="font-size:0.75rem;">{{ n.created_at.strftime('%d %b %Y, %H:%M') }}</div>
+              {% if n.link %}
+                <a href="{{ n.link }}" target="_blank" class="small">View details</a>
+              {% endif %}
+            </div>
+            {% if not n.is_read %}
+              <form method="POST" action="{{ url_for('mark_notification_read', notification_id=n.id) }}">
+                <button type="submit" class="btn btn-sm btn-outline-secondary">Mark read</button>
+              </form>
+            {% endif %}
+          </div>
+        {% endfor %}
+      {% else %}
+        <p class="text-muted mb-0">You have no notifications yet.</p>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}
