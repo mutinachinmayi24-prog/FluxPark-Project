@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Dashboard</h2>
+
+<div class="row mt-4">
+
+    <div class="col-md-3">
+
+        <div class="card shadow">
+
+            <div class="card-body">
+
+                <h5>Total Members</h5>
+
+                <h2>{{ total_members }}</h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card shadow">
+
+            <div class="card-body">
+
+                <h5>Visitors</h5>
+
+                <h2>0</h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card shadow">
+
+            <div class="card-body">
+
+                <h5>Parking Slots</h5>
+
+                <h2>0</h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card shadow">
+
+            <div class="card-body">
+
+                <h5>Requests</h5>
+
+                <h2>0</h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
