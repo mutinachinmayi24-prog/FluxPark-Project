@@ -1,8 +1,8 @@
 :root {
-  --fp-primary: #4f46e5;
-  --fp-primary-dark: #3730a3;
-  --fp-accent: #818cf8;
-  --fp-bg: #f1f5f9;
+  --fp-primary: #27272a;
+  --fp-primary-dark: #0f0f10;
+  --fp-accent: #71717a;
+  --fp-bg: #f4f4f5;
 }
 
 body {
@@ -50,7 +50,7 @@ body {
 /* ---------------------------------------------------------------------- */
 
 .auth-wrapper {
-  background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+  background: linear-gradient(135deg, #f4f4f5 0%, #e4e4e7 100%);
   padding: 1rem;
 }
 
@@ -78,14 +78,14 @@ body {
 
 .option-card:hover {
   border-color: var(--fp-primary);
-  box-shadow: 0 0.25rem 0.75rem rgba(79, 70, 229, 0.1);
+  box-shadow: 0 0.25rem 0.75rem rgba(39, 39, 42, 0.12);
 }
 
 .option-card.selected,
 .option-card input:checked ~ .option-card-body,
 input:checked + .option-card {
   border-color: var(--fp-primary);
-  background-color: #eef2ff;
+  background-color: #f4f4f5;
 }
 
 .option-card .bi {

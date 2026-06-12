@@ -1,13 +1,13 @@
 {% extends "base.html" %}
-{% block title %}Parking Map - FluxPark{% endblock %}
+{% block title %}{{ _('Parking Map') }} - FluxPark{% endblock %}
 
 {% block content %}
-  <h3 class="fw-bold mb-1">Parking Map</h3>
+  <h3 class="fw-bold mb-1">{{ _('Parking Map') }}</h3>
   <p class="text-muted mb-4">
     {% if property.property_type == 'office' %}
-      Live view of your company's parking slots, grouped by floor.
+      {{ _("Live view of your company's parking slots, grouped by floor.") }}
     {% else %}
-      Live view of every parking slot, grouped by floor.
+      {{ _('Live view of every parking slot, grouped by floor.') }}
     {% endif %}
   </p>
 
@@ -21,7 +21,7 @@
     {% for floor, items in floors.items() %}
       <div class="card border-0 shadow-sm mb-3">
         <div class="card-body">
-          <h6 class="section-title">{% if floor == 'Unassigned' %}Unassigned Floor{% else %}Floor {{ floor }}{% endif %}</h6>
+          <h6 class="section-title">{% if floor == 'Unassigned' %}{{ _('Unassigned Floor') }}{% else %}{{ _('Floor %(floor)s', floor=floor) }}{% endif %}</h6>
           <div class="parking-map-grid">
             {% for slot, status in items %}
               <div class="parking-map-cell bg-{{ SLOT_STATUS_CLASSES[status] }}" title="{{ SLOT_STATUS_LABELS[status] }}">
@@ -34,6 +34,6 @@
       </div>
     {% endfor %}
   {% else %}
-    <p class="text-muted">No parking slots configured yet.</p>
+    <p class="text-muted">{{ _('No parking slots configured yet.') }}</p>
   {% endif %}
 {% endblock %}

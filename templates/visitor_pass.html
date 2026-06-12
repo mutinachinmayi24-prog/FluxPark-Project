@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-{% block title %}Visitor Pass - FluxPark{% endblock %}
+{% block title %}{{ _('Visitor Pass') }} - FluxPark{% endblock %}
 {% block card_size %}auth-card-wide{% endblock %}
 
 {% block content %}
-  <h5 class="fw-semibold mb-1">Visitor Pass</h5>
-  <p class="text-muted mb-4">Show this pass (or the QR code) to security at the gate.</p>
+  <h5 class="fw-semibold mb-1">{{ _('Visitor Pass') }}</h5>
+  <p class="text-muted mb-4">{{ _('Show this pass (or the QR code) to security at the gate.') }}</p>
 
   <div class="row g-4 align-items-center">
     <div class="col-md-7">
@@ -13,19 +13,19 @@
 
       <div class="row g-2 mb-3">
         <div class="col-6">
-          <div class="text-muted small">Vehicle</div>
-          <div class="fw-semibold">{{ visitor_request.vehicle_type }} &mdash; {{ visitor_request.vehicle_number }}</div>
+          <div class="text-muted small">{{ _('Vehicle') }}</div>
+          <div class="fw-semibold">{{ VEHICLE_TYPE_LABELS.get(visitor_request.vehicle_type, visitor_request.vehicle_type) }} — {{ visitor_request.vehicle_number }}</div>
         </div>
         <div class="col-6">
-          <div class="text-muted small">Date</div>
+          <div class="text-muted small">{{ _('Date') }}</div>
           <div class="fw-semibold">{{ visitor_request.date.strftime('%d %b %Y') }}</div>
         </div>
         <div class="col-6">
-          <div class="text-muted small">Time</div>
+          <div class="text-muted small">{{ _('Time') }}</div>
           <div class="fw-semibold">{{ visitor_request.from_time.strftime('%H:%M') }} - {{ visitor_request.to_time.strftime('%H:%M') }}</div>
         </div>
         <div class="col-6">
-          <div class="text-muted small">Status</div>
+          <div class="text-muted small">{{ _('Status') }}</div>
           <div><span class="badge bg-{{ REQUEST_STATUS_CLASSES[visitor_request.status] }}">{{ REQUEST_STATUS_LABELS[visitor_request.status] }}</span></div>
         </div>
       </div>
@@ -33,11 +33,15 @@
       {% if slot %}
         <div class="alert alert-success mb-0">
           <i class="bi bi-p-circle-fill me-1"></i>
-          Allocated parking slot <strong>{{ slot.slot_number }}</strong>{% if slot.floor %} (Floor {{ slot.floor }}){% endif %}.
+          {% if slot.floor %}
+            {{ _('Allocated parking slot %(slot)s (Floor %(floor)s).', slot=slot.slot_number, floor=slot.floor) }}
+          {% else %}
+            {{ _('Allocated parking slot %(slot)s.', slot=slot.slot_number) }}
+          {% endif %}
         </div>
       {% else %}
         <div class="alert alert-warning mb-0">
-          A parking slot has not been allocated yet. Please check back shortly.
+          {{ _('A parking slot has not been allocated yet. Please check back shortly.') }}
         </div>
       {% endif %}
     </div>
@@ -45,7 +49,7 @@
       <div class="qr-box">
         <img src="{{ url_for('qr_image', token=visitor_request.qr_token) }}" alt="QR code" class="img-fluid">
       </div>
-      <p class="text-muted small mt-2 mb-0">Pass code: {{ visitor_request.qr_token }}</p>
+      <p class="text-muted small mt-2 mb-0">{{ _('Pass code: %(code)s', code=visitor_request.qr_token) }}</p>
     </div>
   </div>
 {% endblock %}

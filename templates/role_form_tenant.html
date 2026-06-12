@@ -1,44 +1,44 @@
 {% extends "base.html" %}
-{% block title %}Tenant Details - FluxPark{% endblock %}
+{% block title %}{{ _('Tenant Details') }} - FluxPark{% endblock %}
 {% block card_size %}auth-card-wide{% endblock %}
 
 {% block content %}
-  <h5 class="fw-semibold mb-1">Tenant Details</h5>
+  <h5 class="fw-semibold mb-1">{{ _('Tenant Details') }}</h5>
   <p class="text-muted">{{ property.name }}</p>
 
   <form method="POST">
-    <div class="section-title">Owner Details</div>
+    <div class="section-title">{{ _('Owner Details') }}</div>
     <div class="row g-3">
       <div class="col-md-6">
-        <label for="owner_name" class="form-label">Owner Name</label>
+        <label for="owner_name" class="form-label">{{ _('Owner Name') }}</label>
         <input type="text" class="form-control" id="owner_name" name="owner_name" value="{{ form_data.get('owner_name', '') }}" required>
       </div>
       <div class="col-md-6">
-        <label for="owner_phone" class="form-label">Owner Phone Number</label>
+        <label for="owner_phone" class="form-label">{{ _('Owner Phone Number') }}</label>
         <input type="tel" class="form-control" id="owner_phone" name="owner_phone" pattern="[6-9][0-9]{9}" maxlength="10" value="{{ form_data.get('owner_phone', '') }}" required>
       </div>
     </div>
 
-    <div class="section-title">Tenant Details</div>
+    <div class="section-title">{{ _('Tenant Details') }}</div>
     <div class="row g-3">
       <div class="col-md-6">
-        <label for="tenant_name" class="form-label">Tenant Name</label>
+        <label for="tenant_name" class="form-label">{{ _('Tenant Name') }}</label>
         <input type="text" class="form-control" id="tenant_name" name="tenant_name" value="{{ form_data.get('tenant_name', '') }}" required>
       </div>
       <div class="col-md-6">
-        <label for="tenant_phone" class="form-label">Tenant Phone Number</label>
+        <label for="tenant_phone" class="form-label">{{ _('Tenant Phone Number') }}</label>
         <input type="tel" class="form-control" id="tenant_phone" name="tenant_phone" pattern="[6-9][0-9]{9}" maxlength="10" value="{{ form_data.get('tenant_phone', '') }}" required>
       </div>
       <div class="col-md-4">
-        <label for="flat_no" class="form-label">Flat No.</label>
+        <label for="flat_no" class="form-label">{{ _('Flat No.') }}</label>
         <input type="text" class="form-control" id="flat_no" name="flat_no" value="{{ form_data.get('flat_no', '') }}" required>
       </div>
       <div class="col-md-4">
-        <label for="num_parking_slots" class="form-label">No. of Parking Slots</label>
+        <label for="num_parking_slots" class="form-label">{{ _('No. of Parking Slots') }}</label>
         <input type="number" min="0" class="form-control" id="num_parking_slots" name="num_parking_slots" value="{{ form_data.get('num_parking_slots', '') }}" required>
       </div>
       <div class="col-md-4">
-        <label for="parking_space_number" class="form-label">Parking Space Number</label>
+        <label for="parking_space_number" class="form-label">{{ _('Parking Space Number') }}</label>
         <input type="text" class="form-control" id="parking_space_number" name="parking_space_number" value="{{ form_data.get('parking_space_number', '') }}" required>
       </div>
     </div>
@@ -47,7 +47,7 @@
     {% include "_bank_details.html" %}
 
     <button type="submit" class="btn btn-brand btn-lg w-100 mt-4">
-      <i class="bi bi-box-arrow-in-right me-1"></i> Enter Room
+      <i class="bi bi-box-arrow-in-right me-1"></i> {{ _('Enter Room') }}
     </button>
   </form>
 {% endblock %}

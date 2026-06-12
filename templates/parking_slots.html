@@ -1,28 +1,28 @@
 {% extends "base.html" %}
-{% block title %}Parking Slots - FluxPark{% endblock %}
+{% block title %}{{ _('Parking Slots') }} - FluxPark{% endblock %}
 
 {% block content %}
-  <h3 class="fw-bold mb-1">Parking Slots</h3>
+  <h3 class="fw-bold mb-1">{{ _('Parking Slots') }}</h3>
   <p class="text-muted mb-4">
     {% if property.property_type == 'office' %}
-      Live status of every parking slot allocated to your company.
+      {{ _('Live status of every parking slot allocated to your company.') }}
     {% else %}
-      Live status of every parking slot in your property.
+      {{ _('Live status of every parking slot in your property.') }}
     {% endif %}
   </p>
 
   <div class="card border-0 shadow-sm mb-4">
     <div class="card-body">
-      <h6 class="section-title">Live Status</h6>
+      <h6 class="section-title">{{ _('Live Status') }}</h6>
       {% if slot_rows %}
         <div class="table-responsive">
           <table class="table table-sm align-middle">
             <thead>
               <tr>
-                <th>Slot</th>
-                <th>Floor</th>
-                <th>Assigned To</th>
-                <th>Status</th>
+                <th>{{ _('Slot') }}</th>
+                <th>{{ _('Floor') }}</th>
+                <th>{{ _('Assigned To') }}</th>
+                <th>{{ _('Status') }}</th>
               </tr>
             </thead>
             <tbody>
@@ -36,7 +36,7 @@
                     {% elif today_allocations.get(slot.id) %}
                       {{ role_profile_label(today_allocations[slot.id].role_profile) }}
                     {% elif today_visitor_allocations.get(slot.id) %}
-                      Visitor: {{ today_visitor_allocations[slot.id].visitor_name }}
+                      {{ _('Visitor: %(name)s', name=today_visitor_allocations[slot.id].visitor_name) }}
                     {% else %}
                       &mdash;
                     {% endif %}
@@ -48,7 +48,7 @@
           </table>
         </div>
       {% else %}
-        <p class="text-muted mb-0">No parking slots configured yet.</p>
+        <p class="text-muted mb-0">{{ _('No parking slots configured yet.') }}</p>
       {% endif %}
     </div>
   </div>
@@ -56,10 +56,9 @@
   {% if can_edit %}
     <div class="card border-0 shadow-sm">
       <div class="card-body">
-        <h6 class="section-title">Parking Layout Editor</h6>
+        <h6 class="section-title">{{ _('Parking Layout Editor') }}</h6>
         <p class="text-muted small">
-          Lower entrance/ramp rank means closer to the entrance/ramp. These ranks are used by
-          the automatic visitor-allocation algorithm to pick the best slot.
+          {{ _('Lower entrance/ramp rank means closer to the entrance/ramp. These ranks are used by the automatic visitor-allocation algorithm to pick the best slot.') }}
         </p>
         <form method="POST">
           <div class="table-responsive">
@@ -67,11 +66,11 @@
               <thead>
                 <tr>
                   <th style="width:3rem">#</th>
-                  <th>Slot Number</th>
-                  <th>Floor</th>
-                  <th>Entrance Rank</th>
-                  <th>Ramp Rank</th>
-                  <th>Assigned Resident</th>
+                  <th>{{ _('Slot Number') }}</th>
+                  <th>{{ _('Floor') }}</th>
+                  <th>{{ _('Entrance Rank') }}</th>
+                  <th>{{ _('Ramp Rank') }}</th>
+                  <th>{{ _('Assigned Resident') }}</th>
                   <th></th>
                 </tr>
               </thead>
@@ -89,7 +88,7 @@
                       <td><input type="number" class="form-control form-control-sm" name="ramp_rank[]" value="{{ slot.ramp_rank }}"></td>
                       <td>
                         <select class="form-select form-select-sm" name="home_role_profile_id[]">
-                          <option value="">-- Unassigned --</option>
+                          <option value="">{{ _('-- Unassigned --') }}</option>
                           {% for r in residents %}
                             <option value="{{ r.id }}" {% if slot.home_role_profile_id == r.id %}selected{% endif %}>{{ role_profile_label(r) }}</option>
                           {% endfor %}
@@ -110,7 +109,7 @@
                     <td><input type="number" class="form-control form-control-sm" name="ramp_rank[]" value="0"></td>
                     <td>
                       <select class="form-select form-select-sm" name="home_role_profile_id[]">
-                        <option value="">-- Unassigned --</option>
+                        <option value="">{{ _('-- Unassigned --') }}</option>
                         {% for r in residents %}
                           <option value="{{ r.id }}">{{ role_profile_label(r) }}</option>
                         {% endfor %}
@@ -123,11 +122,11 @@
             </table>
           </div>
           <button type="button" class="btn btn-sm btn-outline-brand mb-3" data-add-row="slots-table">
-            <i class="bi bi-plus-lg me-1"></i> Add Slot
+            <i class="bi bi-plus-lg me-1"></i> {{ _('Add Slot') }}
           </button>
           <div>
             <button type="submit" class="btn btn-brand">
-              <i class="bi bi-save me-1"></i> Save Layout
+              <i class="bi bi-save me-1"></i> {{ _('Save Layout') }}
             </button>
           </div>
         </form>

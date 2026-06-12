@@ -29,6 +29,7 @@ from constants import (
     RESIDENTIAL_PROPERTY_TYPES,
     RESIDENTIAL_ROLES,
     ROLE_LABELS,
+    VEHICLE_TYPE_LABELS,
     VEHICLE_TYPES,
 )
 from ai_engine import (
@@ -106,6 +107,7 @@ app.jinja_env.globals.update(
     REQUEST_STATUS_CLASSES=REQUEST_STATUS_CLASSES,
     ROLE_LABELS=ROLE_LABELS,
     PROPERTY_TYPE_LABELS=PROPERTY_TYPE_LABELS,
+    VEHICLE_TYPE_LABELS=VEHICLE_TYPE_LABELS,
     get_locale=get_locale,
     LANGUAGES=app.config["LANGUAGES"],
 )
@@ -313,7 +315,10 @@ def create_and_send_otp(contact):
     db.session.commit()
     # Mock delivery for now: shown on screen instead of a real email/SMS provider.
     flash(
-        f"Demo mode: your verification code is {code} (valid for {OTP_VALIDITY_MINUTES} minutes).",
+        _(
+            "Demo mode: your verification code is %(code)s (valid for %(minutes)s minutes).",
+            code=code, minutes=OTP_VALIDITY_MINUTES,
+        ),
         "info",
     )
     return otp
@@ -384,7 +389,10 @@ def signup():
         resolved = resolve_invite_token(invite_token)
         if resolved:
             kind, obj = resolved
+            lang = session.get("lang")
             session.clear()
+            if lang:
+                session["lang"] = lang
             session["invite_token"] = invite_token
             if kind == "property":
                 session["property_id"] = obj.id
@@ -463,7 +471,10 @@ def resend_otp():
 
 @app.route("/logout")
 def logout():
+    lang = session.get("lang")
     session.clear()
+    if lang:
+        session["lang"] = lang
     return redirect(url_for("signup"))
 
 
@@ -483,7 +494,7 @@ def property_setup():
     if request.method == "POST":
         property_type = request.form.get("property_type")
         if property_type not in dict(PROPERTY_TYPES):
-            flash("Please select a property type.", "danger")
+            flash(_("Please select a property type."), "danger")
         else:
             session["property_type"] = property_type
             session.pop("property_id", None)
@@ -510,15 +521,15 @@ def property_form():
 
         errors = []
         if property_type not in RESIDENTIAL_PROPERTY_TYPES:
-            errors.append("Please select Apartment or Gated Community.")
+            errors.append(_("Please select Apartment or Gated Community."))
         if not name:
-            errors.append("Please enter the property name.")
+            errors.append(_("Please enter the property name."))
         if not address:
-            errors.append("Please enter the address.")
+            errors.append(_("Please enter the address."))
         if not num_flats.isdigit():
-            errors.append("Number of flats must be a number.")
+            errors.append(_("Number of flats must be a number."))
         if extra_parking and not extra_parking.isdigit():
-            errors.append("Extra parking spaces must be a number.")
+            errors.append(_("Extra parking spaces must be a number."))
 
         if errors:
             for error in errors:
@@ -564,9 +575,9 @@ def property_form_office():
 
         errors = []
         if not name:
-            errors.append("Please enter the property name.")
+            errors.append(_("Please enter the property name."))
         if not address:
-            errors.append("Please enter the address.")
+            errors.append(_("Please enter the address."))
 
         companies = []
         for i, raw_name in enumerate(company_names):
@@ -578,7 +589,7 @@ def property_form_office():
                 num_parking = int(num_parking_list[i]) if num_parking_list[i].strip() else None
                 extra = int(extra_parking_list[i]) if extra_parking_list[i].strip() else 0
             except (ValueError, IndexError):
-                errors.append(f"Please enter valid numbers for company '{company_name}'.")
+                errors.append(_("Please enter valid numbers for company '%(name)s'.", name=company_name))
                 continue
             companies.append(
                 {
@@ -591,7 +602,7 @@ def property_form_office():
             )
 
         if not companies:
-            errors.append("Please add at least one company.")
+            errors.append(_("Please add at least one company."))
 
         if errors:
             for error in errors:
@@ -656,7 +667,7 @@ def invite_links_next():
         sub_room_id = request.form.get("sub_room_id", type=int)
         valid_ids = {sub_room.id for sub_room in prop.sub_rooms}
         if sub_room_id not in valid_ids:
-            flash("Please select your company to continue.", "danger")
+            flash(_("Please select your company to continue."), "danger")
             return redirect(url_for("invite_links"))
         session["sub_room_id"] = sub_room_id
 
@@ -862,36 +873,36 @@ def role_form(role):
         errors = []
         for field in REQUIRED_FIELDS[role]:
             if not data.get(field):
-                errors.append("Please fill in all required fields.")
+                errors.append(_("Please fill in all required fields."))
                 break
 
         if role in ("employee", "manager") and data.get("transport") == "self":
             if not data.get("vehicle_type") or not data.get("vehicle_number"):
-                errors.append("Please enter your vehicle type and number for self-transport.")
+                errors.append(_("Please enter your vehicle type and number for self-transport."))
 
         if bank is not None:
             for field in REQUIRED_BANK_FIELDS:
                 if not bank.get(field):
-                    errors.append("Please fill in all required bank details.")
+                    errors.append(_("Please fill in all required bank details."))
                     break
 
         if role in ("owner", "tenant", "committee") and not vehicles:
-            errors.append("Please add at least one vehicle.")
+            errors.append(_("Please add at least one vehicle."))
 
         if vehicles:
             duplicates = find_duplicate_vehicle_numbers(property_id, [v["vehicle_number"] for v in vehicles])
             if duplicates:
-                errors.append(f"Vehicle number(s) already registered to another member: {', '.join(duplicates)}")
+                errors.append(_("Vehicle number(s) already registered to another member: %(numbers)s", numbers=', '.join(duplicates)))
 
         if role in ("employee", "manager") and data.get("transport") == "self":
             duplicates = find_duplicate_vehicle_numbers(property_id, [data["vehicle_number"]])
             if duplicates:
-                errors.append(f"Vehicle number {duplicates[0]} is already registered to another member.")
+                errors.append(_("Vehicle number %(number)s is already registered to another member.", number=duplicates[0]))
 
         if role in ("employee", "manager") and is_duplicate_employee_id(
             property_id, sub_room_id, data.get("employee_id")
         ):
-            errors.append("This Employee ID is already registered.")
+            errors.append(_("This Employee ID is already registered."))
 
         if not errors:
             role_profile = RoleProfile(
@@ -1105,7 +1116,7 @@ def my_profile():
                 bank.rent_per_hour = float(raw_rent)
 
         db.session.commit()
-        flash("Profile updated successfully.", "success")
+        flash(_("Profile updated successfully."), "success")
         return redirect(url_for("my_profile"))
 
     return render_template(
@@ -1143,15 +1154,15 @@ def visitor_request():
 
         errors = []
         if not visitor_name:
-            errors.append("Please enter the visitor's name.")
+            errors.append(_("Please enter the visitor's name."))
         if not PHONE_REGEX.match(visitor_phone):
-            errors.append("Please enter a valid 10-digit visitor phone number.")
+            errors.append(_("Please enter a valid 10-digit visitor phone number."))
         if vehicle_type not in VEHICLE_TYPES:
-            errors.append("Please select a vehicle type.")
+            errors.append(_("Please select a vehicle type."))
         if not vehicle_number:
-            errors.append("Please enter the vehicle number.")
+            errors.append(_("Please enter the vehicle number."))
         if not date_str or not from_str or not to_str:
-            errors.append("Please fill in date, from time and to time.")
+            errors.append(_("Please fill in date, from time and to time."))
 
         if not errors:
             vr = VisitorRequest(
@@ -1171,9 +1182,9 @@ def visitor_request():
             try_match_request(vr)
             db.session.commit()
             if vr.status == "allocated":
-                flash("Visitor request created and a parking slot was allocated!", "success")
+                flash(_("Visitor request created and a parking slot was allocated!"), "success")
             else:
-                flash("Visitor request created. We'll notify you once a slot is available.", "info")
+                flash(_("Visitor request created. We'll notify you once a slot is available."), "info")
             return redirect(url_for("visitor_request"))
 
         for error in errors:
@@ -1222,17 +1233,17 @@ def parking_availability():
         errors = []
         slot = ParkingSlot.query.get(int(slot_id)) if slot_id.isdigit() else None
         if not slot or slot.home_role_profile_id != role_profile.id:
-            errors.append("Please select a valid parking slot of yours.")
+            errors.append(_("Please select a valid parking slot of yours."))
         if not date_str or not from_str or not to_str:
-            errors.append("Please fill in date, from time and to time.")
+            errors.append(_("Please fill in date, from time and to time."))
 
         rent = None
         try:
             rent = float(rent_str)
             if rent <= 0:
-                errors.append("Rent per hour must be greater than zero.")
+                errors.append(_("Rent per hour must be greater than zero."))
         except ValueError:
-            errors.append("Please enter a valid rent per hour.")
+            errors.append(_("Please enter a valid rent per hour."))
 
         if not errors:
             availability = SlotAvailability(
@@ -1249,9 +1260,9 @@ def parking_availability():
             try_match_availability(availability)
             db.session.commit()
             if availability.status == "matched":
-                flash("Slot listed and already matched with a waiting visitor!", "success")
+                flash(_("Slot listed and already matched with a waiting visitor!"), "success")
             else:
-                flash("Your parking slot has been listed as available.", "success")
+                flash(_("Your parking slot has been listed as available."), "success")
             return redirect(url_for("parking_availability"))
 
         for error in errors:
@@ -1284,11 +1295,11 @@ def parking_availability_return(availability_id):
     if availability.role_profile_id != role_profile.id:
         abort(403)
     if availability.status != "matched":
-        flash("This slot isn't currently matched with a visitor.", "warning")
+        flash(_("This slot isn't currently matched with a visitor."), "warning")
         return redirect(url_for("parking_availability"))
 
     handle_emergency_return(availability, now_ist())
-    flash("Marked as returned. We've notified everyone affected.", "success")
+    flash(_("Marked as returned. We've notified everyone affected."), "success")
     return redirect(url_for("parking_availability"))
 
 
@@ -1321,20 +1332,20 @@ def transport_request():
 
         if action == "cancel":
             if not existing or existing.status != "pending_allocation":
-                flash("There's no pending request for tomorrow to cancel.", "warning")
+                flash(_("There's no pending request for tomorrow to cancel."), "warning")
             elif cutoff_passed:
-                flash("The 9 PM cutoff has passed; this request can no longer be changed.", "danger")
+                flash(_("The 9 PM cutoff has passed; this request can no longer be changed."), "danger")
             else:
                 db.session.delete(existing)
                 db.session.commit()
-                flash("Transport request for tomorrow cancelled.", "info")
+                flash(_("Transport request for tomorrow cancelled."), "info")
             return redirect(url_for("transport_request"))
 
         if existing:
-            flash("You've already submitted a transport request for tomorrow.", "warning")
+            flash(_("You've already submitted a transport request for tomorrow."), "warning")
             return redirect(url_for("transport_request"))
         if cutoff_passed:
-            flash("Requests for tomorrow's parking must be submitted before 9 PM today.", "danger")
+            flash(_("Requests for tomorrow's parking must be submitted before 9 PM today."), "danger")
             return redirect(url_for("transport_request"))
 
         vehicle_type = _strip(request.form, "vehicle_type")
@@ -1344,11 +1355,11 @@ def transport_request():
 
         errors = []
         if vehicle_type not in VEHICLE_TYPES:
-            errors.append("Please select a vehicle type.")
+            errors.append(_("Please select a vehicle type."))
         if not vehicle_number:
-            errors.append("Please enter the vehicle number.")
+            errors.append(_("Please enter the vehicle number."))
         if not from_str or not to_str:
-            errors.append("Please fill in your shift start and end time.")
+            errors.append(_("Please fill in your shift start and end time."))
 
         if not errors:
             tr = TransportRequest(
@@ -1364,7 +1375,7 @@ def transport_request():
             )
             db.session.add(tr)
             db.session.commit()
-            flash("Transport request for tomorrow submitted. Slots are allocated after the 9 PM cutoff.", "success")
+            flash(_("Transport request for tomorrow submitted. Slots are allocated after the 9 PM cutoff."), "success")
             return redirect(url_for("transport_request"))
 
         for error in errors:
@@ -1433,7 +1444,7 @@ def parking_slots():
             if not slot_number:
                 continue
             if slot_number in seen_numbers:
-                errors.append(f"Duplicate slot number '{slot_number}' in the table.")
+                errors.append(_("Duplicate slot number '%(slot_number)s' in the table.", slot_number=slot_number))
                 continue
             seen_numbers.add(slot_number)
 
@@ -1441,7 +1452,7 @@ def parking_slots():
                 entrance_rank = int(entrance_ranks[i]) if entrance_ranks[i].strip() else 0
                 ramp_rank = int(ramp_ranks[i]) if ramp_ranks[i].strip() else 0
             except ValueError:
-                errors.append(f"Entrance/ramp rank for slot '{slot_number}' must be a number.")
+                errors.append(_("Entrance/ramp rank for slot '%(slot_number)s' must be a number.", slot_number=slot_number))
                 continue
 
             home_id = home_ids[i].strip()
@@ -1471,7 +1482,7 @@ def parking_slots():
                         continue
                     clash = existing.get(row["slot_number"])
                     if clash is not None and clash.id != slot.id:
-                        errors.append(f"Slot number '{row['slot_number']}' is already in use.")
+                        errors.append(_("Slot number '%(slot_number)s' is already in use.", slot_number=row["slot_number"]))
                         continue
                     existing.pop(slot.slot_number, None)
                     slot.slot_number = row["slot_number"]
@@ -1482,7 +1493,7 @@ def parking_slots():
                     existing[slot.slot_number] = slot
                 else:
                     if row["slot_number"] in existing:
-                        errors.append(f"Slot number '{row['slot_number']}' is already in use.")
+                        errors.append(_("Slot number '%(slot_number)s' is already in use.", slot_number=row["slot_number"]))
                         continue
                     new_slot = ParkingSlot(
                         property_id=role_profile.property_id,
@@ -1502,7 +1513,7 @@ def parking_slots():
             db.session.rollback()
         else:
             db.session.commit()
-            flash("Parking layout updated.", "success")
+            flash(_("Parking layout updated."), "success")
         return redirect(url_for("parking_slots"))
 
     slot_query = ParkingSlot.query.filter_by(property_id=role_profile.property_id)
@@ -1651,7 +1662,7 @@ def approve_visitor_request(request_id):
     if vr.host_role_profile_id not in _approvable_host_ids(role_profile):
         abort(403)
     if vr.status != "pending_approval":
-        flash("This request has already been processed.", "warning")
+        flash(_("This request has already been processed."), "warning")
         return redirect(url_for("notifications"))
 
     vr.status = "pending_allocation"
@@ -1663,9 +1674,9 @@ def approve_visitor_request(request_id):
         allocate_unexpected_visitor(vr)
     db.session.commit()
     if vr.status == "allocated":
-        flash(f"Approved {vr.visitor_name} and allocated a parking slot.", "success")
+        flash(_("Approved %(name)s and allocated a parking slot.", name=vr.visitor_name), "success")
     else:
-        flash(f"Approved {vr.visitor_name}. We'll notify you once a slot is available.", "info")
+        flash(_("Approved %(name)s. We'll notify you once a slot is available.", name=vr.visitor_name), "info")
     return redirect(url_for("notifications"))
 
 
@@ -1680,7 +1691,7 @@ def deny_visitor_request(request_id):
     if vr.host_role_profile_id not in _approvable_host_ids(role_profile):
         abort(403)
     if vr.status != "pending_approval":
-        flash("This request has already been processed.", "warning")
+        flash(_("This request has already been processed."), "warning")
         return redirect(url_for("notifications"))
 
     vr.status = "rejected"
@@ -1692,7 +1703,7 @@ def deny_visitor_request(request_id):
             f"({vr.visitor_phone}).",
         )
     db.session.commit()
-    flash(f"Denied entry for {vr.visitor_name}.", "info")
+    flash(_("Denied entry for %(name)s.", name=vr.visitor_name), "info")
     return redirect(url_for("notifications"))
 
 
@@ -1762,7 +1773,7 @@ def mark_payment_paid(transaction_id):
     if txn.payer_role_profile_id != role_profile.id:
         abort(403)
     if txn.status != "pending":
-        flash("This payment has already been processed.", "warning")
+        flash(_("This payment has already been processed."), "warning")
         return redirect(url_for("payments"))
 
     txn.status = "paid"
@@ -1773,7 +1784,7 @@ def mark_payment_paid(transaction_id):
         f"for {txn.description}.",
     )
     db.session.commit()
-    flash("Marked as paid.", "success")
+    flash(_("Marked as paid."), "success")
     return redirect(url_for("payments"))
 
 
@@ -1822,7 +1833,7 @@ def remove_member(member_id):
     if role_profile.role == "manager" and member.sub_room_id != role_profile.sub_room_id:
         abort(404)
     if member.id == role_profile.id:
-        flash("You cannot remove yourself.", "danger")
+        flash(_("You cannot remove yourself."), "danger")
         return redirect(url_for("members"))
 
     for slot in ParkingSlot.query.filter_by(home_role_profile_id=member.id).all():
@@ -1832,7 +1843,7 @@ def remove_member(member_id):
 
     db.session.delete(member)
     db.session.commit()
-    flash("Member removed.", "success")
+    flash(_("Member removed."), "success")
     return redirect(url_for("members"))
 
 
@@ -2217,7 +2228,7 @@ def security_scan():
             return redirect(url_for("security_visitor", token=token))
         if TransportRequest.query.filter_by(qr_token=token, property_id=role_profile.property_id).first():
             return redirect(url_for("security_transport", token=token))
-        flash("No pass found for that code.", "danger")
+        flash(_("No pass found for that code."), "danger")
         return redirect(url_for("security_scan"))
 
     return render_template("security_scan.html", role_profile=role_profile, show_sidebar=True)
@@ -2256,13 +2267,13 @@ def security_visitor_entry(token):
 
     vr = VisitorRequest.query.filter_by(qr_token=token, property_id=role_profile.property_id).first_or_404()
     if vr.status != "allocated":
-        flash("This visitor cannot be marked as entered right now.", "warning")
+        flash(_("This visitor cannot be marked as entered right now."), "warning")
         return redirect(url_for("security_visitor", token=token))
 
     vr.status = "entered"
     vr.entry_time = now_ist()
     db.session.commit()
-    flash(f"{vr.visitor_name} marked as entered.", "success")
+    flash(_("%(name)s marked as entered.", name=vr.visitor_name), "success")
     return redirect(url_for("security_visitor", token=token))
 
 
@@ -2277,13 +2288,13 @@ def security_visitor_exit(token):
 
     vr = VisitorRequest.query.filter_by(qr_token=token, property_id=role_profile.property_id).first_or_404()
     if vr.status != "entered":
-        flash("This visitor cannot be marked as exited right now.", "warning")
+        flash(_("This visitor cannot be marked as exited right now."), "warning")
         return redirect(url_for("security_visitor", token=token))
 
     vr.status = "exited"
     vr.exit_time = now_ist()
     db.session.commit()
-    flash(f"{vr.visitor_name} marked as exited.", "success")
+    flash(_("%(name)s marked as exited.", name=vr.visitor_name), "success")
     return redirect(url_for("security_visitor", token=token))
 
 
@@ -2317,13 +2328,13 @@ def security_transport_entry(token):
 
     tr = TransportRequest.query.filter_by(qr_token=token, property_id=role_profile.property_id).first_or_404()
     if tr.status != "allocated":
-        flash("This pass cannot be marked as entered right now.", "warning")
+        flash(_("This pass cannot be marked as entered right now."), "warning")
         return redirect(url_for("security_transport", token=token))
 
     tr.status = "entered"
     tr.entry_time = now_ist()
     db.session.commit()
-    flash("Marked as entered.", "success")
+    flash(_("Marked as entered."), "success")
     return redirect(url_for("security_transport", token=token))
 
 
@@ -2338,13 +2349,13 @@ def security_transport_exit(token):
 
     tr = TransportRequest.query.filter_by(qr_token=token, property_id=role_profile.property_id).first_or_404()
     if tr.status != "entered":
-        flash("This pass cannot be marked as exited right now.", "warning")
+        flash(_("This pass cannot be marked as exited right now."), "warning")
         return redirect(url_for("security_transport", token=token))
 
     tr.status = "exited"
     tr.exit_time = now_ist()
     db.session.commit()
-    flash("Marked as exited.", "success")
+    flash(_("Marked as exited."), "success")
     return redirect(url_for("security_transport", token=token))
 
 
@@ -2378,15 +2389,15 @@ def unexpected_visitor():
 
         errors = []
         if not visitor_name:
-            errors.append("Please enter the visitor's name.")
+            errors.append(_("Please enter the visitor's name."))
         if not PHONE_REGEX.match(visitor_phone):
-            errors.append("Please enter a valid 10-digit visitor phone number.")
+            errors.append(_("Please enter a valid 10-digit visitor phone number."))
         if vehicle_type not in VEHICLE_TYPES:
-            errors.append("Please select a vehicle type.")
+            errors.append(_("Please select a vehicle type."))
         if not vehicle_number:
-            errors.append("Please enter the vehicle number.")
+            errors.append(_("Please enter the vehicle number."))
         if not date_str:
-            errors.append("Please select a date.")
+            errors.append(_("Please select a date."))
 
         host = RoleProfile.query.get(int(host_id)) if host_id.isdigit() else None
         if (
@@ -2394,7 +2405,7 @@ def unexpected_visitor():
             or host.property_id != role_profile.property_id
             or host.role not in host_roles
         ):
-            errors.append("Please select who the visitor is here to see.")
+            errors.append(_("Please select who the visitor is here to see."))
 
         date_val = _parse_date(date_str) if date_str else None
         from_time = to_time = None
@@ -2403,7 +2414,7 @@ def unexpected_visitor():
             from_str = _strip(request.form, "from_time")
             to_str = _strip(request.form, "to_time")
             if not from_str or not to_str:
-                errors.append("Please enter the from and to time.")
+                errors.append(_("Please enter the from and to time."))
             else:
                 from_time = _parse_time(from_str)
                 to_time = _parse_time(to_str)
@@ -2453,7 +2464,7 @@ def unexpected_visitor():
                     link=url_for("notifications"),
                 )
             db.session.commit()
-            flash("Visitor logged. Waiting for resident approval.", "success")
+            flash(_("Visitor logged. Waiting for resident approval."), "success")
             return redirect(url_for("unexpected_visitor"))
 
         for error in errors:

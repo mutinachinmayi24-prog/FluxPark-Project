@@ -1,56 +1,56 @@
 {% extends "base.html" %}
-{% block title %}Manager Details - FluxPark{% endblock %}
+{% block title %}{{ _('Manager Details') }} - FluxPark{% endblock %}
 {% block card_size %}auth-card-wide{% endblock %}
 
 {% block content %}
-  <h5 class="fw-semibold mb-1">Manager Details</h5>
+  <h5 class="fw-semibold mb-1">{{ _('Manager Details') }}</h5>
   <p class="text-muted">{{ property.name }}{% if sub_room %} &mdash; {{ sub_room.company_name }}{% endif %}</p>
 
   <form method="POST">
-    <div class="section-title">Profile</div>
+    <div class="section-title">{{ _('Profile') }}</div>
     <div class="row g-3">
       <div class="col-md-6">
-        <label for="employee_name" class="form-label">Employee Name</label>
+        <label for="employee_name" class="form-label">{{ _('Employee Name') }}</label>
         <input type="text" class="form-control" id="employee_name" name="employee_name" value="{{ form_data.get('employee_name', '') }}" required>
       </div>
       <div class="col-md-6">
-        <label for="employee_id" class="form-label">Employee ID</label>
+        <label for="employee_id" class="form-label">{{ _('Employee ID') }}</label>
         <input type="text" class="form-control" id="employee_id" name="employee_id" value="{{ form_data.get('employee_id', '') }}" required>
       </div>
       <div class="col-12">
-        <label for="employee_address" class="form-label">Employee Address</label>
+        <label for="employee_address" class="form-label">{{ _('Employee Address') }}</label>
         <textarea class="form-control" id="employee_address" name="employee_address" rows="2" required>{{ form_data.get('employee_address', '') }}</textarea>
       </div>
       <div class="col-md-6">
-        <label for="shift_from" class="form-label">Shift Timing &mdash; From</label>
+        <label for="shift_from" class="form-label">{{ _('Shift Timing — From') }}</label>
         <input type="time" class="form-control" id="shift_from" name="shift_from" value="{{ form_data.get('shift_from', '') }}" required>
       </div>
       <div class="col-md-6">
-        <label for="shift_to" class="form-label">Shift Timing &mdash; To</label>
+        <label for="shift_to" class="form-label">{{ _('Shift Timing — To') }}</label>
         <input type="time" class="form-control" id="shift_to" name="shift_to" value="{{ form_data.get('shift_to', '') }}" required>
       </div>
     </div>
-    <div class="form-text mb-3">Shift timings can be edited later under My Profile.</div>
+    <div class="form-text mb-3">{{ _('Shift timings can be edited later under My Profile.') }}</div>
 
     {% include "_transport_fields.html" %}
-    <div class="form-text mb-3">Vehicle details for self-transport can be edited later under My Profile.</div>
+    <div class="form-text mb-3">{{ _('Vehicle details for self-transport can be edited later under My Profile.') }}</div>
 
     {% include "_bank_details.html" %}
 
     <div class="row g-3 mt-1">
       <div class="col-md-6">
-        <label for="rent_per_hour" class="form-label">Rent of a Parking Slot per Hour</label>
+        <label for="rent_per_hour" class="form-label">{{ _('Rent of a Parking Slot per Hour') }}</label>
         <div class="input-group">
           <span class="input-group-text">&#8377;</span>
           <input type="number" min="0" step="0.5" class="form-control" id="rent_per_hour" name="rent_per_hour" value="{{ form_data.get('rent_per_hour', '') }}" required>
-          <span class="input-group-text">/ hr</span>
+          <span class="input-group-text">{{ _('/ hr') }}</span>
         </div>
       </div>
     </div>
-    <div class="form-text mb-3">Only managers can update bank account details, from My Profile.</div>
+    <div class="form-text mb-3">{{ _('Only managers can update bank account details, from My Profile.') }}</div>
 
     <button type="submit" class="btn btn-brand btn-lg w-100 mt-2">
-      <i class="bi bi-box-arrow-in-right me-1"></i> Enter Room
+      <i class="bi bi-box-arrow-in-right me-1"></i> {{ _('Enter Room') }}
     </button>
   </form>
 {% endblock %}

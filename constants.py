@@ -1,9 +1,9 @@
 from flask_babel import lazy_gettext as _l
 
 PROPERTY_TYPES = [
-    ("apartment", "Apartment"),
-    ("gated_community", "Gated Community"),
-    ("office", "Office"),
+    ("apartment", _l("Apartment")),
+    ("gated_community", _l("Gated Community")),
+    ("office", _l("Office")),
 ]
 
 RESIDENTIAL_PROPERTY_TYPES = ("apartment", "gated_community")
@@ -37,5 +37,15 @@ PROPERTY_TYPE_LABELS = {
 }
 
 VEHICLE_TYPES = ["Bike", "Car", "Auto", "Truck", "Camper", "Cycle", "Other"]
+
+VEHICLE_TYPE_LABELS = {
+    "Bike": _l("Bike"),
+    "Car": _l("Car"),
+    "Auto": _l("Auto"),
+    "Truck": _l("Truck"),
+    "Camper": _l("Camper"),
+    "Cycle": _l("Cycle"),
+    "Other": _l("Other"),
+}
 
 OTP_VALIDITY_MINUTES = 5

@@ -1,44 +1,44 @@
 {% extends "base.html" %}
-{% block title %}Property Details - FluxPark{% endblock %}
+{% block title %}{{ _('Property Details') }} - FluxPark{% endblock %}
 {% block card_size %}auth-card-wide{% endblock %}
 
 {% block content %}
-  <h5 class="fw-semibold mb-1">Property Details</h5>
-  <p class="text-muted">Tell us a bit about your apartment or gated community.</p>
+  <h5 class="fw-semibold mb-1">{{ _('Property Details') }}</h5>
+  <p class="text-muted">{{ _('Tell us a bit about your apartment or gated community.') }}</p>
 
   <form method="POST">
-    <label class="form-label">Property Type</label>
+    <label class="form-label">{{ _('Property Type') }}</label>
     <div class="btn-group w-100 contact-toggle mb-4" role="group">
       <input type="radio" class="btn-check" name="property_type" id="type_apartment" value="apartment" autocomplete="off"
              {% if property_type != 'gated_community' %}checked{% endif %}>
-      <label class="btn btn-outline-brand" for="type_apartment"><i class="bi bi-building me-1"></i>Apartment</label>
+      <label class="btn btn-outline-brand" for="type_apartment"><i class="bi bi-building me-1"></i>{{ _('Apartment') }}</label>
 
       <input type="radio" class="btn-check" name="property_type" id="type_gated" value="gated_community" autocomplete="off"
              {% if property_type == 'gated_community' %}checked{% endif %}>
-      <label class="btn btn-outline-brand" for="type_gated"><i class="bi bi-houses me-1"></i>Gated Community</label>
+      <label class="btn btn-outline-brand" for="type_gated"><i class="bi bi-houses me-1"></i>{{ _('Gated Community') }}</label>
     </div>
 
     <div class="row g-3">
       <div class="col-12">
-        <label for="name" class="form-label">Name of the Apartment / Community</label>
+        <label for="name" class="form-label">{{ _('Name of the Apartment / Community') }}</label>
         <input type="text" class="form-control" id="name" name="name" value="{{ form_data.get('name', '') }}" required>
       </div>
       <div class="col-12">
-        <label for="address" class="form-label">Address</label>
+        <label for="address" class="form-label">{{ _('Address') }}</label>
         <textarea class="form-control" id="address" name="address" rows="2" required>{{ form_data.get('address', '') }}</textarea>
       </div>
       <div class="col-md-6">
-        <label for="num_flats" class="form-label">Number of Flats</label>
+        <label for="num_flats" class="form-label">{{ _('Number of Flats') }}</label>
         <input type="number" min="1" class="form-control" id="num_flats" name="num_flats" value="{{ form_data.get('num_flats', '') }}" required>
       </div>
       <div class="col-md-6">
-        <label for="extra_parking" class="form-label">Extra Parking Spaces (if any)</label>
+        <label for="extra_parking" class="form-label">{{ _('Extra Parking Spaces (if any)') }}</label>
         <input type="number" min="0" class="form-control" id="extra_parking" name="extra_parking" value="{{ form_data.get('extra_parking', 0) }}">
       </div>
     </div>
 
     <button type="submit" class="btn btn-brand btn-lg w-100 mt-4">
-      <i class="bi bi-house-add me-1"></i> Create Room
+      <i class="bi bi-house-add me-1"></i> {{ _('Create Room') }}
     </button>
   </form>
 {% endblock %}

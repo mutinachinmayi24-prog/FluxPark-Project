@@ -1,78 +1,76 @@
 {% extends "base.html" %}
-{% block title %}Transport Request - FluxPark{% endblock %}
+{% block title %}{{ _('Transport Request') }} - FluxPark{% endblock %}
 
 {% block content %}
-  <h3 class="fw-bold mb-1">Transport Request</h3>
+  <h3 class="fw-bold mb-1">{{ _('Transport Request') }}</h3>
   <p class="text-muted mb-4">
-    Request a company parking slot for tomorrow ({{ tomorrow.strftime('%d %b %Y') }}).
-    Requests must be submitted before <strong>9:00 PM</strong> today &mdash; slots are
-    allocated to all pending requests after the cutoff.
+    {{ _('Request a company parking slot for tomorrow (%(date)s).', date=tomorrow.strftime('%d %b %Y')) }}
+    {{ _('Requests must be submitted before %(time)s today — slots are allocated to all pending requests after the cutoff.', time='9:00 PM') }}
   </p>
 
   <div class="card border-0 shadow-sm mb-4">
     <div class="card-body">
-      <h6 class="section-title">Tomorrow's Request</h6>
+      <h6 class="section-title">{{ _("Tomorrow's Request") }}</h6>
 
       {% if existing %}
         <p class="mb-1">
           <span class="badge bg-{{ REQUEST_STATUS_CLASSES[existing.status] }}">{{ REQUEST_STATUS_LABELS[existing.status] }}</span>
-          {{ existing.vehicle_type }} &mdash; {{ existing.vehicle_number }}
+          {{ VEHICLE_TYPE_LABELS.get(existing.vehicle_type, existing.vehicle_type) }} &mdash; {{ existing.vehicle_number }}
         </p>
         <p class="text-muted small mb-3">
-          Shift: {{ existing.from_time.strftime('%H:%M') }} - {{ existing.to_time.strftime('%H:%M') }}
-          {% if existing.parking_slot %} &middot; Slot {{ existing.parking_slot.slot_number }}{% endif %}
+          {{ _('Shift:') }} {{ existing.from_time.strftime('%H:%M') }} - {{ existing.to_time.strftime('%H:%M') }}
+          {% if existing.parking_slot %} &middot; {{ _('Slot %(number)s', number=existing.parking_slot.slot_number) }}{% endif %}
         </p>
         {% if existing.status == 'allocated' %}
           <a href="{{ url_for('transport_pass', token=existing.qr_token) }}" class="btn btn-sm btn-brand mb-2">
-            <i class="bi bi-qr-code me-1"></i> View Parking Pass
+            <i class="bi bi-qr-code me-1"></i> {{ _('View Parking Pass') }}
           </a>
         {% endif %}
         {% if existing.status == 'pending_allocation' and not cutoff_passed %}
           <form method="POST">
             <input type="hidden" name="action" value="cancel">
-            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Cancel your transport request for tomorrow?');">
-              <i class="bi bi-x-circle me-1"></i> Cancel Request
+            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('{{ _('Cancel your transport request for tomorrow?') }}');">
+              <i class="bi bi-x-circle me-1"></i> {{ _('Cancel Request') }}
             </button>
           </form>
         {% elif existing.status == 'pending_allocation' and cutoff_passed %}
-          <p class="text-muted small mb-0">The 9 PM cutoff has passed; this request can no longer be changed.</p>
+          <p class="text-muted small mb-0">{{ _('The 9 PM cutoff has passed; this request can no longer be changed.') }}</p>
         {% endif %}
       {% elif cutoff_passed %}
         <p class="text-muted mb-0">
-          You haven't submitted a request for tomorrow, and the 9 PM cutoff has passed.
-          You can submit a request for the day after tomorrow once it becomes "tomorrow".
+          {{ _('You haven\'t submitted a request for tomorrow, and the 9 PM cutoff has passed. You can submit a request for the day after tomorrow once it becomes "tomorrow".') }}
         </p>
       {% else %}
         <form method="POST">
           <div class="row g-3">
             <div class="col-md-6">
-              <label for="vehicle_type" class="form-label">Vehicle Type</label>
+              <label for="vehicle_type" class="form-label">{{ _('Vehicle Type') }}</label>
               <select class="form-select" id="vehicle_type" name="vehicle_type" required>
-                <option value="" disabled {% if not defaults.vehicle_type %}selected{% endif %}>Select vehicle type</option>
+                <option value="" disabled {% if not defaults.vehicle_type %}selected{% endif %}>{{ _('Select vehicle type') }}</option>
                 {% for vt in vehicle_types %}
-                  <option value="{{ vt }}" {% if defaults.vehicle_type == vt %}selected{% endif %}>{{ vt }}</option>
+                  <option value="{{ vt }}" {% if defaults.vehicle_type == vt %}selected{% endif %}>{{ VEHICLE_TYPE_LABELS.get(vt, vt) }}</option>
                 {% endfor %}
               </select>
             </div>
             <div class="col-md-6">
-              <label for="vehicle_number" class="form-label">Vehicle Number</label>
+              <label for="vehicle_number" class="form-label">{{ _('Vehicle Number') }}</label>
               <input type="text" class="form-control text-uppercase" id="vehicle_number" name="vehicle_number" value="{{ defaults.vehicle_number }}" required>
             </div>
           </div>
 
           <div class="row g-3 mt-0">
             <div class="col-md-6">
-              <label for="from_time" class="form-label">Shift Start</label>
+              <label for="from_time" class="form-label">{{ _('Shift Start') }}</label>
               <input type="time" class="form-control" id="from_time" name="from_time" value="{{ defaults.from_time }}" required>
             </div>
             <div class="col-md-6">
-              <label for="to_time" class="form-label">Shift End</label>
+              <label for="to_time" class="form-label">{{ _('Shift End') }}</label>
               <input type="time" class="form-control" id="to_time" name="to_time" value="{{ defaults.to_time }}" required>
             </div>
           </div>
 
           <button type="submit" class="btn btn-brand mt-4">
-            <i class="bi bi-send me-1"></i> Submit Request
+            <i class="bi bi-send me-1"></i> {{ _('Submit Request') }}
           </button>
         </form>
       {% endif %}
@@ -81,31 +79,31 @@
 
   <div class="card border-0 shadow-sm">
     <div class="card-body">
-      <h6 class="section-title">Your Recent Requests</h6>
+      <h6 class="section-title">{{ _('Your Recent Requests') }}</h6>
       {% if history %}
         <div class="table-responsive">
           <table class="table table-sm align-middle">
             <thead>
               <tr>
-                <th>Date</th>
-                <th>Vehicle</th>
-                <th>Shift</th>
-                <th>Status</th>
-                <th>Slot</th>
-                <th>Pass</th>
+                <th>{{ _('Date') }}</th>
+                <th>{{ _('Vehicle') }}</th>
+                <th>{{ _('Shift') }}</th>
+                <th>{{ _('Status') }}</th>
+                <th>{{ _('Slot') }}</th>
+                <th>{{ _('Pass') }}</th>
               </tr>
             </thead>
             <tbody>
               {% for r in history %}
                 <tr>
                   <td>{{ r.date.strftime('%d %b %Y') }}</td>
-                  <td>{{ r.vehicle_type }}<br><span class="text-muted small">{{ r.vehicle_number }}</span></td>
+                  <td>{{ VEHICLE_TYPE_LABELS.get(r.vehicle_type, r.vehicle_type) }}<br><span class="text-muted small">{{ r.vehicle_number }}</span></td>
                   <td>{{ r.from_time.strftime('%H:%M') }} - {{ r.to_time.strftime('%H:%M') }}</td>
                   <td><span class="badge bg-{{ REQUEST_STATUS_CLASSES[r.status] }}">{{ REQUEST_STATUS_LABELS[r.status] }}</span></td>
                   <td>{{ r.parking_slot.slot_number if r.parking_slot else '—' }}</td>
                   <td>
                     {% if r.status == 'allocated' %}
-                      <a href="{{ url_for('transport_pass', token=r.qr_token) }}"><i class="bi bi-qr-code"></i> View</a>
+                      <a href="{{ url_for('transport_pass', token=r.qr_token) }}"><i class="bi bi-qr-code"></i> {{ _('View') }}</a>
                     {% else %}
                       &mdash;
                     {% endif %}
@@ -116,7 +114,7 @@
           </table>
         </div>
       {% else %}
-        <p class="text-muted mb-0">You haven't submitted any transport requests yet.</p>
+        <p class="text-muted mb-0">{{ _("You haven't submitted any transport requests yet.") }}</p>
       {% endif %}
     </div>
   </div>

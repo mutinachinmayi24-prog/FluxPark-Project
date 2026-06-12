@@ -1,11 +1,11 @@
-<div class="section-title">Vehicle Details</div>
+<div class="section-title">{{ _('Vehicle Details') }}</div>
 <div class="table-responsive">
   <table class="table dynamic-table align-middle" id="vehicle-table">
     <thead>
       <tr>
-        <th style="width:70px">S.No</th>
-        <th>Vehicle Type</th>
-        <th>Vehicle Number</th>
+        <th style="width:70px">{{ _('S.No') }}</th>
+        <th>{{ _('Vehicle Type') }}</th>
+        <th>{{ _('Vehicle Number') }}</th>
         <th style="width:50px"></th>
       </tr>
     </thead>
@@ -14,8 +14,8 @@
         <td class="s-no text-center">1</td>
         <td>
           <select name="vehicle_type[]" class="form-select" required>
-            <option value="">Select type</option>
-            {% for vt in vehicle_types %}<option value="{{ vt }}">{{ vt }}</option>{% endfor %}
+            <option value="">{{ _('Select type') }}</option>
+            {% for vt in vehicle_types %}<option value="{{ vt }}">{{ VEHICLE_TYPE_LABELS.get(vt, vt) }}</option>{% endfor %}
           </select>
         </td>
         <td><input type="text" name="vehicle_number[]" class="form-control text-uppercase" placeholder="e.g. TS09AB1234" required></td>
@@ -25,5 +25,5 @@
   </table>
 </div>
 <button type="button" class="btn btn-sm btn-outline-brand mb-3" data-add-row="vehicle-table">
-  <i class="bi bi-plus-lg me-1"></i> Add Vehicle
+  <i class="bi bi-plus-lg me-1"></i> {{ _('Add Vehicle') }}
 </button>

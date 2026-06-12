@@ -1,27 +1,27 @@
 {% extends "base.html" %}
-{% block title %}Scan Entry / Exit - FluxPark{% endblock %}
+{% block title %}{{ _('Scan Entry / Exit') }} - FluxPark{% endblock %}
 
 {% block content %}
-  <h3 class="fw-bold mb-1">Scan QR</h3>
-  <p class="text-muted mb-4">Scan a visitor's or employee's QR pass, or enter the pass code manually.</p>
+  <h3 class="fw-bold mb-1">{{ _('Scan QR') }}</h3>
+  <p class="text-muted mb-4">{{ _("Scan a visitor's or employee's QR pass, or enter the pass code manually.") }}</p>
 
   <div class="card border-0 shadow-sm mb-4">
     <div class="card-body text-center">
       <div id="qr-reader"></div>
-      <p class="text-muted small mt-2 mb-0" id="qr-reader-status">Allow camera access to start scanning.</p>
+      <p class="text-muted small mt-2 mb-0" id="qr-reader-status">{{ _('Allow camera access to start scanning.') }}</p>
     </div>
   </div>
 
   <div class="card border-0 shadow-sm">
     <div class="card-body">
-      <h6 class="section-title">Manual Entry</h6>
+      <h6 class="section-title">{{ _('Manual Entry') }}</h6>
       <form method="POST" class="row g-3 align-items-end">
         <div class="col-sm-8">
-          <label for="token" class="form-label">Pass Code</label>
-          <input type="text" class="form-control" id="token" name="token" placeholder="Paste the pass code or link" required>
+          <label for="token" class="form-label">{{ _('Pass Code') }}</label>
+          <input type="text" class="form-control" id="token" name="token" placeholder="{{ _('Paste the pass code or link') }}" required>
         </div>
         <div class="col-sm-4">
-          <button type="submit" class="btn btn-brand w-100"><i class="bi bi-search me-1"></i> Look Up</button>
+          <button type="submit" class="btn btn-brand w-100"><i class="bi bi-search me-1"></i> {{ _('Look Up') }}</button>
         </div>
       </form>
     </div>
@@ -38,7 +38,7 @@
     document.addEventListener('DOMContentLoaded', function () {
       var statusEl = document.getElementById('qr-reader-status');
       if (typeof Html5Qrcode === 'undefined') {
-        statusEl.textContent = 'Camera scanner unavailable. Use manual entry below.';
+        statusEl.textContent = {{ _('Camera scanner unavailable. Use manual entry below.')|tojson }};
         return;
       }
 
@@ -48,7 +48,7 @@
       var onSuccess = function (decodedText) {
         if (handled) return;
         handled = true;
-        statusEl.textContent = 'Code detected, looking up pass...';
+        statusEl.textContent = {{ _('Code detected, looking up pass...')|tojson }};
         scanner.stop().finally(function () {
           document.getElementById('scan-redirect-token').value = decodedText.trim();
           document.getElementById('scan-redirect-form').submit();
@@ -57,17 +57,17 @@
 
       Html5Qrcode.getCameras().then(function (cameras) {
         if (!cameras || !cameras.length) {
-          statusEl.textContent = 'No camera found. Use manual entry below.';
+          statusEl.textContent = {{ _('No camera found. Use manual entry below.')|tojson }};
           return;
         }
         var cameraId = cameras[0].id;
         scanner.start(cameraId, { fps: 10, qrbox: 250 }, onSuccess).then(function () {
-          statusEl.textContent = 'Point the camera at the QR pass.';
+          statusEl.textContent = {{ _('Point the camera at the QR pass.')|tojson }};
         }).catch(function () {
-          statusEl.textContent = 'Could not start the camera. Use manual entry below.';
+          statusEl.textContent = {{ _('Could not start the camera. Use manual entry below.')|tojson }};
         });
       }).catch(function () {
-        statusEl.textContent = 'Camera access denied. Use manual entry below.';
+        statusEl.textContent = {{ _('Camera access denied. Use manual entry below.')|tojson }};
       });
     });
   </script>

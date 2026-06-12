@@ -1,53 +1,53 @@
 {% extends "base.html" %}
-{% block title %}Unexpected Visitor - FluxPark{% endblock %}
+{% block title %}{{ _('Unexpected Visitor') }} - FluxPark{% endblock %}
 
 {% block content %}
-  <h3 class="fw-bold mb-1">Log an Unexpected Visitor</h3>
-  <p class="text-muted mb-4">For walk-in visitors who haven't been pre-approved by a resident.</p>
+  <h3 class="fw-bold mb-1">{{ _('Log an Unexpected Visitor') }}</h3>
+  <p class="text-muted mb-4">{{ _("For walk-in visitors who haven't been pre-approved by a resident.") }}</p>
 
   <div class="card border-0 shadow-sm mb-4">
     <div class="card-body">
       <form method="POST">
         <div class="row g-3">
           <div class="col-md-6">
-            <label for="visitor_name" class="form-label">Visitor Name</label>
+            <label for="visitor_name" class="form-label">{{ _('Visitor Name') }}</label>
             <input type="text" class="form-control" id="visitor_name" name="visitor_name" value="{{ form_data.get('visitor_name', '') }}" required>
           </div>
           <div class="col-md-6">
-            <label for="visitor_phone" class="form-label">Visitor Phone Number</label>
+            <label for="visitor_phone" class="form-label">{{ _('Visitor Phone Number') }}</label>
             <input type="tel" class="form-control" id="visitor_phone" name="visitor_phone" pattern="[6-9][0-9]{9}" maxlength="10" value="{{ form_data.get('visitor_phone', '') }}" required>
           </div>
           <div class="col-md-6">
-            <label for="vehicle_type" class="form-label">Vehicle Type</label>
+            <label for="vehicle_type" class="form-label">{{ _('Vehicle Type') }}</label>
             <select class="form-select" id="vehicle_type" name="vehicle_type" required>
-              <option value="" disabled {% if not form_data.get('vehicle_type') %}selected{% endif %}>Select vehicle type</option>
+              <option value="" disabled {% if not form_data.get('vehicle_type') %}selected{% endif %}>{{ _('Select vehicle type') }}</option>
               {% for vt in vehicle_types %}
-                <option value="{{ vt }}" {% if form_data.get('vehicle_type') == vt %}selected{% endif %}>{{ vt }}</option>
+                <option value="{{ vt }}" {% if form_data.get('vehicle_type') == vt %}selected{% endif %}>{{ VEHICLE_TYPE_LABELS.get(vt, vt) }}</option>
               {% endfor %}
             </select>
           </div>
           <div class="col-md-6">
-            <label for="vehicle_number" class="form-label">Vehicle Number</label>
+            <label for="vehicle_number" class="form-label">{{ _('Vehicle Number') }}</label>
             <input type="text" class="form-control text-uppercase" id="vehicle_number" name="vehicle_number" value="{{ form_data.get('vehicle_number', '') }}" required>
           </div>
           <div class="col-md-6">
-            <label for="host_role_profile_id" class="form-label">Visiting</label>
+            <label for="host_role_profile_id" class="form-label">{{ _('Visiting') }}</label>
             <select class="form-select" id="host_role_profile_id" name="host_role_profile_id" required>
-              <option value="" disabled {% if not form_data.get('host_role_profile_id') %}selected{% endif %}>Select {{ 'employee' if hosts and hosts[0].sub_room else 'resident' }}</option>
+              <option value="" disabled {% if not form_data.get('host_role_profile_id') %}selected{% endif %}>{{ _('Select employee') if hosts and hosts[0].sub_room else _('Select resident') }}</option>
               {% for h in hosts %}
-                <option value="{{ h.id }}" {% if form_data.get('host_role_profile_id')|string == h.id|string %}selected{% endif %}>{{ role_profile_label(h) }}{% if h.sub_room %} &mdash; {{ h.sub_room.company_name }}{% endif %}</option>
+                <option value="{{ h.id }}" {% if form_data.get('host_role_profile_id')|string == h.id|string %}selected{% endif %}>{{ role_profile_label(h) }}{% if h.sub_room %} — {{ h.sub_room.company_name }}{% endif %}</option>
               {% endfor %}
             </select>
           </div>
           <div class="col-md-6">
-            <label for="purpose" class="form-label">Purpose <span class="text-muted">(optional)</span></label>
+            <label for="purpose" class="form-label">{{ _('Purpose') }} <span class="text-muted">({{ _('optional') }})</span></label>
             <input type="text" class="form-control" id="purpose" name="purpose" value="{{ form_data.get('purpose', '') }}">
           </div>
         </div>
 
         <div class="row g-3 mt-0">
           <div class="col-12">
-            <label for="date" class="form-label">Date</label>
+            <label for="date" class="form-label">{{ _('Date') }}</label>
             <input type="date" class="form-control" id="date" name="date" value="{{ form_data.get('date', '') or today }}" required>
           </div>
         </div>
@@ -55,23 +55,23 @@
         <div class="form-check mt-2">
           <input class="form-check-input" type="checkbox" id="more_than_1hr" name="more_than_1hr" {% if form_data.get('more_than_1hr') %}checked{% endif %}>
           <label class="form-check-label" for="more_than_1hr">
-            Visitor will stay longer than 1 hour
+            {{ _('Visitor will stay longer than 1 hour') }}
           </label>
         </div>
 
         <div class="row g-3 mt-0 {% if not form_data.get('more_than_1hr') %}d-none{% endif %}" id="unexpected-time-fields">
           <div class="col-md-6">
-            <label for="from_time" class="form-label">From</label>
+            <label for="from_time" class="form-label">{{ _('From') }}</label>
             <input type="time" class="form-control" id="from_time" name="from_time" value="{{ form_data.get('from_time', '') }}">
           </div>
           <div class="col-md-6">
-            <label for="to_time" class="form-label">To</label>
+            <label for="to_time" class="form-label">{{ _('To') }}</label>
             <input type="time" class="form-control" id="to_time" name="to_time" value="{{ form_data.get('to_time', '') }}">
           </div>
         </div>
 
         <button type="submit" class="btn btn-brand mt-4">
-          <i class="bi bi-person-plus me-1"></i> Log Visitor
+          <i class="bi bi-person-plus me-1"></i> {{ _('Log Visitor') }}
         </button>
       </form>
     </div>
@@ -79,24 +79,24 @@
 
   <div class="card border-0 shadow-sm">
     <div class="card-body">
-      <h6 class="section-title">Recently Logged</h6>
+      <h6 class="section-title">{{ _('Recently Logged') }}</h6>
       {% if recent %}
         <div class="table-responsive">
           <table class="table table-sm align-middle">
             <thead>
               <tr>
-                <th>Visitor</th>
-                <th>Visiting</th>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Status</th>
+                <th>{{ _('Visitor') }}</th>
+                <th>{{ _('Visiting') }}</th>
+                <th>{{ _('Date') }}</th>
+                <th>{{ _('Time') }}</th>
+                <th>{{ _('Status') }}</th>
               </tr>
             </thead>
             <tbody>
               {% for r in recent %}
                 <tr>
                   <td>{{ r.visitor_name }}<br><span class="text-muted small">{{ r.visitor_phone }}</span></td>
-                  <td>{{ role_profile_label(r.host_role_profile) }}{% if r.host_role_profile.sub_room %} &mdash; {{ r.host_role_profile.sub_room.company_name }}{% endif %}</td>
+                  <td>{{ role_profile_label(r.host_role_profile) }}{% if r.host_role_profile.sub_room %} — {{ r.host_role_profile.sub_room.company_name }}{% endif %}</td>
                   <td>{{ r.date.strftime('%d %b %Y') }}</td>
                   <td>{{ r.from_time.strftime('%H:%M') }} - {{ r.to_time.strftime('%H:%M') }}</td>
                   <td><span class="badge bg-{{ REQUEST_STATUS_CLASSES[r.status] }}">{{ REQUEST_STATUS_LABELS[r.status] }}</span></td>
@@ -106,7 +106,7 @@
           </table>
         </div>
       {% else %}
-        <p class="text-muted mb-0">You haven't logged any unexpected visitors yet.</p>
+        <p class="text-muted mb-0">{{ _("You haven't logged any unexpected visitors yet.") }}</p>
       {% endif %}
     </div>
   </div>

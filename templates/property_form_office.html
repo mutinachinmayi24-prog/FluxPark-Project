@@ -1,25 +1,25 @@
 {% extends "base.html" %}
-{% block title %}Office Details - FluxPark{% endblock %}
+{% block title %}{{ _('Office Details') }} - FluxPark{% endblock %}
 {% block card_size %}auth-card-xwide{% endblock %}
 
 {% block content %}
-  <h5 class="fw-semibold mb-1">Office Property Details</h5>
-  <p class="text-muted">Tell us about the building and the companies that operate in it.</p>
+  <h5 class="fw-semibold mb-1">{{ _('Office Property Details') }}</h5>
+  <p class="text-muted">{{ _('Tell us about the building and the companies that operate in it.') }}</p>
 
   <form method="POST">
     <div class="row g-3 mb-3">
       <div class="col-12">
-        <label for="name" class="form-label">Name of the Office / Building</label>
+        <label for="name" class="form-label">{{ _('Name of the Office / Building') }}</label>
         <input type="text" class="form-control" id="name" name="name" value="{{ form_data.get('name', '') }}" required>
       </div>
       <div class="col-12">
-        <label for="address" class="form-label">Address</label>
+        <label for="address" class="form-label">{{ _('Address') }}</label>
         <textarea class="form-control" id="address" name="address" rows="2" required>{{ form_data.get('address', '') }}</textarea>
       </div>
       <div class="col-md-4">
-        <label for="num_companies" class="form-label">Number of Companies in the Building</label>
-        <input type="number" min="1" class="form-control" id="num_companies" name="num_companies" placeholder="e.g. 3">
-        <div class="form-text">Sets up that many rows below. You can also add/remove rows manually.</div>
+        <label for="num_companies" class="form-label">{{ _('Number of Companies in the Building') }}</label>
+        <input type="number" min="1" class="form-control" id="num_companies" name="num_companies" placeholder="{{ _('e.g. 3') }}">
+        <div class="form-text">{{ _('Sets up that many rows below. You can also add/remove rows manually.') }}</div>
       </div>
     </div>
 
@@ -27,20 +27,20 @@
       <table class="table dynamic-table align-middle" id="company-table">
         <thead>
           <tr>
-            <th>Company Name</th>
-            <th>Approx. Employees</th>
-            <th>Parking Spaces</th>
-            <th>Floor Allocation (if any)</th>
-            <th>Extra Parking</th>
+            <th>{{ _('Company Name') }}</th>
+            <th>{{ _('Approx. Employees') }}</th>
+            <th>{{ _('Parking Spaces') }}</th>
+            <th>{{ _('Floor Allocation (if any)') }}</th>
+            <th>{{ _('Extra Parking') }}</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><input type="text" name="company_name[]" class="form-control" placeholder="e.g. Acme Corp" required></td>
-            <td><input type="number" min="0" name="num_employees[]" class="form-control" placeholder="e.g. 50"></td>
-            <td><input type="number" min="0" name="num_parking_spaces[]" class="form-control" placeholder="e.g. 10"></td>
-            <td><input type="text" name="floor_allocation[]" class="form-control" placeholder="e.g. 2nd floor: 6, B1: 4"></td>
+            <td><input type="text" name="company_name[]" class="form-control" placeholder="{{ _('e.g. Acme Corp') }}" required></td>
+            <td><input type="number" min="0" name="num_employees[]" class="form-control" placeholder="{{ _('e.g. 50') }}"></td>
+            <td><input type="number" min="0" name="num_parking_spaces[]" class="form-control" placeholder="{{ _('e.g. 10') }}"></td>
+            <td><input type="text" name="floor_allocation[]" class="form-control" placeholder="{{ _('e.g. 2nd floor: 6, B1: 4') }}"></td>
             <td><input type="number" min="0" name="extra_parking[]" class="form-control" placeholder="0"></td>
             <td><button type="button" class="btn btn-sm btn-outline-danger remove-row"><i class="bi bi-trash"></i></button></td>
           </tr>
@@ -48,11 +48,11 @@
       </table>
     </div>
     <button type="button" class="btn btn-sm btn-outline-brand mb-4" data-add-row="company-table">
-      <i class="bi bi-plus-lg me-1"></i> Add Company
+      <i class="bi bi-plus-lg me-1"></i> {{ _('Add Company') }}
     </button>
 
     <button type="submit" class="btn btn-brand btn-lg w-100">
-      <i class="bi bi-diagram-3 me-1"></i> Create Sub-rooms
+      <i class="bi bi-diagram-3 me-1"></i> {{ _('Create Sub-rooms') }}
     </button>
   </form>
 {% endblock %}

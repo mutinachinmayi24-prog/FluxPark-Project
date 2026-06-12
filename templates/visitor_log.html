@@ -57,7 +57,7 @@
                     {{ r.visitor_name }}
                     <div class="text-muted small">{{ r.visitor_phone }}</div>
                   </td>
-                  <td>{{ r.vehicle_number }}<div class="text-muted small text-capitalize">{{ r.vehicle_type }}</div></td>
+                  <td>{{ r.vehicle_number }}<div class="text-muted small">{{ VEHICLE_TYPE_LABELS.get(r.vehicle_type, r.vehicle_type) }}</div></td>
                   <td>{{ r.from_time.strftime('%H:%M') }} &ndash; {{ r.to_time.strftime('%H:%M') }}</td>
                   <td>
                     {{ role_profile_label(r.host_role_profile) }}

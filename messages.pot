@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-06-12 13:31+0530\n"
+"POT-Creation-Date: 2026-06-12 17:06+0530\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,129 +17,418 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
 
-#: app.py:235
+#: app.py:237
 msgid "Dashboard"
 msgstr ""
 
-#: app.py:236 templates/ai_assistant.html:2 templates/ai_assistant.html:6
+#: app.py:238 templates/ai_assistant.html:2 templates/ai_assistant.html:6
 msgid "AI Assistant"
 msgstr ""
 
-#: app.py:240
+#: app.py:242 templates/visitor_request.html:2
 msgid "Visitor Request"
 msgstr ""
 
-#: app.py:241
+#: app.py:243 templates/parking_availability.html:2
 msgid "Parking Availability"
 msgstr ""
 
-#: app.py:243
+#: app.py:245 templates/parking_availability.html:61
+#: templates/parking_slots.html:2 templates/parking_slots.html:5
 msgid "Parking Slots"
 msgstr ""
 
-#: app.py:244 app.py:263
+#: app.py:246 app.py:265 templates/parking_map.html:2
+#: templates/parking_map.html:5
 msgid "Parking Map"
 msgstr ""
 
-#: app.py:247 app.py:267
+#: app.py:249 app.py:269 templates/security_scan.html:2
 msgid "Scan Entry / Exit"
 msgstr ""
 
-#: app.py:248 app.py:268
+#: app.py:250 app.py:270 templates/unexpected_visitor.html:2
 msgid "Unexpected Visitor"
 msgstr ""
 
-#: app.py:249 app.py:258 app.py:269 app.py:277 templates/visitor_log.html:2
+#: app.py:251 app.py:260 app.py:271 app.py:279 templates/visitor_log.html:2
 #: templates/visitor_log.html:6
 msgid "Visitor Log"
 msgstr ""
 
-#: app.py:251 app.py:271
+#: app.py:253 app.py:273 templates/notifications.html:2
+#: templates/notifications.html:6
 msgid "Notifications"
 msgstr ""
 
-#: app.py:254
+#: app.py:256 templates/payments.html:2 templates/payments.html:5
 msgid "Payments"
 msgstr ""
 
-#: app.py:257
+#: app.py:259 templates/members.html:14
 msgid "Members"
 msgstr ""
 
-#: app.py:259 app.py:279
+#: app.py:261 app.py:281 templates/invite_links.html:2
 msgid "Invite Links"
 msgstr ""
 
-#: app.py:262
+#: app.py:264
 msgid "Company Parking"
 msgstr ""
 
-#: app.py:264 templates/dashboard.html:128
+#: app.py:266 templates/dashboard.html:128 templates/transport_request.html:2
+#: templates/transport_request.html:5
 msgid "Transport Request"
 msgstr ""
 
-#: app.py:274 templates/dashboard.html:356
+#: app.py:276 templates/dashboard.html:356
 msgid "Team"
 msgstr ""
 
-#: app.py:278
+#: app.py:280
 msgid "Rent Ledger"
 msgstr ""
 
-#: app.py:281
+#: app.py:283 templates/my_profile.html:2 templates/my_profile.html:13
+#: templates/parking_availability.html:60
 msgid "My Profile"
 msgstr ""
 
-#: app.py:398
+#: app.py:319
+#, python-format
+msgid ""
+"Demo mode: your verification code is %(code)s (valid for %(minutes)s "
+"minutes)."
+msgstr ""
+
+#: app.py:403
 msgid "This invite link is invalid or has expired."
 msgstr ""
 
-#: app.py:406
+#: app.py:411
 msgid "Please choose email or phone."
 msgstr ""
 
-#: app.py:408
+#: app.py:413
 msgid "Please enter a valid email address."
 msgstr ""
 
-#: app.py:410
+#: app.py:415
 msgid "Please enter a valid 10-digit mobile number."
 msgstr ""
 
-#: app.py:442
+#: app.py:447
 msgid "Your OTP has expired. Please request a new one."
 msgstr ""
 
-#: app.py:444
+#: app.py:449
 msgid "Incorrect OTP. Please try again."
 msgstr ""
 
-#: app.py:685
+#: app.py:491
+msgid "Please select a property type."
+msgstr ""
+
+#: app.py:518
+msgid "Please select Apartment or Gated Community."
+msgstr ""
+
+#: app.py:520 app.py:572
+msgid "Please enter the property name."
+msgstr ""
+
+#: app.py:522 app.py:574
+msgid "Please enter the address."
+msgstr ""
+
+#: app.py:524
+msgid "Number of flats must be a number."
+msgstr ""
+
+#: app.py:526
+msgid "Extra parking spaces must be a number."
+msgstr ""
+
+#: app.py:586
+#, python-format
+msgid "Please enter valid numbers for company '%(name)s'."
+msgstr ""
+
+#: app.py:599
+msgid "Please add at least one company."
+msgstr ""
+
+#: app.py:664
+msgid "Please select your company to continue."
+msgstr ""
+
+#: app.py:690
 msgid "Please select a role."
 msgstr ""
 
-#: app.py:2045
+#: app.py:870
+msgid "Please fill in all required fields."
+msgstr ""
+
+#: app.py:875
+msgid "Please enter your vehicle type and number for self-transport."
+msgstr ""
+
+#: app.py:880
+msgid "Please fill in all required bank details."
+msgstr ""
+
+#: app.py:884
+msgid "Please add at least one vehicle."
+msgstr ""
+
+#: app.py:889
+#, python-format
+msgid "Vehicle number(s) already registered to another member: %(numbers)s"
+msgstr ""
+
+#: app.py:894
+#, python-format
+msgid "Vehicle number %(number)s is already registered to another member."
+msgstr ""
+
+#: app.py:899
+msgid "This Employee ID is already registered."
+msgstr ""
+
+#: app.py:1113
+msgid "Profile updated successfully."
+msgstr ""
+
+#: app.py:1151 app.py:2386
+msgid "Please enter the visitor's name."
+msgstr ""
+
+#: app.py:1153 app.py:2388
+msgid "Please enter a valid 10-digit visitor phone number."
+msgstr ""
+
+#: app.py:1155 app.py:1352 app.py:2390
+msgid "Please select a vehicle type."
+msgstr ""
+
+#: app.py:1157 app.py:1354 app.py:2392
+msgid "Please enter the vehicle number."
+msgstr ""
+
+#: app.py:1159 app.py:1232
+msgid "Please fill in date, from time and to time."
+msgstr ""
+
+#: app.py:1179
+msgid "Visitor request created and a parking slot was allocated!"
+msgstr ""
+
+#: app.py:1181
+msgid "Visitor request created. We'll notify you once a slot is available."
+msgstr ""
+
+#: app.py:1230
+msgid "Please select a valid parking slot of yours."
+msgstr ""
+
+#: app.py:1238
+msgid "Rent per hour must be greater than zero."
+msgstr ""
+
+#: app.py:1240
+msgid "Please enter a valid rent per hour."
+msgstr ""
+
+#: app.py:1257
+msgid "Slot listed and already matched with a waiting visitor!"
+msgstr ""
+
+#: app.py:1259
+msgid "Your parking slot has been listed as available."
+msgstr ""
+
+#: app.py:1292
+msgid "This slot isn't currently matched with a visitor."
+msgstr ""
+
+#: app.py:1296
+msgid "Marked as returned. We've notified everyone affected."
+msgstr ""
+
+#: app.py:1329
+msgid "There's no pending request for tomorrow to cancel."
+msgstr ""
+
+#: app.py:1331 templates/transport_request.html:37
+msgid "The 9 PM cutoff has passed; this request can no longer be changed."
+msgstr ""
+
+#: app.py:1335
+msgid "Transport request for tomorrow cancelled."
+msgstr ""
+
+#: app.py:1339
+msgid "You've already submitted a transport request for tomorrow."
+msgstr ""
+
+#: app.py:1342
+msgid "Requests for tomorrow's parking must be submitted before 9 PM today."
+msgstr ""
+
+#: app.py:1356
+msgid "Please fill in your shift start and end time."
+msgstr ""
+
+#: app.py:1372
+msgid ""
+"Transport request for tomorrow submitted. Slots are allocated after the 9"
+" PM cutoff."
+msgstr ""
+
+#: app.py:1441
+#, python-format
+msgid "Duplicate slot number '%(slot_number)s' in the table."
+msgstr ""
+
+#: app.py:1449
+#, python-format
+msgid "Entrance/ramp rank for slot '%(slot_number)s' must be a number."
+msgstr ""
+
+#: app.py:1479 app.py:1490
+#, python-format
+msgid "Slot number '%(slot_number)s' is already in use."
+msgstr ""
+
+#: app.py:1510
+msgid "Parking layout updated."
+msgstr ""
+
+#: app.py:1659 app.py:1688
+msgid "This request has already been processed."
+msgstr ""
+
+#: app.py:1671
+#, python-format
+msgid "Approved %(name)s and allocated a parking slot."
+msgstr ""
+
+#: app.py:1673
+#, python-format
+msgid "Approved %(name)s. We'll notify you once a slot is available."
+msgstr ""
+
+#: app.py:1700
+#, python-format
+msgid "Denied entry for %(name)s."
+msgstr ""
+
+#: app.py:1770
+msgid "This payment has already been processed."
+msgstr ""
+
+#: app.py:1781
+msgid "Marked as paid."
+msgstr ""
+
+#: app.py:1830
+msgid "You cannot remove yourself."
+msgstr ""
+
+#: app.py:1840
+msgid "Member removed."
+msgstr ""
+
+#: app.py:2050
 msgid ""
 "Sorry, I couldn't reach the AI provider. Check your AI settings and try "
 "again."
 msgstr ""
 
-#: app.py:2105
+#: app.py:2110
 #, python-format
 msgid "Connected to Ollama at %(host)s. Installed models: %(models)s"
 msgstr ""
 
-#: app.py:2106
+#: app.py:2111
 msgid "none"
 msgstr ""
 
-#: app.py:2111
+#: app.py:2116
 #, python-format
 msgid "Could not reach Ollama at %(host)s: %(error)s"
 msgstr ""
 
-#: app.py:2115
+#: app.py:2120
 msgid "AI settings saved."
+msgstr ""
+
+#: app.py:2225
+msgid "No pass found for that code."
+msgstr ""
+
+#: app.py:2264
+msgid "This visitor cannot be marked as entered right now."
+msgstr ""
+
+#: app.py:2270
+#, python-format
+msgid "%(name)s marked as entered."
+msgstr ""
+
+#: app.py:2285
+msgid "This visitor cannot be marked as exited right now."
+msgstr ""
+
+#: app.py:2291
+#, python-format
+msgid "%(name)s marked as exited."
+msgstr ""
+
+#: app.py:2325
+msgid "This pass cannot be marked as entered right now."
+msgstr ""
+
+#: app.py:2331
+msgid "Marked as entered."
+msgstr ""
+
+#: app.py:2346
+msgid "This pass cannot be marked as exited right now."
+msgstr ""
+
+#: app.py:2352
+msgid "Marked as exited."
+msgstr ""
+
+#: app.py:2394
+msgid "Please select a date."
+msgstr ""
+
+#: app.py:2402
+msgid "Please select who the visitor is here to see."
+msgstr ""
+
+#: app.py:2411
+msgid "Please enter the from and to time."
+msgstr ""
+
+#: app.py:2461
+msgid "Visitor logged. Waiting for resident approval."
+msgstr ""
+
+#: constants.py:4 constants.py:34 templates/property_form_residential.html:14
+msgid "Apartment"
+msgstr ""
+
+#: constants.py:5 constants.py:35 templates/property_form_residential.html:18
+msgid "Gated Community"
+msgstr ""
+
+#: constants.py:6 constants.py:36
+msgid "Office"
 msgstr ""
 
 #: constants.py:12 constants.py:25
@@ -158,7 +447,8 @@ msgstr ""
 msgid "Security"
 msgstr ""
 
-#: constants.py:19 constants.py:29
+#: constants.py:19 constants.py:29 templates/security_transport.html:12
+#: templates/transport_pass.html:11
 msgid "Employee"
 msgstr ""
 
@@ -166,16 +456,32 @@ msgstr ""
 msgid "Manager"
 msgstr ""
 
-#: constants.py:34
-msgid "Apartment"
+#: constants.py:42
+msgid "Bike"
 msgstr ""
 
-#: constants.py:35
-msgid "Gated Community"
+#: constants.py:43
+msgid "Car"
 msgstr ""
 
-#: constants.py:36
-msgid "Office"
+#: constants.py:44
+msgid "Auto"
+msgstr ""
+
+#: constants.py:45
+msgid "Truck"
+msgstr ""
+
+#: constants.py:46
+msgid "Camper"
+msgstr ""
+
+#: constants.py:47
+msgid "Cycle"
+msgstr ""
+
+#: constants.py:48
+msgid "Other"
 msgstr ""
 
 #: parking_engine.py:29
@@ -223,11 +529,84 @@ msgid "Needs reallocation"
 msgstr ""
 
 #: parking_engine.py:41 templates/dashboard.html:224
+#: templates/parking_availability.html:84
 msgid "Cancelled"
+msgstr ""
+
+#: templates/_bank_details.html:1 templates/my_profile.html:71
+#: templates/my_profile.html:122
+msgid "Bank Account Details"
+msgstr ""
+
+#: templates/_bank_details.html:4 templates/my_profile.html:73
+#: templates/my_profile.html:125
+msgid "Bank Name"
+msgstr ""
+
+#: templates/_bank_details.html:8 templates/my_profile.html:74
+#: templates/my_profile.html:129
+msgid "Bank Branch"
+msgstr ""
+
+#: templates/_bank_details.html:12 templates/my_profile.html:75
+#: templates/my_profile.html:133
+msgid "IFSC Code"
+msgstr ""
+
+#: templates/_bank_details.html:16 templates/my_profile.html:76
+#: templates/my_profile.html:137
+msgid "Account Number"
+msgstr ""
+
+#: templates/_bank_details.html:20 templates/my_profile.html:77
+#: templates/my_profile.html:141
+msgid "Expiry Date"
 msgstr ""
 
 #: templates/_sidebar_nav.html:24
 msgid "Logout"
+msgstr ""
+
+#: templates/_transport_fields.html:1 templates/my_profile.html:100
+msgid "Commute"
+msgstr ""
+
+#: templates/_transport_fields.html:5
+msgid "Cab"
+msgstr ""
+
+#: templates/_transport_fields.html:9
+msgid "Self-transport"
+msgstr ""
+
+#: templates/_transport_fields.html:14 templates/_vehicle_table.html:7
+#: templates/my_profile.html:59 templates/my_profile.html:104
+#: templates/transport_request.html:47 templates/unexpected_visitor.html:21
+#: templates/visitor_request.html:23
+msgid "Vehicle Type"
+msgstr ""
+
+#: templates/_transport_fields.html:16 templates/_vehicle_table.html:17
+msgid "Select type"
+msgstr ""
+
+#: templates/_transport_fields.html:23 templates/_vehicle_table.html:8
+#: templates/my_profile.html:59 templates/my_profile.html:112
+#: templates/transport_request.html:56 templates/unexpected_visitor.html:30
+#: templates/visitor_request.html:32
+msgid "Vehicle Number"
+msgstr ""
+
+#: templates/_vehicle_table.html:1
+msgid "Vehicle Details"
+msgstr ""
+
+#: templates/_vehicle_table.html:6 templates/my_profile.html:59
+msgid "S.No"
+msgstr ""
+
+#: templates/_vehicle_table.html:28
+msgid "Add Vehicle"
 msgstr ""
 
 #: templates/ai_assistant.html:8 templates/ai_assistant.html:21
@@ -439,32 +818,45 @@ msgid "Today's Visitor Requests"
 msgstr ""
 
 #: templates/dashboard.html:146 templates/dashboard.html:248
-#: templates/visitor_log.html:45
+#: templates/unexpected_visitor.html:88 templates/visitor_log.html:45
+#: templates/visitor_request.html:70
 msgid "Visitor"
 msgstr ""
 
 #: templates/dashboard.html:147 templates/dashboard.html:249
-#: templates/visitor_log.html:46
+#: templates/security_transport.html:22 templates/security_visitor.html:22
+#: templates/transport_pass.html:16 templates/transport_request.html:89
+#: templates/visitor_log.html:46 templates/visitor_pass.html:16
+#: templates/visitor_request.html:71
 msgid "Vehicle"
 msgstr ""
 
 #: templates/dashboard.html:148 templates/dashboard.html:217
-#: templates/dashboard.html:251 templates/visitor_log.html:47
+#: templates/dashboard.html:251 templates/parking_availability.html:77
+#: templates/security_visitor.html:30 templates/unexpected_visitor.html:91
+#: templates/visitor_log.html:47 templates/visitor_pass.html:24
+#: templates/visitor_request.html:73
 msgid "Time"
 msgstr ""
 
 #: templates/dashboard.html:149 templates/dashboard.html:188
 #: templates/dashboard.html:219 templates/dashboard.html:252
-#: templates/dashboard.html:287 templates/visitor_log.html:21
-#: templates/visitor_log.html:49
+#: templates/dashboard.html:287 templates/parking_availability.html:79
+#: templates/parking_slots.html:25 templates/payments.html:34
+#: templates/payments.html:80 templates/transport_pass.html:28
+#: templates/transport_request.html:91 templates/unexpected_visitor.html:92
+#: templates/visitor_log.html:21 templates/visitor_log.html:49
+#: templates/visitor_pass.html:28 templates/visitor_request.html:74
 msgid "Status"
 msgstr ""
 
-#: templates/dashboard.html:150
+#: templates/dashboard.html:150 templates/transport_request.html:93
+#: templates/visitor_request.html:75
 msgid "Pass"
 msgstr ""
 
 #: templates/dashboard.html:162 templates/dashboard.html:264
+#: templates/transport_request.html:106
 msgid "View"
 msgstr ""
 
@@ -477,11 +869,13 @@ msgid "My Parking Slots"
 msgstr ""
 
 #: templates/dashboard.html:186 templates/dashboard.html:216
-#: templates/dashboard.html:284
+#: templates/dashboard.html:284 templates/parking_availability.html:75
+#: templates/parking_slots.html:22 templates/transport_request.html:92
 msgid "Slot"
 msgstr ""
 
 #: templates/dashboard.html:187 templates/dashboard.html:285
+#: templates/parking_slots.html:23 templates/parking_slots.html:70
 msgid "Floor"
 msgstr ""
 
@@ -497,19 +891,20 @@ msgstr ""
 msgid "Rent/hr"
 msgstr ""
 
-#: templates/dashboard.html:224
+#: templates/dashboard.html:224 templates/parking_availability.html:84
 msgid "Available"
 msgstr ""
 
-#: templates/dashboard.html:224
+#: templates/dashboard.html:224 templates/parking_availability.html:84
 msgid "Matched"
 msgstr ""
 
-#: templates/dashboard.html:224
+#: templates/dashboard.html:224 templates/parking_availability.html:84
 msgid "Completed"
 msgstr ""
 
-#: templates/dashboard.html:250
+#: templates/dashboard.html:250 templates/security_visitor.html:34
+#: templates/unexpected_visitor.html:34 templates/unexpected_visitor.html:89
 msgid "Visiting"
 msgstr ""
 
@@ -517,11 +912,11 @@ msgstr ""
 msgid "No expected visitors for today yet."
 msgstr ""
 
-#: templates/dashboard.html:286
+#: templates/dashboard.html:286 templates/parking_slots.html:24
 msgid "Assigned To"
 msgstr ""
 
-#: templates/dashboard.html:301
+#: templates/dashboard.html:301 templates/parking_slots.html:39
 #, python-format
 msgid "Visitor: %(name)s"
 msgstr ""
@@ -547,7 +942,7 @@ msgstr ""
 msgid "Shift: %(from)s – %(to)s"
 msgstr ""
 
-#: templates/dashboard.html:339
+#: templates/dashboard.html:339 templates/transport_request.html:26
 msgid "View Parking Pass"
 msgstr ""
 
@@ -563,19 +958,25 @@ msgstr ""
 msgid "Submit before 9 PM"
 msgstr ""
 
-#: templates/dashboard.html:362
+#: templates/dashboard.html:362 templates/members.html:27
+#: templates/my_profile.html:24 templates/my_profile.html:45
+#: templates/role_form_owner.html:13 templates/role_form_security.html:11
 msgid "Name"
 msgstr ""
 
-#: templates/dashboard.html:363
+#: templates/dashboard.html:363 templates/members.html:29
+#: templates/my_profile.html:49 templates/role_form_employee.html:17
+#: templates/role_form_manager.html:17
 msgid "Employee ID"
 msgstr ""
 
-#: templates/dashboard.html:364
+#: templates/dashboard.html:364 templates/members.html:31
+#: templates/security_transport.html:30 templates/transport_pass.html:24
+#: templates/transport_request.html:90
 msgid "Shift"
 msgstr ""
 
-#: templates/dashboard.html:365
+#: templates/dashboard.html:365 templates/members.html:30
 msgid "Contact"
 msgstr ""
 
@@ -619,6 +1020,606 @@ msgstr ""
 msgid "No notifications yet."
 msgstr ""
 
+#: templates/invite_links.html:10
+msgid ""
+"Share each company's invite link with its members. Anyone who opens a "
+"link will sign up and join that company's room."
+msgstr ""
+
+#: templates/invite_links.html:17 templates/invite_links.html:29
+msgid "Copy"
+msgstr ""
+
+#: templates/invite_links.html:23
+msgid ""
+"Share this invite link with owners, tenants, committee members, and "
+"security staff. Anyone who opens it will sign up and join this property."
+msgstr ""
+
+#: templates/invite_links.html:25
+msgid "Invite Link"
+msgstr ""
+
+#: templates/invite_links.html:38
+msgid "Which company are you joining?"
+msgstr ""
+
+#: templates/invite_links.html:40
+msgid "Choose your company…"
+msgstr ""
+
+#: templates/invite_links.html:46 templates/invite_links.html:51
+msgid "Next"
+msgstr ""
+
+#: templates/invite_links.html:56
+msgid "Back to Dashboard"
+msgstr ""
+
+#: templates/members.html:16 templates/visitor_log.html:8
+msgid "Export CSV"
+msgstr ""
+
+#: templates/members.html:19
+msgid "Everyone registered in your property."
+msgstr ""
+
+#: templates/members.html:28
+msgid "Role"
+msgstr ""
+
+#: templates/members.html:29
+msgid "Flat / Unit"
+msgstr ""
+
+#: templates/members.html:31 templates/my_profile.html:55
+msgid "Vehicles"
+msgstr ""
+
+#: templates/my_profile.html:21
+msgid "Details"
+msgstr ""
+
+#: templates/my_profile.html:25 templates/my_profile.html:46
+#: templates/role_form_owner.html:17 templates/role_form_security.html:15
+#: templates/signup.html:24
+msgid "Phone Number"
+msgstr ""
+
+#: templates/my_profile.html:26 templates/my_profile.html:34
+#: templates/role_form_owner.html:21 templates/role_form_tenant.html:33
+msgid "Flat No."
+msgstr ""
+
+#: templates/my_profile.html:27 templates/my_profile.html:35
+#: templates/my_profile.html:41 templates/role_form_committee.html:25
+#: templates/role_form_owner.html:25 templates/role_form_tenant.html:37
+msgid "No. of Parking Slots"
+msgstr ""
+
+#: templates/my_profile.html:28 templates/my_profile.html:36
+#: templates/my_profile.html:42 templates/role_form_committee.html:29
+#: templates/role_form_owner.html:29 templates/role_form_tenant.html:41
+msgid "Parking Space Number"
+msgstr ""
+
+#: templates/my_profile.html:30 templates/role_form_tenant.html:13
+msgid "Owner Name"
+msgstr ""
+
+#: templates/my_profile.html:31 templates/role_form_tenant.html:17
+msgid "Owner Phone Number"
+msgstr ""
+
+#: templates/my_profile.html:32 templates/role_form_tenant.html:25
+msgid "Tenant Name"
+msgstr ""
+
+#: templates/my_profile.html:33 templates/role_form_tenant.html:29
+msgid "Tenant Phone Number"
+msgstr ""
+
+#: templates/my_profile.html:38 templates/role_form_committee.html:13
+msgid "Committee Head Name"
+msgstr ""
+
+#: templates/my_profile.html:39 templates/role_form_committee.html:17
+msgid "Committee Head Phone Number"
+msgstr ""
+
+#: templates/my_profile.html:40 templates/role_form_committee.html:21
+msgid "Committee Head Flat No."
+msgstr ""
+
+#: templates/my_profile.html:43 templates/role_form_committee.html:39
+msgid "Commission %"
+msgstr ""
+
+#: templates/my_profile.html:48 templates/role_form_employee.html:13
+#: templates/role_form_manager.html:13
+msgid "Employee Name"
+msgstr ""
+
+#: templates/my_profile.html:50 templates/role_form_employee.html:21
+#: templates/role_form_manager.html:21
+msgid "Employee Address"
+msgstr ""
+
+#: templates/my_profile.html:87
+msgid "Shift Timing"
+msgstr ""
+
+#: templates/my_profile.html:87 templates/my_profile.html:104
+#: templates/my_profile.html:112 templates/my_profile.html:122
+msgid "editable"
+msgstr ""
+
+#: templates/my_profile.html:90 templates/parking_availability.html:44
+#: templates/payments.html:78 templates/unexpected_visitor.html:64
+#: templates/visitor_request.html:46
+msgid "From"
+msgstr ""
+
+#: templates/my_profile.html:94 templates/parking_availability.html:48
+#: templates/payments.html:30 templates/unexpected_visitor.html:68
+#: templates/visitor_request.html:50
+msgid "To"
+msgstr ""
+
+#: templates/my_profile.html:117
+msgid "Commutes by Cab"
+msgstr ""
+
+#: templates/my_profile.html:145 templates/role_form_manager.html:42
+msgid "Rent of a Parking Slot per Hour"
+msgstr ""
+
+#: templates/my_profile.html:149 templates/parking_availability.html:30
+#: templates/role_form_manager.html:46
+msgid "/ hr"
+msgstr ""
+
+#: templates/my_profile.html:156
+msgid "Save Changes"
+msgstr ""
+
+#: templates/notifications.html:10
+msgid "Mark all as read"
+msgstr ""
+
+#: templates/notifications.html:19
+msgid "Visitor Approvals Needed"
+msgstr ""
+
+#: templates/notifications.html:28
+#, python-format
+msgid "Visiting: %(name)s"
+msgstr ""
+
+#: templates/notifications.html:33
+msgid "Approve"
+msgstr ""
+
+#: templates/notifications.html:36
+msgid "Deny"
+msgstr ""
+
+#: templates/notifications.html:58
+msgid "View details"
+msgstr ""
+
+#: templates/notifications.html:63
+msgid "Mark read"
+msgstr ""
+
+#: templates/notifications.html:69
+msgid "You have no notifications yet."
+msgstr ""
+
+#: templates/parking_availability.html:5
+msgid "Generate Parking Slot"
+msgstr ""
+
+#: templates/parking_availability.html:7
+msgid "Share your parking slot for a window of time when you won't be using it."
+msgstr ""
+
+#: templates/parking_availability.html:16
+msgid "Your Parking Slot"
+msgstr ""
+
+#: templates/parking_availability.html:20
+#, python-format
+msgid "(Floor %(floor)s)"
+msgstr ""
+
+#: templates/parking_availability.html:26
+msgid "Rent per Hour"
+msgstr ""
+
+#: templates/parking_availability.html:37
+#: templates/parking_availability.html:76 templates/security_transport.html:26
+#: templates/security_visitor.html:26 templates/transport_pass.html:20
+#: templates/transport_request.html:88 templates/unexpected_visitor.html:50
+#: templates/unexpected_visitor.html:90 templates/visitor_log.html:44
+#: templates/visitor_pass.html:20 templates/visitor_request.html:39
+#: templates/visitor_request.html:72
+msgid "Date"
+msgstr ""
+
+#: templates/parking_availability.html:54
+msgid "List Slot as Available"
+msgstr ""
+
+#: templates/parking_availability.html:59
+msgid ""
+"You don't have a registered parking slot. Add your parking space number "
+"from"
+msgstr ""
+
+#: templates/parking_availability.html:60
+msgid "or ask the committee to assign one on the"
+msgstr ""
+
+#: templates/parking_availability.html:61
+msgid "page."
+msgstr ""
+
+#: templates/parking_availability.html:69
+msgid "Your Listed Slots"
+msgstr ""
+
+#: templates/parking_availability.html:78
+msgid "Rent"
+msgstr ""
+
+#: templates/parking_availability.html:90
+msgid "/hr"
+msgstr ""
+
+#: templates/parking_availability.html:97
+msgid "Mark your slot as free now? Your visitor will be reallocated if possible."
+msgstr ""
+
+#: templates/parking_availability.html:99
+msgid "I'm back early"
+msgstr ""
+
+#: templates/parking_availability.html:112
+msgid "You haven't listed any parking slots yet."
+msgstr ""
+
+#: templates/parking_map.html:8
+msgid "Live view of your company's parking slots, grouped by floor."
+msgstr ""
+
+#: templates/parking_map.html:10
+msgid "Live view of every parking slot, grouped by floor."
+msgstr ""
+
+#: templates/parking_map.html:24
+msgid "Unassigned Floor"
+msgstr ""
+
+#: templates/parking_map.html:24
+#, python-format
+msgid "Floor %(floor)s"
+msgstr ""
+
+#: templates/parking_map.html:37 templates/parking_slots.html:51
+msgid "No parking slots configured yet."
+msgstr ""
+
+#: templates/parking_slots.html:8
+msgid "Live status of every parking slot allocated to your company."
+msgstr ""
+
+#: templates/parking_slots.html:10
+msgid "Live status of every parking slot in your property."
+msgstr ""
+
+#: templates/parking_slots.html:16
+msgid "Live Status"
+msgstr ""
+
+#: templates/parking_slots.html:59
+msgid "Parking Layout Editor"
+msgstr ""
+
+#: templates/parking_slots.html:61
+msgid ""
+"Lower entrance/ramp rank means closer to the entrance/ramp. These ranks "
+"are used by the automatic visitor-allocation algorithm to pick the best "
+"slot."
+msgstr ""
+
+#: templates/parking_slots.html:69
+msgid "Slot Number"
+msgstr ""
+
+#: templates/parking_slots.html:71
+msgid "Entrance Rank"
+msgstr ""
+
+#: templates/parking_slots.html:72
+msgid "Ramp Rank"
+msgstr ""
+
+#: templates/parking_slots.html:73
+msgid "Assigned Resident"
+msgstr ""
+
+#: templates/parking_slots.html:91 templates/parking_slots.html:112
+msgid "-- Unassigned --"
+msgstr ""
+
+#: templates/parking_slots.html:125
+msgid "Add Slot"
+msgstr ""
+
+#: templates/parking_slots.html:129
+msgid "Save Layout"
+msgstr ""
+
+#: templates/payments.html:7
+msgid "Cross-company spare-slot rent you owe and amounts due to you."
+msgstr ""
+
+#: templates/payments.html:9
+msgid "Visitor parking charges you owe and amounts due to you."
+msgstr ""
+
+#: templates/payments.html:15
+msgid "Commission Earned (Committee)"
+msgstr ""
+
+#: templates/payments.html:23
+msgid "You Pay"
+msgstr ""
+
+#: templates/payments.html:29 templates/payments.html:77
+msgid "Description"
+msgstr ""
+
+#: templates/payments.html:31
+msgid "Base"
+msgstr ""
+
+#: templates/payments.html:32 templates/role_form_committee.html:36
+msgid "Commission"
+msgstr ""
+
+#: templates/payments.html:33
+msgid "Total"
+msgstr ""
+
+#: templates/payments.html:44
+msgid "(to committee)"
+msgstr ""
+
+#: templates/payments.html:47 templates/payments.html:90
+msgid "Paid"
+msgstr ""
+
+#: templates/payments.html:47 templates/payments.html:90
+msgid "Pending"
+msgstr ""
+
+#: templates/payments.html:52
+msgid "Mark as paid"
+msgstr ""
+
+#: templates/payments.html:64
+msgid "You don't owe anything right now."
+msgstr ""
+
+#: templates/payments.html:71
+msgid "You Receive"
+msgstr ""
+
+#: templates/payments.html:79
+msgid "Your Share"
+msgstr ""
+
+#: templates/payments.html:98
+msgid "No incoming payments yet."
+msgstr ""
+
+#: templates/property_form_office.html:2
+msgid "Office Details"
+msgstr ""
+
+#: templates/property_form_office.html:6
+msgid "Office Property Details"
+msgstr ""
+
+#: templates/property_form_office.html:7
+msgid "Tell us about the building and the companies that operate in it."
+msgstr ""
+
+#: templates/property_form_office.html:12
+msgid "Name of the Office / Building"
+msgstr ""
+
+#: templates/property_form_office.html:16
+#: templates/property_form_residential.html:27
+msgid "Address"
+msgstr ""
+
+#: templates/property_form_office.html:20
+msgid "Number of Companies in the Building"
+msgstr ""
+
+#: templates/property_form_office.html:21
+msgid "e.g. 3"
+msgstr ""
+
+#: templates/property_form_office.html:22
+msgid "Sets up that many rows below. You can also add/remove rows manually."
+msgstr ""
+
+#: templates/property_form_office.html:30
+msgid "Company Name"
+msgstr ""
+
+#: templates/property_form_office.html:31
+msgid "Approx. Employees"
+msgstr ""
+
+#: templates/property_form_office.html:32
+msgid "Parking Spaces"
+msgstr ""
+
+#: templates/property_form_office.html:33
+msgid "Floor Allocation (if any)"
+msgstr ""
+
+#: templates/property_form_office.html:34
+msgid "Extra Parking"
+msgstr ""
+
+#: templates/property_form_office.html:40
+msgid "e.g. Acme Corp"
+msgstr ""
+
+#: templates/property_form_office.html:41
+msgid "e.g. 50"
+msgstr ""
+
+#: templates/property_form_office.html:42
+msgid "e.g. 10"
+msgstr ""
+
+#: templates/property_form_office.html:43
+msgid "e.g. 2nd floor: 6, B1: 4"
+msgstr ""
+
+#: templates/property_form_office.html:51
+msgid "Add Company"
+msgstr ""
+
+#: templates/property_form_office.html:55
+msgid "Create Sub-rooms"
+msgstr ""
+
+#: templates/property_form_residential.html:2
+#: templates/property_form_residential.html:6
+msgid "Property Details"
+msgstr ""
+
+#: templates/property_form_residential.html:7
+msgid "Tell us a bit about your apartment or gated community."
+msgstr ""
+
+#: templates/property_form_residential.html:10
+msgid "Property Type"
+msgstr ""
+
+#: templates/property_form_residential.html:23
+msgid "Name of the Apartment / Community"
+msgstr ""
+
+#: templates/property_form_residential.html:31
+msgid "Number of Flats"
+msgstr ""
+
+#: templates/property_form_residential.html:35
+msgid "Extra Parking Spaces (if any)"
+msgstr ""
+
+#: templates/property_form_residential.html:41
+msgid "Create Room"
+msgstr ""
+
+#: templates/property_setup.html:2
+msgid "Create Property"
+msgstr ""
+
+#: templates/property_setup.html:6
+msgid "Let's set up your property"
+msgstr ""
+
+#: templates/property_setup.html:7
+msgid "Choose the type of property you'd like to create."
+msgstr ""
+
+#: templates/property_setup.html:24 templates/role_selection.html:23
+msgid "Continue"
+msgstr ""
+
+#: templates/role_form_committee.html:2 templates/role_form_committee.html:6
+msgid "Committee Details"
+msgstr ""
+
+#: templates/role_form_committee.html:10
+msgid "Committee Head Details"
+msgstr ""
+
+#: templates/role_form_committee.html:45
+msgid ""
+"Charged on top of every parking transaction. e.g. if the rent is ₹50/hr "
+"and this is 5%, visitors pay ₹52.5/hr — the ₹2.5 difference goes to this "
+"account."
+msgstr ""
+
+#: templates/role_form_committee.html:53 templates/role_form_employee.html:39
+#: templates/role_form_manager.html:53 templates/role_form_owner.html:38
+#: templates/role_form_security.html:29 templates/role_form_tenant.html:50
+msgid "Enter Room"
+msgstr ""
+
+#: templates/role_form_employee.html:2 templates/role_form_employee.html:6
+msgid "Employee Details"
+msgstr ""
+
+#: templates/role_form_employee.html:10 templates/role_form_manager.html:10
+msgid "Profile"
+msgstr ""
+
+#: templates/role_form_employee.html:25 templates/role_form_manager.html:25
+#: templates/role_form_security.html:19
+msgid "Shift Timing — From"
+msgstr ""
+
+#: templates/role_form_employee.html:29 templates/role_form_manager.html:29
+#: templates/role_form_security.html:23
+msgid "Shift Timing — To"
+msgstr ""
+
+#: templates/role_form_employee.html:33 templates/role_form_manager.html:33
+msgid "Shift timings can be edited later under My Profile."
+msgstr ""
+
+#: templates/role_form_employee.html:36 templates/role_form_manager.html:36
+msgid "Vehicle details for self-transport can be edited later under My Profile."
+msgstr ""
+
+#: templates/role_form_manager.html:2 templates/role_form_manager.html:6
+msgid "Manager Details"
+msgstr ""
+
+#: templates/role_form_manager.html:50
+msgid "Only managers can update bank account details, from My Profile."
+msgstr ""
+
+#: templates/role_form_owner.html:2 templates/role_form_owner.html:6
+#: templates/role_form_tenant.html:10
+msgid "Owner Details"
+msgstr ""
+
+#: templates/role_form_owner.html:10
+msgid "Personal Details"
+msgstr ""
+
+#: templates/role_form_security.html:2 templates/role_form_security.html:5
+msgid "Security Details"
+msgstr ""
+
+#: templates/role_form_tenant.html:2 templates/role_form_tenant.html:6
+#: templates/role_form_tenant.html:22
+msgid "Tenant Details"
+msgstr ""
+
 #: templates/role_selection.html:7
 msgid "Joining"
 msgstr ""
@@ -635,8 +1636,122 @@ msgstr ""
 msgid "Choose a role…"
 msgstr ""
 
-#: templates/role_selection.html:23
-msgid "Continue"
+#: templates/security_scan.html:5
+msgid "Scan QR"
+msgstr ""
+
+#: templates/security_scan.html:6
+msgid "Scan a visitor's or employee's QR pass, or enter the pass code manually."
+msgstr ""
+
+#: templates/security_scan.html:11
+msgid "Allow camera access to start scanning."
+msgstr ""
+
+#: templates/security_scan.html:17
+msgid "Manual Entry"
+msgstr ""
+
+#: templates/security_scan.html:20
+msgid "Pass Code"
+msgstr ""
+
+#: templates/security_scan.html:21
+msgid "Paste the pass code or link"
+msgstr ""
+
+#: templates/security_scan.html:24
+msgid "Look Up"
+msgstr ""
+
+#: templates/security_scan.html:41
+msgid "Camera scanner unavailable. Use manual entry below."
+msgstr ""
+
+#: templates/security_scan.html:51
+msgid "Code detected, looking up pass..."
+msgstr ""
+
+#: templates/security_scan.html:60
+msgid "No camera found. Use manual entry below."
+msgstr ""
+
+#: templates/security_scan.html:65
+msgid "Point the camera at the QR pass."
+msgstr ""
+
+#: templates/security_scan.html:67
+msgid "Could not start the camera. Use manual entry below."
+msgstr ""
+
+#: templates/security_scan.html:70
+msgid "Camera access denied. Use manual entry below."
+msgstr ""
+
+#: templates/security_transport.html:2
+msgid "Transport Pass"
+msgstr ""
+
+#: templates/security_transport.html:5
+msgid "Transport Pass Details"
+msgstr ""
+
+#: templates/security_transport.html:6
+msgid "Verify the employee's details before allowing entry or exit."
+msgstr ""
+
+#: templates/security_transport.html:34
+msgid "Company"
+msgstr ""
+
+#: templates/security_transport.html:43 templates/security_visitor.html:50
+#: templates/transport_pass.html:37 templates/visitor_pass.html:37
+#, python-format
+msgid "Allocated parking slot %(slot)s (Floor %(floor)s)."
+msgstr ""
+
+#: templates/security_transport.html:45 templates/security_visitor.html:52
+#: templates/transport_pass.html:39 templates/visitor_pass.html:39
+#, python-format
+msgid "Allocated parking slot %(slot)s."
+msgstr ""
+
+#: templates/security_transport.html:49
+msgid "No parking slot allocated."
+msgstr ""
+
+#: templates/security_transport.html:53 templates/security_visitor.html:60
+#, python-format
+msgid "Entered at %(time)s"
+msgstr ""
+
+#: templates/security_transport.html:56 templates/security_visitor.html:63
+#, python-format
+msgid "Exited at %(time)s"
+msgstr ""
+
+#: templates/security_transport.html:62 templates/security_visitor.html:69
+msgid "Mark Entry"
+msgstr ""
+
+#: templates/security_transport.html:66 templates/security_visitor.html:73
+msgid "Mark Exit"
+msgstr ""
+
+#: templates/security_transport.html:69 templates/security_visitor.html:76
+msgid "Back to Scanner"
+msgstr ""
+
+#: templates/security_visitor.html:2 templates/security_visitor.html:5
+msgid "Visitor Details"
+msgstr ""
+
+#: templates/security_visitor.html:6
+msgid "Verify the visitor's details before allowing entry or exit."
+msgstr ""
+
+#: templates/security_visitor.html:56
+msgid "No parking slot allocated yet."
 msgstr ""
 
 #: templates/signup.html:9
@@ -663,10 +1778,6 @@ msgstr ""
 msgid "Email"
 msgstr ""
 
-#: templates/signup.html:24
-msgid "Phone Number"
-msgstr ""
-
 #: templates/signup.html:28
 msgid "Email or Phone Number"
 msgstr ""
@@ -677,6 +1788,136 @@ msgstr ""
 
 #: templates/signup.html:34
 msgid "Send OTP"
+msgstr ""
+
+#: templates/transport_pass.html:2 templates/transport_pass.html:6
+msgid "Parking Pass"
+msgstr ""
+
+#: templates/transport_pass.html:7 templates/visitor_pass.html:7
+msgid "Show this pass (or the QR code) to security at the gate."
+msgstr ""
+
+#: templates/transport_pass.html:44 templates/visitor_pass.html:44
+msgid "A parking slot has not been allocated yet. Please check back shortly."
+msgstr ""
+
+#: templates/transport_pass.html:52 templates/visitor_pass.html:52
+#, python-format
+msgid "Pass code: %(code)s"
+msgstr ""
+
+#: templates/transport_request.html:7
+#, python-format
+msgid "Request a company parking slot for tomorrow (%(date)s)."
+msgstr ""
+
+#: templates/transport_request.html:8
+#, python-format
+msgid ""
+"Requests must be submitted before %(time)s today — slots are allocated to"
+" all pending requests after the cutoff."
+msgstr ""
+
+#: templates/transport_request.html:13
+msgid "Tomorrow's Request"
+msgstr ""
+
+#: templates/transport_request.html:21
+msgid "Shift:"
+msgstr ""
+
+#: templates/transport_request.html:22
+#, python-format
+msgid "Slot %(number)s"
+msgstr ""
+
+#: templates/transport_request.html:32
+msgid "Cancel your transport request for tomorrow?"
+msgstr ""
+
+#: templates/transport_request.html:33
+msgid "Cancel Request"
+msgstr ""
+
+#: templates/transport_request.html:41
+msgid ""
+"You haven't submitted a request for tomorrow, and the 9 PM cutoff has "
+"passed. You can submit a request for the day after tomorrow once it "
+"becomes \"tomorrow\"."
+msgstr ""
+
+#: templates/transport_request.html:49 templates/unexpected_visitor.html:23
+#: templates/visitor_request.html:25
+msgid "Select vehicle type"
+msgstr ""
+
+#: templates/transport_request.html:63
+msgid "Shift Start"
+msgstr ""
+
+#: templates/transport_request.html:67
+msgid "Shift End"
+msgstr ""
+
+#: templates/transport_request.html:73 templates/visitor_request.html:56
+msgid "Submit Request"
+msgstr ""
+
+#: templates/transport_request.html:82
+msgid "Your Recent Requests"
+msgstr ""
+
+#: templates/transport_request.html:117
+msgid "You haven't submitted any transport requests yet."
+msgstr ""
+
+#: templates/unexpected_visitor.html:5
+msgid "Log an Unexpected Visitor"
+msgstr ""
+
+#: templates/unexpected_visitor.html:6
+msgid "For walk-in visitors who haven't been pre-approved by a resident."
+msgstr ""
+
+#: templates/unexpected_visitor.html:13 templates/visitor_request.html:15
+msgid "Visitor Name"
+msgstr ""
+
+#: templates/unexpected_visitor.html:17 templates/visitor_request.html:19
+msgid "Visitor Phone Number"
+msgstr ""
+
+#: templates/unexpected_visitor.html:36
+msgid "Select employee"
+msgstr ""
+
+#: templates/unexpected_visitor.html:36
+msgid "Select resident"
+msgstr ""
+
+#: templates/unexpected_visitor.html:43
+msgid "Purpose"
+msgstr ""
+
+#: templates/unexpected_visitor.html:43
+msgid "optional"
+msgstr ""
+
+#: templates/unexpected_visitor.html:58
+msgid "Visitor will stay longer than 1 hour"
+msgstr ""
+
+#: templates/unexpected_visitor.html:74
+msgid "Log Visitor"
+msgstr ""
+
+#: templates/unexpected_visitor.html:82
+msgid "Recently Logged"
+msgstr ""
+
+#: templates/unexpected_visitor.html:109
+msgid "You haven't logged any unexpected visitors yet."
 msgstr ""
 
 #: templates/verify_otp.html:5
@@ -703,10 +1944,6 @@ msgstr ""
 msgid "Use a different email or phone number"
 msgstr ""
 
-#: templates/visitor_log.html:8
-msgid "Export CSV"
-msgstr ""
-
 #: templates/visitor_log.html:11
 msgid "Searchable history of all visitor requests for your property."
 msgstr ""
@@ -731,15 +1968,37 @@ msgstr ""
 msgid "Reset"
 msgstr ""
 
-#: templates/visitor_log.html:44
-msgid "Date"
-msgstr ""
-
 #: templates/visitor_log.html:48
 msgid "Host"
 msgstr ""
 
 #: templates/visitor_log.html:73
 msgid "No visitor records match your search."
+msgstr ""
+
+#: templates/visitor_pass.html:2 templates/visitor_pass.html:6
+msgid "Visitor Pass"
+msgstr ""
+
+#: templates/visitor_request.html:5
+msgid "Visitor Parking Request"
+msgstr ""
+
+#: templates/visitor_request.html:7
+msgid ""
+"Request a parking slot for your visitor. We'll match it automatically "
+"with an available slot."
+msgstr ""
+
+#: templates/visitor_request.html:64
+msgid "Your Visitor Requests"
+msgstr ""
+
+#: templates/visitor_request.html:89
+msgid "View Pass"
+msgstr ""
+
+#: templates/visitor_request.html:101
+msgid "You haven't created any visitor requests yet."
 msgstr ""
 

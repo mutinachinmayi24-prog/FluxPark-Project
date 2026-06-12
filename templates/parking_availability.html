@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-{% block title %}Parking Availability - FluxPark{% endblock %}
+{% block title %}{{ _('Parking Availability') }} - FluxPark{% endblock %}
 
 {% block content %}
-  <h3 class="fw-bold mb-1">Generate Parking Slot</h3>
+  <h3 class="fw-bold mb-1">{{ _('Generate Parking Slot') }}</h3>
   <p class="text-muted mb-4">
-    Share your parking slot for a window of time when you won't be using it.
+    {{ _("Share your parking slot for a window of time when you won't be using it.") }}
   </p>
 
   <div class="card border-0 shadow-sm mb-4">
@@ -13,52 +13,52 @@
         <form method="POST">
           <div class="row g-3">
             <div class="col-md-6">
-              <label for="parking_slot_id" class="form-label">Your Parking Slot</label>
+              <label for="parking_slot_id" class="form-label">{{ _('Your Parking Slot') }}</label>
               <select class="form-select" id="parking_slot_id" name="parking_slot_id" required>
                 {% for slot in my_slots %}
                   <option value="{{ slot.id }}" {% if form_data.get('parking_slot_id')|string == slot.id|string %}selected{% endif %}>
-                    {{ slot.slot_number }}{% if slot.floor %} (Floor {{ slot.floor }}){% endif %}
+                    {{ slot.slot_number }}{% if slot.floor %} {{ _('(Floor %(floor)s)', floor=slot.floor) }}{% endif %}
                   </option>
                 {% endfor %}
               </select>
             </div>
             <div class="col-md-6">
-              <label for="rent_per_hour" class="form-label">Rent per Hour</label>
+              <label for="rent_per_hour" class="form-label">{{ _('Rent per Hour') }}</label>
               <div class="input-group">
                 <span class="input-group-text">&#8377;</span>
                 <input type="number" min="0" step="0.5" class="form-control" id="rent_per_hour" name="rent_per_hour" value="{{ form_data.get('rent_per_hour', '') }}" required>
-                <span class="input-group-text">/ hr</span>
+                <span class="input-group-text">{{ _('/ hr') }}</span>
               </div>
             </div>
           </div>
 
           <div class="row g-3 mt-0">
             <div class="col-12">
-              <label for="date" class="form-label">Date</label>
+              <label for="date" class="form-label">{{ _('Date') }}</label>
               <input type="date" class="form-control" id="date" name="date" value="{{ form_data.get('date', '') }}" required>
             </div>
           </div>
 
           <div class="row g-3 mt-0">
             <div class="col-md-6">
-              <label for="from_time" class="form-label">From</label>
+              <label for="from_time" class="form-label">{{ _('From') }}</label>
               <input type="time" class="form-control" id="from_time" name="from_time" value="{{ form_data.get('from_time', '') }}" required>
             </div>
             <div class="col-md-6">
-              <label for="to_time" class="form-label">To</label>
+              <label for="to_time" class="form-label">{{ _('To') }}</label>
               <input type="time" class="form-control" id="to_time" name="to_time" value="{{ form_data.get('to_time', '') }}" required>
             </div>
           </div>
 
           <button type="submit" class="btn btn-brand mt-4">
-            <i class="bi bi-calendar2-plus me-1"></i> List Slot as Available
+            <i class="bi bi-calendar2-plus me-1"></i> {{ _('List Slot as Available') }}
           </button>
         </form>
       {% else %}
         <p class="text-muted mb-0">
-          You don't have a registered parking slot. Add your parking space number from
-          <a href="{{ url_for('my_profile') }}">My Profile</a> or ask the committee to assign one
-          on the <a href="{{ url_for('parking_slots') }}">Parking Slots</a> page.
+          {{ _("You don't have a registered parking slot. Add your parking space number from") }}
+          <a href="{{ url_for('my_profile') }}">{{ _('My Profile') }}</a> {{ _('or ask the committee to assign one on the') }}
+          <a href="{{ url_for('parking_slots') }}">{{ _('Parking Slots') }}</a> {{ _('page.') }}
         </p>
       {% endif %}
     </div>
@@ -66,36 +66,37 @@
 
   <div class="card border-0 shadow-sm">
     <div class="card-body">
-      <h6 class="section-title">Your Listed Slots</h6>
+      <h6 class="section-title">{{ _('Your Listed Slots') }}</h6>
       {% if availabilities %}
         <div class="table-responsive">
           <table class="table table-sm align-middle">
             <thead>
               <tr>
-                <th>Slot</th>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Rent</th>
-                <th>Status</th>
+                <th>{{ _('Slot') }}</th>
+                <th>{{ _('Date') }}</th>
+                <th>{{ _('Time') }}</th>
+                <th>{{ _('Rent') }}</th>
+                <th>{{ _('Status') }}</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
+              {% set avail_status_labels = {'available': _('Available'), 'matched': _('Matched'), 'completed': _('Completed'), 'cancelled': _('Cancelled')} %}
               {% for a in availabilities %}
                 <tr>
                   <td>{{ a.parking_slot.slot_number }}</td>
                   <td>{{ a.date.strftime('%d %b %Y') }}</td>
                   <td>{{ a.from_time.strftime('%H:%M') }} - {{ a.to_time.strftime('%H:%M') }}</td>
-                  <td>&#8377;{{ a.rent_per_hour }}/hr</td>
+                  <td>&#8377;{{ a.rent_per_hour }}{{ _('/hr') }}</td>
                   <td>
                     {% set avail_classes = {'available': 'success', 'matched': 'primary', 'completed': 'secondary', 'cancelled': 'danger'} %}
-                    <span class="badge bg-{{ avail_classes.get(a.status, 'secondary') }}">{{ a.status.title() }}</span>
+                    <span class="badge bg-{{ avail_classes.get(a.status, 'secondary') }}">{{ avail_status_labels.get(a.status, a.status.title()) }}</span>
                   </td>
                   <td>
                     {% if a.status == 'matched' %}
-                      <form method="POST" action="{{ url_for('parking_availability_return', availability_id=a.id) }}" class="d-inline" onsubmit="return confirm('Mark your slot as free now? Your visitor will be reallocated if possible.');">
+                      <form method="POST" action="{{ url_for('parking_availability_return', availability_id=a.id) }}" class="d-inline" onsubmit="return confirm('{{ _('Mark your slot as free now? Your visitor will be reallocated if possible.') }}');">
                         <button type="submit" class="btn btn-sm btn-outline-danger">
-                          <i class="bi bi-arrow-return-left me-1"></i> I'm back early
+                          <i class="bi bi-arrow-return-left me-1"></i> {{ _("I'm back early") }}
                         </button>
                       </form>
                     {% else %}
@@ -108,7 +109,7 @@
           </table>
         </div>
       {% else %}
-        <p class="text-muted mb-0">You haven't listed any parking slots yet.</p>
+        <p class="text-muted mb-0">{{ _("You haven't listed any parking slots yet.") }}</p>
       {% endif %}
     </div>
   </div>

@@ -1,37 +1,37 @@
 {% extends "base.html" %}
-{% block title %}Payments - FluxPark{% endblock %}
+{% block title %}{{ _('Payments') }} - FluxPark{% endblock %}
 
 {% block content %}
-  <h3 class="fw-bold mb-1">Payments</h3>
+  <h3 class="fw-bold mb-1">{{ _('Payments') }}</h3>
   {% if is_office %}
-    <p class="text-muted mb-4">Cross-company spare-slot rent you owe and amounts due to you.</p>
+    <p class="text-muted mb-4">{{ _('Cross-company spare-slot rent you owe and amounts due to you.') }}</p>
   {% else %}
-    <p class="text-muted mb-4">Visitor parking charges you owe and amounts due to you.</p>
+    <p class="text-muted mb-4">{{ _('Visitor parking charges you owe and amounts due to you.') }}</p>
   {% endif %}
 
   {% if commission_total is not none %}
     <div class="card border-0 shadow-sm mb-4">
       <div class="card-body">
-        <h6 class="text-muted text-uppercase small mb-2">Commission Earned (Committee)</h6>
-        <h3 class="fw-bold text-brand mb-0">&#8377;{{ "%.2f"|format(commission_total) }}</h3>
+        <h6 class="text-muted text-uppercase small mb-2">{{ _('Commission Earned (Committee)') }}</h6>
+        <h3 class="fw-bold text-brand mb-0">₹{{ "%.2f"|format(commission_total) }}</h3>
       </div>
     </div>
   {% endif %}
 
   <div class="card border-0 shadow-sm mb-4">
     <div class="card-body">
-      <h6 class="section-title">You Pay</h6>
+      <h6 class="section-title">{{ _('You Pay') }}</h6>
       {% if payable %}
         <div class="table-responsive">
           <table class="table table-sm align-middle">
             <thead>
               <tr>
-                <th>Description</th>
-                <th>To</th>
-                <th>Base</th>
-                {% if not is_office %}<th>Commission</th>{% endif %}
-                <th>Total</th>
-                <th>Status</th>
+                <th>{{ _('Description') }}</th>
+                <th>{{ _('To') }}</th>
+                <th>{{ _('Base') }}</th>
+                {% if not is_office %}<th>{{ _('Commission') }}</th>{% endif %}
+                <th>{{ _('Total') }}</th>
+                <th>{{ _('Status') }}</th>
                 <th></th>
               </tr>
             </thead>
@@ -39,17 +39,17 @@
               {% for t in payable %}
                 <tr>
                   <td>{{ t.description }}</td>
-                  <td>{{ role_profile_label(t.payee_role_profile) }}{% if t.payee_role_profile.sub_room %} &mdash; {{ t.payee_role_profile.sub_room.company_name }}{% endif %}</td>
-                  <td>&#8377;{{ "%.2f"|format(t.base_amount) }}</td>
-                  {% if not is_office %}<td>&#8377;{{ "%.2f"|format(t.commission_amount) }} <span class="text-muted small">(to committee)</span></td>{% endif %}
-                  <td class="fw-semibold">&#8377;{{ "%.2f"|format(t.total_amount) }}</td>
+                  <td>{{ role_profile_label(t.payee_role_profile) }}{% if t.payee_role_profile.sub_room %} — {{ t.payee_role_profile.sub_room.company_name }}{% endif %}</td>
+                  <td>₹{{ "%.2f"|format(t.base_amount) }}</td>
+                  {% if not is_office %}<td>₹{{ "%.2f"|format(t.commission_amount) }} <span class="text-muted small">{{ _('(to committee)') }}</span></td>{% endif %}
+                  <td class="fw-semibold">₹{{ "%.2f"|format(t.total_amount) }}</td>
                   <td>
-                    <span class="badge bg-{{ 'success' if t.status == 'paid' else 'warning' }}">{{ t.status.title() }}</span>
+                    <span class="badge bg-{{ 'success' if t.status == 'paid' else 'warning' }}">{{ _('Paid') if t.status == 'paid' else _('Pending') }}</span>
                   </td>
                   <td>
                     {% if t.status == 'pending' %}
                       <form method="POST" action="{{ url_for('mark_payment_paid', transaction_id=t.id) }}">
-                        <button type="submit" class="btn btn-sm btn-outline-brand">Mark as paid</button>
+                        <button type="submit" class="btn btn-sm btn-outline-brand">{{ _('Mark as paid') }}</button>
                       </form>
                     {% else %}
                       &mdash;
@@ -61,33 +61,33 @@
           </table>
         </div>
       {% else %}
-        <p class="text-muted mb-0">You don't owe anything right now.</p>
+        <p class="text-muted mb-0">{{ _("You don't owe anything right now.") }}</p>
       {% endif %}
     </div>
   </div>
 
   <div class="card border-0 shadow-sm">
     <div class="card-body">
-      <h6 class="section-title">You Receive</h6>
+      <h6 class="section-title">{{ _('You Receive') }}</h6>
       {% if receivable %}
         <div class="table-responsive">
           <table class="table table-sm align-middle">
             <thead>
               <tr>
-                <th>Description</th>
-                <th>From</th>
-                <th>Your Share</th>
-                <th>Status</th>
+                <th>{{ _('Description') }}</th>
+                <th>{{ _('From') }}</th>
+                <th>{{ _('Your Share') }}</th>
+                <th>{{ _('Status') }}</th>
               </tr>
             </thead>
             <tbody>
               {% for t in receivable %}
                 <tr>
                   <td>{{ t.description }}</td>
-                  <td>{{ role_profile_label(t.payer_role_profile) }}{% if t.payer_role_profile.sub_room %} &mdash; {{ t.payer_role_profile.sub_room.company_name }}{% endif %}</td>
-                  <td class="fw-semibold">&#8377;{{ "%.2f"|format(t.base_amount) }}</td>
+                  <td>{{ role_profile_label(t.payer_role_profile) }}{% if t.payer_role_profile.sub_room %} — {{ t.payer_role_profile.sub_room.company_name }}{% endif %}</td>
+                  <td class="fw-semibold">₹{{ "%.2f"|format(t.base_amount) }}</td>
                   <td>
-                    <span class="badge bg-{{ 'success' if t.status == 'paid' else 'warning' }}">{{ t.status.title() }}</span>
+                    <span class="badge bg-{{ 'success' if t.status == 'paid' else 'warning' }}">{{ _('Paid') if t.status == 'paid' else _('Pending') }}</span>
                   </td>
                 </tr>
               {% endfor %}
@@ -95,7 +95,7 @@
           </table>
         </div>
       {% else %}
-        <p class="text-muted mb-0">No incoming payments yet.</p>
+        <p class="text-muted mb-0">{{ _('No incoming payments yet.') }}</p>
       {% endif %}
     </div>
   </div>

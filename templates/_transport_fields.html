@@ -1,26 +1,26 @@
-<div class="section-title">Commute</div>
+<div class="section-title">{{ _('Commute') }}</div>
 <div class="btn-group w-100 contact-toggle mb-3" role="group">
   <input type="radio" class="btn-check" name="transport" id="transport_cab" value="cab" autocomplete="off"
          {% if form_data.get('transport', 'cab') != 'self' %}checked{% endif %}>
-  <label class="btn btn-outline-brand" for="transport_cab"><i class="bi bi-taxi-front me-1"></i>Cab</label>
+  <label class="btn btn-outline-brand" for="transport_cab"><i class="bi bi-taxi-front me-1"></i>{{ _('Cab') }}</label>
 
   <input type="radio" class="btn-check" name="transport" id="transport_self" value="self" autocomplete="off"
          {% if form_data.get('transport') == 'self' %}checked{% endif %}>
-  <label class="btn btn-outline-brand" for="transport_self"><i class="bi bi-car-front me-1"></i>Self-transport</label>
+  <label class="btn btn-outline-brand" for="transport_self"><i class="bi bi-car-front me-1"></i>{{ _('Self-transport') }}</label>
 </div>
 
 <div id="self-transport-fields" class="row g-3 mb-3 d-none">
   <div class="col-md-6">
-    <label for="vehicle_type" class="form-label">Vehicle Type</label>
+    <label for="vehicle_type" class="form-label">{{ _('Vehicle Type') }}</label>
     <select class="form-select" id="vehicle_type" name="vehicle_type">
-      <option value="">Select type</option>
+      <option value="">{{ _('Select type') }}</option>
       {% for vt in vehicle_types %}
-        <option value="{{ vt }}" {% if form_data.get('vehicle_type') == vt %}selected{% endif %}>{{ vt }}</option>
+        <option value="{{ vt }}" {% if form_data.get('vehicle_type') == vt %}selected{% endif %}>{{ VEHICLE_TYPE_LABELS.get(vt, vt) }}</option>
       {% endfor %}
     </select>
   </div>
   <div class="col-md-6">
-    <label for="vehicle_number" class="form-label">Vehicle Number</label>
+    <label for="vehicle_number" class="form-label">{{ _('Vehicle Number') }}</label>
     <input type="text" class="form-control text-uppercase" id="vehicle_number" name="vehicle_number" value="{{ form_data.get('vehicle_number', '') }}">
   </div>
 </div>

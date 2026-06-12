@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Invite Links - FluxPark{% endblock %}
+{% block title %}{{ _('Invite Links') }} - FluxPark{% endblock %}
 {% block card_size %}auth-card-wide{% endblock %}
 
 {% block content %}
@@ -7,26 +7,26 @@
   <p class="text-muted mb-4">{{ property.address }}</p>
 
   {% if property.property_type == 'office' %}
-    <p>Share each company's invite link with its members. Anyone who opens a link will sign up and join that company's room.</p>
+    <p>{{ _("Share each company's invite link with its members. Anyone who opens a link will sign up and join that company's room.") }}</p>
     {% for sub_room, link in sub_room_links %}
       <div class="mb-3">
         <label class="form-label fw-semibold">{{ sub_room.company_name }}</label>
         <div class="input-group">
           <span class="invite-link-box form-control" id="invite-link-{{ sub_room.id }}">{{ link }}</span>
           <button class="btn btn-outline-brand" type="button" data-copy-target="invite-link-{{ sub_room.id }}">
-            <i class="bi bi-clipboard"></i> Copy
+            <i class="bi bi-clipboard"></i> {{ _('Copy') }}
           </button>
         </div>
       </div>
     {% endfor %}
   {% else %}
-    <p>Share this invite link with owners, tenants, committee members, and security staff. Anyone who opens it will sign up and join this property.</p>
+    <p>{{ _('Share this invite link with owners, tenants, committee members, and security staff. Anyone who opens it will sign up and join this property.') }}</p>
     <div class="mb-3">
-      <label class="form-label fw-semibold">Invite Link</label>
+      <label class="form-label fw-semibold">{{ _('Invite Link') }}</label>
       <div class="input-group">
         <span class="invite-link-box form-control" id="invite-link-main">{{ invite_url }}</span>
         <button class="btn btn-outline-brand" type="button" data-copy-target="invite-link-main">
-          <i class="bi bi-clipboard"></i> Copy
+          <i class="bi bi-clipboard"></i> {{ _('Copy') }}
         </button>
       </div>
     </div>
@@ -35,25 +35,25 @@
   {% if onboarding %}
     {% if property.property_type == 'office' %}
       <form method="POST" action="{{ url_for('invite_links_next') }}" class="mt-3">
-        <label for="sub_room_id" class="form-label fw-semibold">Which company are you joining?</label>
+        <label for="sub_room_id" class="form-label fw-semibold">{{ _('Which company are you joining?') }}</label>
         <select class="form-select form-select-lg mb-3" id="sub_room_id" name="sub_room_id" required>
-          <option value="" selected disabled>Choose your company&hellip;</option>
+          <option value="" selected disabled>{{ _('Choose your company…') }}</option>
           {% for sub_room in sub_rooms %}
             <option value="{{ sub_room.id }}">{{ sub_room.company_name }}</option>
           {% endfor %}
         </select>
         <button type="submit" class="btn btn-brand btn-lg w-100">
-          Next <i class="bi bi-arrow-right-circle ms-1"></i>
+          {{ _('Next') }} <i class="bi bi-arrow-right-circle ms-1"></i>
         </button>
       </form>
     {% else %}
       <a href="{{ url_for('invite_links_next') }}" class="btn btn-brand btn-lg w-100 mt-3">
-        Next <i class="bi bi-arrow-right-circle ms-1"></i>
+        {{ _('Next') }} <i class="bi bi-arrow-right-circle ms-1"></i>
       </a>
     {% endif %}
   {% else %}
     <a href="{{ url_for('dashboard') }}" class="btn btn-outline-brand mt-3">
-      <i class="bi bi-arrow-left me-1"></i> Back to Dashboard
+      <i class="bi bi-arrow-left me-1"></i> {{ _('Back to Dashboard') }}
     </a>
   {% endif %}
 {% endblock %}

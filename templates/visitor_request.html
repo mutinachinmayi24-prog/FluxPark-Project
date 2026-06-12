@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-{% block title %}Visitor Request - FluxPark{% endblock %}
+{% block title %}{{ _('Visitor Request') }} - FluxPark{% endblock %}
 
 {% block content %}
-  <h3 class="fw-bold mb-1">Visitor Parking Request</h3>
+  <h3 class="fw-bold mb-1">{{ _('Visitor Parking Request') }}</h3>
   <p class="text-muted mb-4">
-    Request a parking slot for your visitor. We'll match it automatically with an available slot.
+    {{ _("Request a parking slot for your visitor. We'll match it automatically with an available slot.") }}
   </p>
 
   <div class="card border-0 shadow-sm mb-4">
@@ -12,48 +12,48 @@
       <form method="POST">
         <div class="row g-3">
           <div class="col-md-6">
-            <label for="visitor_name" class="form-label">Visitor Name</label>
+            <label for="visitor_name" class="form-label">{{ _('Visitor Name') }}</label>
             <input type="text" class="form-control" id="visitor_name" name="visitor_name" value="{{ form_data.get('visitor_name', '') }}" required>
           </div>
           <div class="col-md-6">
-            <label for="visitor_phone" class="form-label">Visitor Phone Number</label>
+            <label for="visitor_phone" class="form-label">{{ _('Visitor Phone Number') }}</label>
             <input type="tel" class="form-control" id="visitor_phone" name="visitor_phone" pattern="[6-9][0-9]{9}" maxlength="10" value="{{ form_data.get('visitor_phone', '') }}" required>
           </div>
           <div class="col-md-6">
-            <label for="vehicle_type" class="form-label">Vehicle Type</label>
+            <label for="vehicle_type" class="form-label">{{ _('Vehicle Type') }}</label>
             <select class="form-select" id="vehicle_type" name="vehicle_type" required>
-              <option value="" disabled {% if not form_data.get('vehicle_type') %}selected{% endif %}>Select vehicle type</option>
+              <option value="" disabled {% if not form_data.get('vehicle_type') %}selected{% endif %}>{{ _('Select vehicle type') }}</option>
               {% for vt in vehicle_types %}
-                <option value="{{ vt }}" {% if form_data.get('vehicle_type') == vt %}selected{% endif %}>{{ vt }}</option>
+                <option value="{{ vt }}" {% if form_data.get('vehicle_type') == vt %}selected{% endif %}>{{ VEHICLE_TYPE_LABELS.get(vt, vt) }}</option>
               {% endfor %}
             </select>
           </div>
           <div class="col-md-6">
-            <label for="vehicle_number" class="form-label">Vehicle Number</label>
+            <label for="vehicle_number" class="form-label">{{ _('Vehicle Number') }}</label>
             <input type="text" class="form-control text-uppercase" id="vehicle_number" name="vehicle_number" value="{{ form_data.get('vehicle_number', '') }}" required>
           </div>
         </div>
 
         <div class="row g-3 mt-0">
           <div class="col-12">
-            <label for="date" class="form-label">Date</label>
+            <label for="date" class="form-label">{{ _('Date') }}</label>
             <input type="date" class="form-control" id="date" name="date" value="{{ form_data.get('date', '') }}" required>
           </div>
         </div>
 
         <div class="row g-3 mt-0">
           <div class="col-md-6">
-            <label for="from_time" class="form-label">From</label>
+            <label for="from_time" class="form-label">{{ _('From') }}</label>
             <input type="time" class="form-control" id="from_time" name="from_time" value="{{ form_data.get('from_time', '') }}" required>
           </div>
           <div class="col-md-6">
-            <label for="to_time" class="form-label">To</label>
+            <label for="to_time" class="form-label">{{ _('To') }}</label>
             <input type="time" class="form-control" id="to_time" name="to_time" value="{{ form_data.get('to_time', '') }}" required>
           </div>
         </div>
 
         <button type="submit" class="btn btn-brand mt-4">
-          <i class="bi bi-send me-1"></i> Submit Request
+          <i class="bi bi-send me-1"></i> {{ _('Submit Request') }}
         </button>
       </form>
     </div>
@@ -61,32 +61,32 @@
 
   <div class="card border-0 shadow-sm">
     <div class="card-body">
-      <h6 class="section-title">Your Visitor Requests</h6>
+      <h6 class="section-title">{{ _('Your Visitor Requests') }}</h6>
       {% if requests %}
         <div class="table-responsive">
           <table class="table table-sm align-middle">
             <thead>
               <tr>
-                <th>Visitor</th>
-                <th>Vehicle</th>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Status</th>
-                <th>Pass</th>
+                <th>{{ _('Visitor') }}</th>
+                <th>{{ _('Vehicle') }}</th>
+                <th>{{ _('Date') }}</th>
+                <th>{{ _('Time') }}</th>
+                <th>{{ _('Status') }}</th>
+                <th>{{ _('Pass') }}</th>
               </tr>
             </thead>
             <tbody>
               {% for r in requests %}
                 <tr>
                   <td>{{ r.visitor_name }}<br><span class="text-muted small">{{ r.visitor_phone }}</span></td>
-                  <td>{{ r.vehicle_type }}<br><span class="text-muted small">{{ r.vehicle_number }}</span></td>
+                  <td>{{ VEHICLE_TYPE_LABELS.get(r.vehicle_type, r.vehicle_type) }}<br><span class="text-muted small">{{ r.vehicle_number }}</span></td>
                   <td>{{ r.date.strftime('%d %b %Y') }}</td>
                   <td>{{ r.from_time.strftime('%H:%M') }} - {{ r.to_time.strftime('%H:%M') }}</td>
                   <td><span class="badge bg-{{ REQUEST_STATUS_CLASSES[r.status] }}">{{ REQUEST_STATUS_LABELS[r.status] }}</span></td>
                   <td>
                     {% if r.status in ('allocated', 'entered', 'exited') %}
                       <a href="{{ url_for('visitor_pass', token=r.qr_token) }}" target="_blank" class="btn btn-sm btn-outline-brand">
-                        <i class="bi bi-qr-code me-1"></i> View Pass
+                        <i class="bi bi-qr-code me-1"></i> {{ _('View Pass') }}
                       </a>
                     {% else %}
                       &mdash;
@@ -98,7 +98,7 @@
           </table>
         </div>
       {% else %}
-        <p class="text-muted mb-0">You haven't created any visitor requests yet.</p>
+        <p class="text-muted mb-0">{{ _("You haven't created any visitor requests yet.") }}</p>
       {% endif %}
     </div>
   </div>

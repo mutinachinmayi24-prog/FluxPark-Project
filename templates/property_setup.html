@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-{% block title %}Create Property - FluxPark{% endblock %}
+{% block title %}{{ _('Create Property') }} - FluxPark{% endblock %}
 {% block card_size %}auth-card-wide{% endblock %}
 
 {% block content %}
-  <h5 class="fw-semibold mb-1">Let's set up your property</h5>
-  <p class="text-muted">Choose the type of property you'd like to create.</p>
+  <h5 class="fw-semibold mb-1">{{ _("Let's set up your property") }}</h5>
+  <p class="text-muted">{{ _("Choose the type of property you'd like to create.") }}</p>
 
   <form method="POST">
     <div class="row g-3 mb-4">
@@ -21,7 +21,7 @@
     </div>
 
     <button type="submit" class="btn btn-brand btn-lg w-100">
-      <i class="bi bi-arrow-right-circle me-1"></i> Continue
+      <i class="bi bi-arrow-right-circle me-1"></i> {{ _('Continue') }}
     </button>
   </form>
 {% endblock %}
