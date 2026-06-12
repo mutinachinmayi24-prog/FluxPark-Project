@@ -4,15 +4,15 @@
 {% block content %}
   <h5 class="fw-semibold mb-1">{{ property.name }}</h5>
   {% if sub_room %}
-    <p class="text-muted mb-1">Joining <strong>{{ sub_room.company_name }}</strong></p>
+    <p class="text-muted mb-1">{{ _('Joining') }} <strong>{{ sub_room.company_name }}</strong></p>
   {% endif %}
-  <p class="text-muted">How will you be using FluxPark here?</p>
+  <p class="text-muted">{{ _('How will you be using FluxPark here?') }}</p>
 
   <form method="POST">
     <div class="mb-4">
-      <label for="role" class="form-label">Select your role</label>
+      <label for="role" class="form-label">{{ _('Select your role') }}</label>
       <select class="form-select form-select-lg" id="role" name="role" required>
-        <option value="" selected disabled>Choose a role&hellip;</option>
+        <option value="" selected disabled>{{ _('Choose a role…') }}</option>
         {% for value, label in roles %}
           <option value="{{ value }}">{{ label }}</option>
         {% endfor %}
@@ -20,7 +20,7 @@
     </div>
 
     <button type="submit" class="btn btn-brand btn-lg w-100">
-      <i class="bi bi-arrow-right-circle me-1"></i> Continue
+      <i class="bi bi-arrow-right-circle me-1"></i> {{ _('Continue') }}
     </button>
   </form>
 {% endblock %}

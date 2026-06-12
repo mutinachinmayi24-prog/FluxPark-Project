@@ -1,0 +1,10 @@
+<div class="dropdown">
+  <button class="btn btn-sm {{ lang_switcher_class | default('btn-outline-secondary') }} dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <i class="bi bi-translate me-1"></i>{{ LANGUAGES[get_locale()|string] }}
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    {% for code, name in LANGUAGES.items() %}
+      <li><a class="dropdown-item {% if (get_locale()|string) == code %}active{% endif %}" href="{{ url_for('set_language', lang_code=code) }}">{{ name }}</a></li>
+    {% endfor %}
+  </ul>
+</div>

@@ -1,0 +1,541 @@
+# Hindi translations for PROJECT.
+# Copyright (C) 2026 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-06-12 12:33+0530\n"
+"PO-Revision-Date: 2026-06-12 12:33+0530\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: hi\n"
+"Language-Team: hi <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#: app.py:223
+msgid "Dashboard"
+msgstr "डैशबोर्ड"
+
+#: app.py:227
+msgid "Visitor Request"
+msgstr "विज़िटर रिक्वेस्ट"
+
+#: app.py:228
+msgid "Parking Availability"
+msgstr "पार्किंग उपलब्धता"
+
+#: app.py:230
+msgid "Parking Slots"
+msgstr "पार्किंग स्लॉट"
+
+#: app.py:231 app.py:248
+msgid "Parking Map"
+msgstr "पार्किंग मैप"
+
+#: app.py:234 app.py:252
+msgid "Scan Entry / Exit"
+msgstr "एंट्री / एग्ज़िट स्कैन करें"
+
+#: app.py:235 app.py:253
+msgid "Unexpected Visitor"
+msgstr "अप्रत्याशित विज़िटर"
+
+#: app.py:237 app.py:255
+msgid "Notifications"
+msgstr "सूचनाएं"
+
+#: app.py:240
+msgid "Payments"
+msgstr "पेमेंट्स"
+
+#: app.py:243
+msgid "Members"
+msgstr "सदस्य"
+
+#: app.py:244 app.py:262
+msgid "Invite Links"
+msgstr "इनवाइट लिंक"
+
+#: app.py:247
+msgid "Company Parking"
+msgstr "कंपनी पार्किंग"
+
+#: app.py:249 templates/dashboard.html:128
+msgid "Transport Request"
+msgstr "ट्रांसपोर्ट रिक्वेस्ट"
+
+#: app.py:258 templates/dashboard.html:356
+msgid "Team"
+msgstr "टीम"
+
+#: app.py:261
+msgid "Rent Ledger"
+msgstr "रेंट लेजर"
+
+#: app.py:264
+msgid "My Profile"
+msgstr "मेरी प्रोफ़ाइल"
+
+#: app.py:381
+msgid "This invite link is invalid or has expired."
+msgstr "यह इनवाइट लिंक अमान्य है या समाप्त हो गया है।"
+
+#: app.py:389
+msgid "Please choose email or phone."
+msgstr "कृपया ईमेल या फ़ोन चुनें।"
+
+#: app.py:391
+msgid "Please enter a valid email address."
+msgstr "कृपया एक मान्य ईमेल पता दर्ज करें।"
+
+#: app.py:393
+msgid "Please enter a valid 10-digit mobile number."
+msgstr "कृपया एक मान्य 10-अंकीय मोबाइल नंबर दर्ज करें।"
+
+#: app.py:425
+msgid "Your OTP has expired. Please request a new one."
+msgstr "आपका OTP समाप्त हो गया है। कृपया नया OTP प्राप्त करें।"
+
+#: app.py:427
+msgid "Incorrect OTP. Please try again."
+msgstr "गलत OTP। कृपया पुनः प्रयास करें।"
+
+#: app.py:668
+msgid "Please select a role."
+msgstr "कृपया एक भूमिका चुनें।"
+
+#: constants.py:12 constants.py:25
+msgid "Owner"
+msgstr "मालिक"
+
+#: constants.py:13 constants.py:26
+msgid "Tenant"
+msgstr "किरायेदार"
+
+#: constants.py:14 constants.py:27
+msgid "Committee"
+msgstr "समिति"
+
+#: constants.py:15 constants.py:20 constants.py:28
+msgid "Security"
+msgstr "सुरक्षा"
+
+#: constants.py:19 constants.py:29
+msgid "Employee"
+msgstr "कर्मचारी"
+
+#: constants.py:21 constants.py:30
+msgid "Manager"
+msgstr "मैनेजर"
+
+#: constants.py:34
+msgid "Apartment"
+msgstr "अपार्टमेंट"
+
+#: constants.py:35
+msgid "Gated Community"
+msgstr "गेटेड कम्युनिटी"
+
+#: constants.py:36
+msgid "Office"
+msgstr "ऑफिस"
+
+#: parking_engine.py:29
+msgid "Vacant"
+msgstr "खाली"
+
+#: parking_engine.py:29
+msgid "Booked"
+msgstr "बुक्ड"
+
+#: parking_engine.py:29
+msgid "Occupied"
+msgstr "ऑक्यूपाइड"
+
+#: parking_engine.py:33
+msgid "Pending allocation"
+msgstr "आवंटन लंबित"
+
+#: parking_engine.py:34
+msgid "Pending approval"
+msgstr "स्वीकृति लंबित"
+
+#: parking_engine.py:35
+msgid "Allocated"
+msgstr "आवंटित"
+
+#: parking_engine.py:36
+msgid "No slot available"
+msgstr "कोई स्लॉट उपलब्ध नहीं"
+
+#: parking_engine.py:37
+msgid "Entered"
+msgstr "प्रवेश किया"
+
+#: parking_engine.py:38
+msgid "Exited"
+msgstr "बाहर गए"
+
+#: parking_engine.py:39
+msgid "Rejected"
+msgstr "अस्वीकृत"
+
+#: parking_engine.py:40
+msgid "Needs reallocation"
+msgstr "पुनः आवंटन आवश्यक"
+
+#: parking_engine.py:41 templates/dashboard.html:224
+msgid "Cancelled"
+msgstr "रद्द"
+
+#: templates/_sidebar_nav.html:24
+msgid "Logout"
+msgstr "लॉगआउट"
+
+#: templates/base.html:52
+msgid "Smart Parking & Access Management"
+msgstr "स्मार्ट पार्किंग और एक्सेस मैनेजमेंट"
+
+#: templates/dashboard.html:10
+#, python-format
+msgid "Welcome, %(name)s!"
+msgstr "नमस्ते, %(name)s!"
+
+#: templates/dashboard.html:10
+msgid "Welcome!"
+msgstr "नमस्ते!"
+
+#: templates/dashboard.html:26
+msgid "Today's Visitors"
+msgstr "आज के विज़िटर"
+
+#: templates/dashboard.html:34
+msgid "My Parking Slot"
+msgid_plural "My Parking Slots"
+msgstr[0] "मेरा पार्किंग स्लॉट"
+msgstr[1] "मेरे पार्किंग स्लॉट"
+
+#: templates/dashboard.html:42
+msgid "Pending Approvals"
+msgstr "लंबित स्वीकृतियां"
+
+#: templates/dashboard.html:50 templates/dashboard.html:77
+#: templates/dashboard.html:112
+msgid "Unread Notifications"
+msgstr "अपठित सूचनाएं"
+
+#: templates/dashboard.html:59
+msgid "Commission Earned Today"
+msgstr "आज अर्जित कमीशन"
+
+#: templates/dashboard.html:69 templates/dashboard.html:242
+msgid "Today's Expected Visitors"
+msgstr "आज आने वाले विज़िटर"
+
+#: templates/dashboard.html:86 templates/dashboard.html:278
+msgid "Company Parking Slots"
+msgstr "कंपनी पार्किंग स्लॉट"
+
+#: templates/dashboard.html:94
+msgid "Vacant Now"
+msgstr "अभी खाली"
+
+#: templates/dashboard.html:103
+msgid "Employees"
+msgstr "कर्मचारी"
+
+#: templates/dashboard.html:121
+msgid "New Visitor Request"
+msgstr "नई विज़िटर रिक्वेस्ट"
+
+#: templates/dashboard.html:122
+msgid "List My Parking Slot"
+msgstr "मेरा पार्किंग स्लॉट लिस्ट करें"
+
+#: templates/dashboard.html:124
+msgid "Scan Visitor QR"
+msgstr "विज़िटर QR स्कैन करें"
+
+#: templates/dashboard.html:125
+msgid "Log Unexpected Visitor"
+msgstr "अप्रत्याशित विज़िटर दर्ज करें"
+
+#: templates/dashboard.html:127
+msgid "View Company Parking"
+msgstr "कंपनी पार्किंग देखें"
+
+#: templates/dashboard.html:130
+msgid "Team Directory"
+msgstr "टीम डायरेक्टरी"
+
+#: templates/dashboard.html:140
+msgid "Today's Visitor Requests"
+msgstr "आज की विज़िटर रिक्वेस्ट"
+
+#: templates/dashboard.html:146 templates/dashboard.html:248
+msgid "Visitor"
+msgstr "विज़िटर"
+
+#: templates/dashboard.html:147 templates/dashboard.html:249
+msgid "Vehicle"
+msgstr "वाहन"
+
+#: templates/dashboard.html:148 templates/dashboard.html:217
+#: templates/dashboard.html:251
+msgid "Time"
+msgstr "समय"
+
+#: templates/dashboard.html:149 templates/dashboard.html:188
+#: templates/dashboard.html:219 templates/dashboard.html:252
+#: templates/dashboard.html:287
+msgid "Status"
+msgstr "स्थिति"
+
+#: templates/dashboard.html:150
+msgid "Pass"
+msgstr "पास"
+
+#: templates/dashboard.html:162 templates/dashboard.html:264
+msgid "View"
+msgstr "देखें"
+
+#: templates/dashboard.html:173
+msgid "No visitor requests for today."
+msgstr "आज के लिए कोई विज़िटर रिक्वेस्ट नहीं है।"
+
+#: templates/dashboard.html:180
+msgid "My Parking Slots"
+msgstr "मेरे पार्किंग स्लॉट"
+
+#: templates/dashboard.html:186 templates/dashboard.html:216
+#: templates/dashboard.html:284
+msgid "Slot"
+msgstr "स्लॉट"
+
+#: templates/dashboard.html:187 templates/dashboard.html:285
+msgid "Floor"
+msgstr "फ्लोर"
+
+#: templates/dashboard.html:203
+msgid "No parking slot is linked to your profile yet."
+msgstr "अभी तक आपकी प्रोफ़ाइल से कोई पार्किंग स्लॉट लिंक नहीं है।"
+
+#: templates/dashboard.html:211
+msgid "Your Listed Availability Today"
+msgstr "आज आपकी सूचीबद्ध उपलब्धता"
+
+#: templates/dashboard.html:218
+msgid "Rent/hr"
+msgstr "किराया/घंटा"
+
+#: templates/dashboard.html:224
+msgid "Available"
+msgstr "उपलब्ध"
+
+#: templates/dashboard.html:224
+msgid "Matched"
+msgstr "मैच हुआ"
+
+#: templates/dashboard.html:224
+msgid "Completed"
+msgstr "पूर्ण"
+
+#: templates/dashboard.html:250
+msgid "Visiting"
+msgstr "मुलाकात"
+
+#: templates/dashboard.html:271
+msgid "No expected visitors for today yet."
+msgstr "आज के लिए अभी तक कोई अपेक्षित विज़िटर नहीं है।"
+
+#: templates/dashboard.html:286
+msgid "Assigned To"
+msgstr "असाइन किया गया"
+
+#: templates/dashboard.html:301
+#, python-format
+msgid "Visitor: %(name)s"
+msgstr "विज़िटर: %(name)s"
+
+#: templates/dashboard.html:314
+msgid "No parking slots configured for your company yet."
+msgstr "आपकी कंपनी के लिए अभी तक कोई पार्किंग स्लॉट कॉन्फ़िगर नहीं किए गए हैं।"
+
+#: templates/dashboard.html:316
+msgid "Add some"
+msgstr "कुछ जोड़ें"
+
+#: templates/dashboard.html:326
+msgid "Tomorrow's Transport Request"
+msgstr "कल की ट्रांसपोर्ट रिक्वेस्ट"
+
+#: templates/dashboard.html:327
+msgid "Manage"
+msgstr "मैनेज करें"
+
+#: templates/dashboard.html:335 templates/dashboard.html:411
+#, python-format
+msgid "Shift: %(from)s – %(to)s"
+msgstr "शिफ्ट: %(from)s – %(to)s"
+
+#: templates/dashboard.html:339
+msgid "View Parking Pass"
+msgstr "पार्किंग पास देखें"
+
+#: templates/dashboard.html:343
+msgid "No request submitted for tomorrow. The 9 PM cutoff has passed."
+msgstr "कल के लिए कोई रिक्वेस्ट सबमिट नहीं की गई। रात 9 बजे की समय सीमा समाप्त हो गई है।"
+
+#: templates/dashboard.html:346
+msgid "You haven't requested parking for tomorrow yet."
+msgstr "आपने कल के लिए अभी तक पार्किंग का अनुरोध नहीं किया है।"
+
+#: templates/dashboard.html:347
+msgid "Submit before 9 PM"
+msgstr "रात 9 बजे से पहले सबमिट करें"
+
+#: templates/dashboard.html:362
+msgid "Name"
+msgstr "नाम"
+
+#: templates/dashboard.html:363
+msgid "Employee ID"
+msgstr "कर्मचारी आईडी"
+
+#: templates/dashboard.html:364
+msgid "Shift"
+msgstr "शिफ्ट"
+
+#: templates/dashboard.html:365
+msgid "Contact"
+msgstr "संपर्क"
+
+#: templates/dashboard.html:382
+msgid "No employees have joined yet."
+msgstr "अभी तक कोई कर्मचारी शामिल नहीं हुआ है।"
+
+#: templates/dashboard.html:383
+msgid "Share your"
+msgstr "अपना"
+
+#: templates/dashboard.html:383
+msgid "invite link"
+msgstr "इनवाइट लिंक शेयर करें"
+
+#: templates/dashboard.html:395
+msgid "Property"
+msgstr "प्रॉपर्टी"
+
+#: templates/dashboard.html:405
+msgid "Your Role"
+msgstr "आपकी भूमिका"
+
+#: templates/dashboard.html:414
+msgid "View My Profile"
+msgstr "मेरी प्रोफ़ाइल देखें"
+
+#: templates/dashboard.html:426
+msgid "Recent Notifications"
+msgstr "हाल की सूचनाएं"
+
+#: templates/dashboard.html:427
+msgid "View all"
+msgstr "सभी देखें"
+
+#: templates/dashboard.html:435
+msgid "New"
+msgstr "नया"
+
+#: templates/dashboard.html:443
+msgid "No notifications yet."
+msgstr "अभी तक कोई सूचना नहीं है।"
+
+#: templates/role_selection.html:7
+msgid "Joining"
+msgstr "जॉइनिंग"
+
+#: templates/role_selection.html:9
+msgid "How will you be using FluxPark here?"
+msgstr "आप यहां FluxPark का उपयोग कैसे करेंगे?"
+
+#: templates/role_selection.html:13
+msgid "Select your role"
+msgstr "अपनी भूमिका चुनें"
+
+#: templates/role_selection.html:15
+msgid "Choose a role…"
+msgstr "एक भूमिका चुनें…"
+
+#: templates/role_selection.html:23
+msgid "Continue"
+msgstr "जारी रखें"
+
+#: templates/signup.html:9
+#, python-format
+msgid ""
+"You've been invited to join %(property)s — %(company)s. Sign up below to "
+"continue."
+msgstr "आपको %(property)s — %(company)s में शामिल होने के लिए आमंत्रित किया गया है। आगे बढ़ने के लिए नीचे साइन अप करें।"
+
+#: templates/signup.html:11
+#, python-format
+msgid "You've been invited to join %(property)s. Sign up below to continue."
+msgstr "आपको %(property)s में शामिल होने के लिए आमंत्रित किया गया है। आगे बढ़ने के लिए नीचे साइन अप करें।"
+
+#: templates/signup.html:16
+msgid "Create your account"
+msgstr "अपना अकाउंट बनाएं"
+
+#: templates/signup.html:18
+msgid "How would you like to verify?"
+msgstr "आप कैसे सत्यापित करना चाहेंगे?"
+
+#: templates/signup.html:21
+msgid "Email"
+msgstr "ईमेल"
+
+#: templates/signup.html:24
+msgid "Phone Number"
+msgstr "फ़ोन नंबर"
+
+#: templates/signup.html:28
+msgid "Email or Phone Number"
+msgstr "ईमेल या फ़ोन नंबर"
+
+#: templates/signup.html:30
+msgid "A verification code (OTP) will be sent here."
+msgstr "यहां एक सत्यापन कोड (OTP) भेजा जाएगा।"
+
+#: templates/signup.html:34
+msgid "Send OTP"
+msgstr "OTP भेजें"
+
+#: templates/verify_otp.html:5
+msgid "Verify your account"
+msgstr "अपना अकाउंट सत्यापित करें"
+
+#: templates/verify_otp.html:6
+msgid "We've sent a 6-digit verification code to"
+msgstr "हमने यह 6-अंकीय सत्यापन कोड भेजा है:"
+
+#: templates/verify_otp.html:10
+msgid "Enter Verification Code"
+msgstr "सत्यापन कोड दर्ज करें"
+
+#: templates/verify_otp.html:16
+msgid "Verify OTP"
+msgstr "OTP सत्यापित करें"
+
+#: templates/verify_otp.html:22
+msgid "Resend OTP"
+msgstr "OTP फिर से भेजें"
+
+#: templates/verify_otp.html:28
+msgid "Use a different email or phone number"
+msgstr "एक अलग ईमेल या फ़ोन नंबर का उपयोग करें"

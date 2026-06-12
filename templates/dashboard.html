@@ -6,13 +6,15 @@
                  or role_profile.data.get('head_name') or role_profile.data.get('employee_name') %}
   <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-4">
     <div>
-      <h3 class="fw-bold mb-1">Welcome{% if name %}, {{ name }}{% endif %}!</h3>
+      <h3 class="fw-bold mb-1">
+        {% if name %}{{ _('Welcome, %(name)s!', name=name) }}{% else %}{{ _('Welcome!') }}{% endif %}
+      </h3>
       <p class="text-muted mb-0">
         {{ property.name }}{% if sub_room %} &mdash; {{ sub_room.company_name }}{% endif %}
         &middot; {{ property.address }}
       </p>
     </div>
-    <span class="badge bg-brand fs-6 text-capitalize px-3 py-2">{{ role_profile.role }}</span>
+    <span class="badge bg-brand fs-6 px-3 py-2">{{ ROLE_LABELS[role_profile.role] }}</span>
   </div>
 
   <div class="row g-3 mb-4">
@@ -21,7 +23,7 @@
         <div class="card border-0 shadow-sm h-100">
           <div class="card-body text-center">
             <div class="display-6 fw-bold text-brand">{{ today_requests|length }}</div>
-            <div class="text-muted small">Today's Visitors</div>
+            <div class="text-muted small">{{ _("Today's Visitors") }}</div>
           </div>
         </div>
       </div>
@@ -29,7 +31,7 @@
         <div class="card border-0 shadow-sm h-100">
           <div class="card-body text-center">
             <div class="display-6 fw-bold text-brand">{{ my_slot_rows|length }}</div>
-            <div class="text-muted small">My Parking Slot{{ 's' if my_slot_rows|length != 1 else '' }}</div>
+            <div class="text-muted small">{{ ngettext('My Parking Slot', 'My Parking Slots', my_slot_rows|length) }}</div>
           </div>
         </div>
       </div>
@@ -37,7 +39,7 @@
         <div class="card border-0 shadow-sm h-100">
           <div class="card-body text-center">
             <div class="display-6 fw-bold text-brand">{{ pending_approvals }}</div>
-            <div class="text-muted small">Pending Approvals</div>
+            <div class="text-muted small">{{ _('Pending Approvals') }}</div>
           </div>
         </div>
       </div>
@@ -45,7 +47,7 @@
         <div class="card border-0 shadow-sm h-100">
           <div class="card-body text-center">
             <div class="display-6 fw-bold text-brand">{{ unread_count }}</div>
-            <div class="text-muted small">Unread Notifications</div>
+            <div class="text-muted small">{{ _('Unread Notifications') }}</div>
           </div>
         </div>
       </div>
@@ -54,7 +56,7 @@
           <div class="card border-0 shadow-sm h-100">
             <div class="card-body text-center">
               <div class="display-6 fw-bold text-brand">₹{{ '%.2f'|format(commission_today) }}</div>
-              <div class="text-muted small">Commission Earned Today</div>
+              <div class="text-muted small">{{ _('Commission Earned Today') }}</div>
             </div>
           </div>
         </div>
@@ -64,7 +66,7 @@
         <div class="card border-0 shadow-sm h-100">
           <div class="card-body text-center">
             <div class="display-6 fw-bold text-brand">{{ today_visitors|length }}</div>
-            <div class="text-muted small">Today's Expected Visitors</div>
+            <div class="text-muted small">{{ _("Today's Expected Visitors") }}</div>
           </div>
         </div>
       </div>
@@ -72,7 +74,7 @@
         <div class="card border-0 shadow-sm h-100">
           <div class="card-body text-center">
             <div class="display-6 fw-bold text-brand">{{ unread_count }}</div>
-            <div class="text-muted small">Unread Notifications</div>
+            <div class="text-muted small">{{ _('Unread Notifications') }}</div>
           </div>
         </div>
       </div>
@@ -81,7 +83,7 @@
         <div class="card border-0 shadow-sm h-100">
           <div class="card-body text-center">
             <div class="display-6 fw-bold text-brand">{{ company_slot_rows|length }}</div>
-            <div class="text-muted small">Company Parking Slots</div>
+            <div class="text-muted small">{{ _('Company Parking Slots') }}</div>
           </div>
         </div>
       </div>
@@ -89,7 +91,7 @@
         <div class="card border-0 shadow-sm h-100">
           <div class="card-body text-center">
             <div class="display-6 fw-bold text-brand">{{ company_vacant_count }}</div>
-            <div class="text-muted small">Vacant Now</div>
+            <div class="text-muted small">{{ _('Vacant Now') }}</div>
           </div>
         </div>
       </div>
@@ -98,7 +100,7 @@
           <div class="card border-0 shadow-sm h-100">
             <div class="card-body text-center">
               <div class="display-6 fw-bold text-brand">{{ team_members|length }}</div>
-              <div class="text-muted small">Employees</div>
+              <div class="text-muted small">{{ _('Employees') }}</div>
             </div>
           </div>
         </div>
@@ -107,7 +109,7 @@
         <div class="card border-0 shadow-sm h-100">
           <div class="card-body text-center">
             <div class="display-6 fw-bold text-brand">{{ unread_count }}</div>
-            <div class="text-muted small">Unread Notifications</div>
+            <div class="text-muted small">{{ _('Unread Notifications') }}</div>
           </div>
         </div>
       </div>
@@ -116,16 +118,16 @@
 
   <div class="d-flex flex-wrap gap-2 mb-4">
     {% if role_profile.role in ('owner', 'tenant', 'committee') %}
-      <a href="{{ url_for('visitor_request') }}" class="btn btn-brand"><i class="bi bi-person-plus me-1"></i> New Visitor Request</a>
-      <a href="{{ url_for('parking_availability') }}" class="btn btn-outline-brand"><i class="bi bi-p-circle me-1"></i> List My Parking Slot</a>
+      <a href="{{ url_for('visitor_request') }}" class="btn btn-brand"><i class="bi bi-person-plus me-1"></i> {{ _('New Visitor Request') }}</a>
+      <a href="{{ url_for('parking_availability') }}" class="btn btn-outline-brand"><i class="bi bi-p-circle me-1"></i> {{ _('List My Parking Slot') }}</a>
     {% elif role_profile.role == 'security' %}
-      <a href="{{ url_for('security_scan') }}" class="btn btn-brand"><i class="bi bi-qr-code-scan me-1"></i> Scan Visitor QR</a>
-      <a href="{{ url_for('unexpected_visitor') }}" class="btn btn-outline-brand"><i class="bi bi-person-plus me-1"></i> Log Unexpected Visitor</a>
+      <a href="{{ url_for('security_scan') }}" class="btn btn-brand"><i class="bi bi-qr-code-scan me-1"></i> {{ _('Scan Visitor QR') }}</a>
+      <a href="{{ url_for('unexpected_visitor') }}" class="btn btn-outline-brand"><i class="bi bi-person-plus me-1"></i> {{ _('Log Unexpected Visitor') }}</a>
     {% elif role_profile.role in ('employee', 'manager') %}
-      <a href="{{ url_for('parking_slots') }}" class="btn btn-brand"><i class="bi bi-grid-3x3-gap me-1"></i> View Company Parking</a>
-      <a href="{{ url_for('transport_request') }}" class="btn btn-outline-brand"><i class="bi bi-car-front me-1"></i> Transport Request</a>
+      <a href="{{ url_for('parking_slots') }}" class="btn btn-brand"><i class="bi bi-grid-3x3-gap me-1"></i> {{ _('View Company Parking') }}</a>
+      <a href="{{ url_for('transport_request') }}" class="btn btn-outline-brand"><i class="bi bi-car-front me-1"></i> {{ _('Transport Request') }}</a>
       {% if role_profile.role == 'manager' %}
-        <a href="{{ url_for('members') }}" class="btn btn-outline-brand"><i class="bi bi-people me-1"></i> Team Directory</a>
+        <a href="{{ url_for('members') }}" class="btn btn-outline-brand"><i class="bi bi-people me-1"></i> {{ _('Team Directory') }}</a>
       {% endif %}
     {% endif %}
   </div>
@@ -135,17 +137,17 @@
       {% if role_profile.role in ('owner', 'tenant', 'committee') %}
         <div class="card border-0 shadow-sm mb-3">
           <div class="card-body">
-            <h6 class="section-title">Today's Visitor Requests</h6>
+            <h6 class="section-title">{{ _("Today's Visitor Requests") }}</h6>
             {% if today_requests %}
               <div class="table-responsive">
                 <table class="table table-sm align-middle mb-0">
                   <thead>
                     <tr>
-                      <th>Visitor</th>
-                      <th>Vehicle</th>
-                      <th>Time</th>
-                      <th>Status</th>
-                      <th>Pass</th>
+                      <th>{{ _('Visitor') }}</th>
+                      <th>{{ _('Vehicle') }}</th>
+                      <th>{{ _('Time') }}</th>
+                      <th>{{ _('Status') }}</th>
+                      <th>{{ _('Pass') }}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -157,7 +159,7 @@
                         <td><span class="badge bg-{{ REQUEST_STATUS_CLASSES[r.status] }}">{{ REQUEST_STATUS_LABELS[r.status] }}</span></td>
                         <td>
                           {% if r.status in ('allocated', 'entered', 'exited') %}
-                            <a href="{{ url_for('visitor_pass', token=r.qr_token) }}" target="_blank">View</a>
+                            <a href="{{ url_for('visitor_pass', token=r.qr_token) }}" target="_blank">{{ _('View') }}</a>
                           {% else %}
                             &mdash;
                           {% endif %}
@@ -168,22 +170,22 @@
                 </table>
               </div>
             {% else %}
-              <p class="text-muted mb-0">No visitor requests for today.</p>
+              <p class="text-muted mb-0">{{ _('No visitor requests for today.') }}</p>
             {% endif %}
           </div>
         </div>
 
         <div class="card border-0 shadow-sm mb-3">
           <div class="card-body">
-            <h6 class="section-title">My Parking Slots</h6>
+            <h6 class="section-title">{{ _('My Parking Slots') }}</h6>
             {% if my_slot_rows %}
               <div class="table-responsive">
                 <table class="table table-sm align-middle mb-0">
                   <thead>
                     <tr>
-                      <th>Slot</th>
-                      <th>Floor</th>
-                      <th>Status</th>
+                      <th>{{ _('Slot') }}</th>
+                      <th>{{ _('Floor') }}</th>
+                      <th>{{ _('Status') }}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -198,7 +200,7 @@
                 </table>
               </div>
             {% else %}
-              <p class="text-muted mb-0">No parking slot is linked to your profile yet.</p>
+              <p class="text-muted mb-0">{{ _('No parking slot is linked to your profile yet.') }}</p>
             {% endif %}
           </div>
         </div>
@@ -206,25 +208,26 @@
         {% if today_availabilities %}
           <div class="card border-0 shadow-sm mb-3">
             <div class="card-body">
-              <h6 class="section-title">Your Listed Availability Today</h6>
+              <h6 class="section-title">{{ _('Your Listed Availability Today') }}</h6>
               <div class="table-responsive">
                 <table class="table table-sm align-middle mb-0">
                   <thead>
                     <tr>
-                      <th>Slot</th>
-                      <th>Time</th>
-                      <th>Rent/hr</th>
-                      <th>Status</th>
+                      <th>{{ _('Slot') }}</th>
+                      <th>{{ _('Time') }}</th>
+                      <th>{{ _('Rent/hr') }}</th>
+                      <th>{{ _('Status') }}</th>
                     </tr>
                   </thead>
                   <tbody>
                     {% set availability_classes = {'available': 'success', 'matched': 'primary', 'completed': 'secondary', 'cancelled': 'danger'} %}
+                    {% set availability_labels = {'available': _('Available'), 'matched': _('Matched'), 'completed': _('Completed'), 'cancelled': _('Cancelled')} %}
                     {% for a in today_availabilities %}
                       <tr>
                         <td>{{ a.parking_slot.slot_number }}</td>
                         <td>{{ a.from_time.strftime('%H:%M') }} - {{ a.to_time.strftime('%H:%M') }}</td>
                         <td>₹{{ '%.2f'|format(a.rent_per_hour) }}</td>
-                        <td><span class="badge bg-{{ availability_classes[a.status] }}">{{ a.status.title() }}</span></td>
+                        <td><span class="badge bg-{{ availability_classes[a.status] }}">{{ availability_labels[a.status] }}</span></td>
                       </tr>
                     {% endfor %}
                   </tbody>
@@ -236,17 +239,17 @@
       {% elif role_profile.role == 'security' %}
         <div class="card border-0 shadow-sm mb-3">
           <div class="card-body">
-            <h6 class="section-title">Today's Expected Visitors</h6>
+            <h6 class="section-title">{{ _("Today's Expected Visitors") }}</h6>
             {% if today_visitors %}
               <div class="table-responsive">
                 <table class="table table-sm align-middle mb-0">
                   <thead>
                     <tr>
-                      <th>Visitor</th>
-                      <th>Vehicle</th>
-                      <th>Visiting</th>
-                      <th>Time</th>
-                      <th>Status</th>
+                      <th>{{ _('Visitor') }}</th>
+                      <th>{{ _('Vehicle') }}</th>
+                      <th>{{ _('Visiting') }}</th>
+                      <th>{{ _('Time') }}</th>
+                      <th>{{ _('Status') }}</th>
                       <th></th>
                     </tr>
                   </thead>
@@ -258,30 +261,30 @@
                         <td>{{ role_profile_label(r.host_role_profile) }}</td>
                         <td>{{ r.from_time.strftime('%H:%M') }} - {{ r.to_time.strftime('%H:%M') }}</td>
                         <td><span class="badge bg-{{ REQUEST_STATUS_CLASSES[r.status] }}">{{ REQUEST_STATUS_LABELS[r.status] }}</span></td>
-                        <td><a href="{{ url_for('security_visitor', token=r.qr_token) }}" class="btn btn-sm btn-outline-brand">View</a></td>
+                        <td><a href="{{ url_for('security_visitor', token=r.qr_token) }}" class="btn btn-sm btn-outline-brand">{{ _('View') }}</a></td>
                       </tr>
                     {% endfor %}
                   </tbody>
                 </table>
               </div>
             {% else %}
-              <p class="text-muted mb-0">No expected visitors for today yet.</p>
+              <p class="text-muted mb-0">{{ _('No expected visitors for today yet.') }}</p>
             {% endif %}
           </div>
         </div>
       {% elif role_profile.role in ('employee', 'manager') %}
         <div class="card border-0 shadow-sm mb-3">
           <div class="card-body">
-            <h6 class="section-title">Company Parking Slots</h6>
+            <h6 class="section-title">{{ _('Company Parking Slots') }}</h6>
             {% if company_slot_rows %}
               <div class="table-responsive">
                 <table class="table table-sm align-middle mb-0">
                   <thead>
                     <tr>
-                      <th>Slot</th>
-                      <th>Floor</th>
-                      <th>Assigned To</th>
-                      <th>Status</th>
+                      <th>{{ _('Slot') }}</th>
+                      <th>{{ _('Floor') }}</th>
+                      <th>{{ _('Assigned To') }}</th>
+                      <th>{{ _('Status') }}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -294,6 +297,8 @@
                             {{ role_profile_label(slot.home_role_profile) }}
                           {% elif today_allocations.get(slot.id) %}
                             {{ role_profile_label(today_allocations[slot.id].role_profile) }}
+                          {% elif today_visitor_allocations.get(slot.id) %}
+                            {{ _('Visitor: %(name)s', name=today_visitor_allocations[slot.id].visitor_name) }}
                           {% else %}
                             &mdash;
                           {% endif %}
@@ -306,9 +311,9 @@
               </div>
             {% else %}
               <p class="text-muted mb-0">
-                No parking slots configured for your company yet.
+                {{ _('No parking slots configured for your company yet.') }}
                 {% if role_profile.role == 'manager' %}
-                  <a href="{{ url_for('parking_slots') }}">Add some</a>.
+                  <a href="{{ url_for('parking_slots') }}">{{ _('Add some') }}</a>.
                 {% endif %}
               </p>
             {% endif %}
@@ -318,8 +323,8 @@
         <div class="card border-0 shadow-sm mb-3">
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center mb-2">
-              <h6 class="section-title mb-0">Tomorrow's Transport Request</h6>
-              <a href="{{ url_for('transport_request') }}" class="small">Manage</a>
+              <h6 class="section-title mb-0">{{ _("Tomorrow's Transport Request") }}</h6>
+              <a href="{{ url_for('transport_request') }}" class="small">{{ _('Manage') }}</a>
             </div>
             {% if tomorrow_transport_request %}
               <p class="mb-1">
@@ -327,19 +332,19 @@
                 {{ tomorrow_transport_request.vehicle_type }} &mdash; {{ tomorrow_transport_request.vehicle_number }}
               </p>
               <p class="text-muted small mb-{% if tomorrow_transport_request.status == 'allocated' %}2{% else %}0{% endif %}">
-                Shift: {{ tomorrow_transport_request.from_time.strftime('%H:%M') }} - {{ tomorrow_transport_request.to_time.strftime('%H:%M') }}
+                {{ _('Shift: %(from)s – %(to)s', from=tomorrow_transport_request.from_time.strftime('%H:%M'), to=tomorrow_transport_request.to_time.strftime('%H:%M')) }}
               </p>
               {% if tomorrow_transport_request.status == 'allocated' %}
                 <a href="{{ url_for('transport_pass', token=tomorrow_transport_request.qr_token) }}" class="btn btn-sm btn-brand">
-                  <i class="bi bi-qr-code me-1"></i> View Parking Pass
+                  <i class="bi bi-qr-code me-1"></i> {{ _('View Parking Pass') }}
                 </a>
               {% endif %}
             {% elif transport_cutoff_passed %}
-              <p class="text-muted mb-0">No request submitted for tomorrow. The 9 PM cutoff has passed.</p>
+              <p class="text-muted mb-0">{{ _('No request submitted for tomorrow. The 9 PM cutoff has passed.') }}</p>
             {% else %}
               <p class="text-muted mb-0">
-                You haven't requested parking for tomorrow yet.
-                <a href="{{ url_for('transport_request') }}">Submit before 9 PM</a>.
+                {{ _("You haven't requested parking for tomorrow yet.") }}
+                <a href="{{ url_for('transport_request') }}">{{ _('Submit before 9 PM') }}</a>.
               </p>
             {% endif %}
           </div>
@@ -348,16 +353,16 @@
         {% if role_profile.role == 'manager' %}
           <div class="card border-0 shadow-sm mb-3">
             <div class="card-body">
-              <h6 class="section-title">Team</h6>
+              <h6 class="section-title">{{ _('Team') }}</h6>
               {% if team_members %}
                 <div class="table-responsive">
                   <table class="table table-sm align-middle mb-0">
                     <thead>
                       <tr>
-                        <th>Name</th>
-                        <th>Employee ID</th>
-                        <th>Shift</th>
-                        <th>Contact</th>
+                        <th>{{ _('Name') }}</th>
+                        <th>{{ _('Employee ID') }}</th>
+                        <th>{{ _('Shift') }}</th>
+                        <th>{{ _('Contact') }}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -374,7 +379,8 @@
                 </div>
               {% else %}
                 <p class="text-muted mb-0">
-                  No employees have joined yet. Share your <a href="{{ url_for('invite_links') }}">invite link</a>.
+                  {{ _('No employees have joined yet.') }}
+                  {{ _('Share your') }} <a href="{{ url_for('invite_links') }}">{{ _('invite link') }}</a>.
                 </p>
               {% endif %}
             </div>
@@ -386,26 +392,26 @@
         <div class="col-md-6">
           <div class="card border-0 shadow-sm h-100">
             <div class="card-body">
-              <h6 class="text-muted text-uppercase small mb-3">Property</h6>
+              <h6 class="text-muted text-uppercase small mb-3">{{ _('Property') }}</h6>
               <p class="mb-1"><i class="bi bi-buildings me-2 text-brand"></i>{{ property.name }}</p>
               <p class="mb-1"><i class="bi bi-geo-alt me-2 text-brand"></i>{{ property.address }}</p>
-              <p class="mb-0 text-capitalize"><i class="bi bi-tag me-2 text-brand"></i>{{ property.property_type.replace('_', ' ') }}</p>
+              <p class="mb-0"><i class="bi bi-tag me-2 text-brand"></i>{{ PROPERTY_TYPE_LABELS[property.property_type] }}</p>
             </div>
           </div>
         </div>
         <div class="col-md-6">
           <div class="card border-0 shadow-sm h-100">
             <div class="card-body">
-              <h6 class="text-muted text-uppercase small mb-3">Your Role</h6>
-              <p class="mb-1 text-capitalize"><i class="bi bi-person-badge me-2 text-brand"></i>{{ role_profile.role }}</p>
+              <h6 class="text-muted text-uppercase small mb-3">{{ _('Your Role') }}</h6>
+              <p class="mb-1"><i class="bi bi-person-badge me-2 text-brand"></i>{{ ROLE_LABELS[role_profile.role] }}</p>
               {% if sub_room %}
                 <p class="mb-1"><i class="bi bi-building me-2 text-brand"></i>{{ sub_room.company_name }}</p>
               {% endif %}
               {% if role_profile.role in ('employee', 'manager') and role_profile.data.get('shift_from') %}
-                <p class="mb-1"><i class="bi bi-clock me-2 text-brand"></i>Shift: {{ role_profile.data.get('shift_from') }} – {{ role_profile.data.get('shift_to') }}</p>
+                <p class="mb-1"><i class="bi bi-clock me-2 text-brand"></i>{{ _('Shift: %(from)s – %(to)s', from=role_profile.data.get('shift_from'), to=role_profile.data.get('shift_to')) }}</p>
               {% endif %}
               <a href="{{ url_for('my_profile') }}" class="btn btn-sm btn-outline-brand mt-2">
-                <i class="bi bi-person-circle me-1"></i> View My Profile
+                <i class="bi bi-person-circle me-1"></i> {{ _('View My Profile') }}
               </a>
             </div>
           </div>
@@ -417,8 +423,8 @@
       <div class="card border-0 shadow-sm">
         <div class="card-body">
           <div class="d-flex justify-content-between align-items-center mb-3">
-            <h6 class="section-title mb-0">Recent Notifications</h6>
-            <a href="{{ url_for('notifications') }}" class="small">View all</a>
+            <h6 class="section-title mb-0">{{ _('Recent Notifications') }}</h6>
+            <a href="{{ url_for('notifications') }}" class="small">{{ _('View all') }}</a>
           </div>
           {% if recent_notifications %}
             <ul class="list-unstyled mb-0">
@@ -426,7 +432,7 @@
                 <li class="mb-3 pb-3 {% if not loop.last %}border-bottom{% endif %}">
                   <div class="d-flex justify-content-between gap-2">
                     <strong class="{% if not n.is_read %}text-brand{% endif %}">{{ n.title }}</strong>
-                    {% if not n.is_read %}<span class="badge bg-brand">New</span>{% endif %}
+                    {% if not n.is_read %}<span class="badge bg-brand">{{ _('New') }}</span>{% endif %}
                   </div>
                   <p class="text-muted small mb-1">{{ n.message }}</p>
                   <span class="text-muted small">{{ n.created_at.strftime('%d %b, %H:%M') }}</span>
@@ -434,7 +440,7 @@
               {% endfor %}
             </ul>
           {% else %}
-            <p class="text-muted mb-0">No notifications yet.</p>
+            <p class="text-muted mb-0">{{ _('No notifications yet.') }}</p>
           {% endif %}
         </div>
       </div>

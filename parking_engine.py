@@ -10,6 +10,7 @@ from types import SimpleNamespace
 from zoneinfo import ZoneInfo
 
 from flask import url_for
+from flask_babel import lazy_gettext as _l
 
 from extensions import db
 from models import (
@@ -25,19 +26,19 @@ from models import (
 IST = ZoneInfo("Asia/Kolkata")
 BUFFER_MINUTES = 15
 
-SLOT_STATUS_LABELS = {"vacant": "Vacant", "booked": "Booked", "occupied": "Occupied"}
+SLOT_STATUS_LABELS = {"vacant": _l("Vacant"), "booked": _l("Booked"), "occupied": _l("Occupied")}
 SLOT_STATUS_CLASSES = {"vacant": "success", "booked": "warning", "occupied": "secondary"}
 
 REQUEST_STATUS_LABELS = {
-    "pending_allocation": "Pending allocation",
-    "pending_approval": "Pending approval",
-    "allocated": "Allocated",
-    "no_slot": "No slot available",
-    "entered": "Entered",
-    "exited": "Exited",
-    "rejected": "Rejected",
-    "needs_reallocation": "Needs reallocation",
-    "cancelled": "Cancelled",
+    "pending_allocation": _l("Pending allocation"),
+    "pending_approval": _l("Pending approval"),
+    "allocated": _l("Allocated"),
+    "no_slot": _l("No slot available"),
+    "entered": _l("Entered"),
+    "exited": _l("Exited"),
+    "rejected": _l("Rejected"),
+    "needs_reallocation": _l("Needs reallocation"),
+    "cancelled": _l("Cancelled"),
 }
 REQUEST_STATUS_CLASSES = {
     "pending_allocation": "warning",
@@ -225,6 +226,48 @@ def create_transaction(visitor_request, availability):
     return txn
 
 
+def _company_manager(property_id, sub_room_id):
+    if sub_room_id is None:
+        return None
+    return RoleProfile.query.filter_by(
+        property_id=property_id, sub_room_id=sub_room_id, role="manager"
+    ).first()
+
+
+def create_cross_company_transaction(
+    property_id, payer_sub_room_id, payee_sub_room_id, date, from_time, to_time, description, visitor_request_id=None
+):
+    """Bill the payer company's manager for using the payee company's spare slot.
+
+    No-op if either company has no manager, or the payee's manager hasn't set
+    a rent_per_hour rate (i.e. spare-slot use is free until configured).
+    """
+    payer_manager = _company_manager(property_id, payer_sub_room_id)
+    payee_manager = _company_manager(property_id, payee_sub_room_id)
+    if not payer_manager or not payee_manager or payer_manager.id == payee_manager.id:
+        return None
+
+    rent_per_hour = payee_manager.bank_detail.rent_per_hour if payee_manager.bank_detail else None
+    if not rent_per_hour:
+        return None
+
+    hours = _duration_hours(date, from_time, to_time)
+    base_amount = round(rent_per_hour * hours, 2)
+
+    txn = Transaction(
+        property_id=property_id,
+        payer_role_profile_id=payer_manager.id,
+        payee_role_profile_id=payee_manager.id,
+        visitor_request_id=visitor_request_id,
+        base_amount=base_amount,
+        total_amount=base_amount,
+        status="pending",
+        description=description,
+    )
+    db.session.add(txn)
+    return txn
+
+
 def _summaries(visitor_request, availability):
     slot = availability.parking_slot
     visitor_summary = (
@@ -340,6 +383,14 @@ def allocate_transport_requests(property_id, target_date):
             TransportRequest.parking_slot_id.isnot(None),
         ).all()
     }
+    taken |= {
+        vr.parking_slot_id
+        for vr in VisitorRequest.query.filter(
+            VisitorRequest.property_id == property_id,
+            VisitorRequest.date == target_date,
+            VisitorRequest.parking_slot_id.isnot(None),
+        ).all()
+    }
 
     for req in pending:
         own = [s for s in slots if s.sub_room_id == req.sub_room_id and s.id not in taken]
@@ -360,7 +411,8 @@ def allocate_transport_requests(property_id, target_date):
         req.parking_slot_id = chosen.id
         req.status = "allocated"
         taken.add(chosen.id)
-        note = "" if chosen.sub_room_id == req.sub_room_id else " from another company's spare capacity"
+        cross_company = chosen.sub_room_id != req.sub_room_id
+        note = "" if not cross_company else " from another company's spare capacity"
         pass_link = url_for("transport_pass", token=req.qr_token)
         notify(
             req.role_profile_id,
@@ -370,7 +422,112 @@ def allocate_transport_requests(property_id, target_date):
             link=pass_link,
         )
 
+        if cross_company:
+            employee_label = req.role_profile.data.get("employee_name") or "Employee"
+            create_cross_company_transaction(
+                property_id=property_id,
+                payer_sub_room_id=req.sub_room_id,
+                payee_sub_room_id=chosen.sub_room_id,
+                date=target_date,
+                from_time=req.from_time,
+                to_time=req.to_time,
+                description=f"Slot {chosen.slot_number} used by {employee_label} on {target_date.strftime('%d %b %Y')}",
+            )
+
     db.session.commit()
+
+
+def allocate_unexpected_visitor(visitor_request):
+    """Allocate a parking slot for an approved office unexpected-visitor request.
+
+    Tries a free slot belonging to the visited employee's company first; if
+    none is free, falls back to any free slot elsewhere in the property
+    (mirrors the cross-company overflow in allocate_transport_requests).
+    """
+    if visitor_request.status != "pending_allocation":
+        return None
+
+    host = visitor_request.host_role_profile
+    now_dt = now_ist()
+
+    slots = (
+        ParkingSlot.query.filter_by(property_id=visitor_request.property_id)
+        .order_by(ParkingSlot.entrance_rank, ParkingSlot.ramp_rank)
+        .all()
+    )
+    own = [s for s in slots if s.sub_room_id == host.sub_room_id]
+    other = [s for s in slots if s.sub_room_id != host.sub_room_id]
+
+    chosen = None
+    for slot in own + other:
+        if compute_slot_status(slot, visitor_request.date, now_dt) == "vacant":
+            chosen = slot
+            break
+
+    pass_link = _pass_link(visitor_request.qr_token)
+
+    if chosen is None:
+        visitor_request.status = "no_slot"
+        notify(
+            visitor_request.host_role_profile_id,
+            "Visitor approved, no parking slot available",
+            f"Visitor {visitor_request.visitor_name} ({visitor_request.visitor_phone}) was approved "
+            f"but no parking slot is free right now. We'll allocate one if a slot frees up.",
+            link=pass_link,
+        )
+        if visitor_request.created_by_role_profile_id:
+            notify(
+                visitor_request.created_by_role_profile_id,
+                "Visitor approved, no parking slot available",
+                f"Visitor {visitor_request.visitor_name} ({visitor_request.visitor_phone}), "
+                f"{visitor_request.vehicle_type} {visitor_request.vehicle_number} was approved "
+                f"but no parking slot is free right now.",
+                link=pass_link,
+            )
+        db.session.commit()
+        return None
+
+    visitor_request.parking_slot_id = chosen.id
+    visitor_request.status = "allocated"
+    cross_company = chosen.sub_room_id != host.sub_room_id
+    note = "" if not cross_company else " from another company's spare capacity"
+    floor_part = f" (Floor {chosen.floor})" if chosen.floor else ""
+
+    notify(
+        visitor_request.host_role_profile_id,
+        "Visitor parking allocated",
+        f"Visitor {visitor_request.visitor_name} ({visitor_request.visitor_phone}), "
+        f"{visitor_request.vehicle_type} {visitor_request.vehicle_number} has been allocated "
+        f"slot {chosen.slot_number}{floor_part}{note}. Visitor pass: {pass_link}",
+        link=pass_link,
+    )
+    if visitor_request.created_by_role_profile_id:
+        notify(
+            visitor_request.created_by_role_profile_id,
+            "Visitor parking allocated",
+            f"Visitor {visitor_request.visitor_name} ({visitor_request.visitor_phone}) has been "
+            f"allocated slot {chosen.slot_number}{floor_part}{note}. Pass: {pass_link}",
+            link=pass_link,
+        )
+
+    if cross_company:
+        host_label = host.data.get("employee_name") or "Employee"
+        create_cross_company_transaction(
+            property_id=visitor_request.property_id,
+            payer_sub_room_id=host.sub_room_id,
+            payee_sub_room_id=chosen.sub_room_id,
+            date=visitor_request.date,
+            from_time=visitor_request.from_time,
+            to_time=visitor_request.to_time,
+            description=(
+                f"Slot {chosen.slot_number} used by visitor {visitor_request.visitor_name} "
+                f"visiting {host_label} on {visitor_request.date.strftime('%d %b %Y')}"
+            ),
+            visitor_request_id=visitor_request.id,
+        )
+
+    db.session.commit()
+    return chosen
 
 
 def run_pending_transport_allocations(property_id, now_dt):
@@ -419,6 +576,20 @@ def compute_slot_status(slot, today, now_dt):
         if transport_request.status == "entered":
             return "occupied"
         start, end = _window(transport_request.date, transport_request.from_time, transport_request.to_time)
+        if start <= now_dt <= end:
+            return "occupied"
+        if now_dt < start:
+            return "booked"
+
+    office_visitor = VisitorRequest.query.filter(
+        VisitorRequest.parking_slot_id == slot.id,
+        VisitorRequest.date == today,
+        VisitorRequest.status.in_(("allocated", "entered")),
+    ).first()
+    if office_visitor:
+        if office_visitor.status == "entered":
+            return "occupied"
+        start, end = _window(office_visitor.date, office_visitor.from_time, office_visitor.to_time)
         if start <= now_dt <= end:
             return "occupied"
         if now_dt < start:

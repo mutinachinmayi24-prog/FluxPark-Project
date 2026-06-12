@@ -1,0 +1,541 @@
+# Telugu translations for PROJECT.
+# Copyright (C) 2026 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-06-12 12:33+0530\n"
+"PO-Revision-Date: 2026-06-12 12:33+0530\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: te\n"
+"Language-Team: te <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#: app.py:223
+msgid "Dashboard"
+msgstr "డాష్‌బోర్డ్"
+
+#: app.py:227
+msgid "Visitor Request"
+msgstr "విజిటర్ రిక్వెస్ట్"
+
+#: app.py:228
+msgid "Parking Availability"
+msgstr "పార్కింగ్ లభ్యత"
+
+#: app.py:230
+msgid "Parking Slots"
+msgstr "పార్కింగ్ స్లాట్‌లు"
+
+#: app.py:231 app.py:248
+msgid "Parking Map"
+msgstr "పార్కింగ్ మ్యాప్"
+
+#: app.py:234 app.py:252
+msgid "Scan Entry / Exit"
+msgstr "ఎంట్రీ / ఎగ్జిట్ స్కాన్ చేయండి"
+
+#: app.py:235 app.py:253
+msgid "Unexpected Visitor"
+msgstr "ఊహించని విజిటర్"
+
+#: app.py:237 app.py:255
+msgid "Notifications"
+msgstr "నోటిఫికేషన్లు"
+
+#: app.py:240
+msgid "Payments"
+msgstr "చెల్లింపులు"
+
+#: app.py:243
+msgid "Members"
+msgstr "సభ్యులు"
+
+#: app.py:244 app.py:262
+msgid "Invite Links"
+msgstr "ఆహ్వాన లింకులు"
+
+#: app.py:247
+msgid "Company Parking"
+msgstr "కంపెనీ పార్కింగ్"
+
+#: app.py:249 templates/dashboard.html:128
+msgid "Transport Request"
+msgstr "ట్రాన్స్‌పోర్ట్ రిక్వెస్ట్"
+
+#: app.py:258 templates/dashboard.html:356
+msgid "Team"
+msgstr "టీమ్"
+
+#: app.py:261
+msgid "Rent Ledger"
+msgstr "అద్దె లెడ్జర్"
+
+#: app.py:264
+msgid "My Profile"
+msgstr "నా ప్రొఫైల్"
+
+#: app.py:381
+msgid "This invite link is invalid or has expired."
+msgstr "ఈ ఆహ్వాన లింక్ చెల్లదు లేదా గడువు ముగిసింది."
+
+#: app.py:389
+msgid "Please choose email or phone."
+msgstr "దయచేసి ఇమెయిల్ లేదా ఫోన్ ఎంచుకోండి."
+
+#: app.py:391
+msgid "Please enter a valid email address."
+msgstr "దయచేసి సరైన ఇమెయిల్ చిరునామా నమోదు చేయండి."
+
+#: app.py:393
+msgid "Please enter a valid 10-digit mobile number."
+msgstr "దయచేసి సరైన 10-అంకెల మొబైల్ నంబర్‌ను నమోదు చేయండి."
+
+#: app.py:425
+msgid "Your OTP has expired. Please request a new one."
+msgstr "మీ OTP గడువు ముగిసింది. దయచేసి కొత్త OTP అభ్యర్థించండి."
+
+#: app.py:427
+msgid "Incorrect OTP. Please try again."
+msgstr "తప్పు OTP. దయచేసి మళ్ళీ ప్రయత్నించండి."
+
+#: app.py:668
+msgid "Please select a role."
+msgstr "దయచేసి ఒక పాత్రను ఎంచుకోండి."
+
+#: constants.py:12 constants.py:25
+msgid "Owner"
+msgstr "యజమాని"
+
+#: constants.py:13 constants.py:26
+msgid "Tenant"
+msgstr "అద్దెదారు"
+
+#: constants.py:14 constants.py:27
+msgid "Committee"
+msgstr "కమిటీ"
+
+#: constants.py:15 constants.py:20 constants.py:28
+msgid "Security"
+msgstr "సెక్యూరిటీ"
+
+#: constants.py:19 constants.py:29
+msgid "Employee"
+msgstr "ఉద్యోగి"
+
+#: constants.py:21 constants.py:30
+msgid "Manager"
+msgstr "మేనేజర్"
+
+#: constants.py:34
+msgid "Apartment"
+msgstr "అపార్ట్‌మెంట్"
+
+#: constants.py:35
+msgid "Gated Community"
+msgstr "గేటెడ్ కమ్యూనిటీ"
+
+#: constants.py:36
+msgid "Office"
+msgstr "ఆఫీసు"
+
+#: parking_engine.py:29
+msgid "Vacant"
+msgstr "ఖాళీ"
+
+#: parking_engine.py:29
+msgid "Booked"
+msgstr "బుక్డ్"
+
+#: parking_engine.py:29
+msgid "Occupied"
+msgstr "ఆక్యుపైడ్"
+
+#: parking_engine.py:33
+msgid "Pending allocation"
+msgstr "కేటాయింపు పెండింగ్‌లో ఉంది"
+
+#: parking_engine.py:34
+msgid "Pending approval"
+msgstr "ఆమోదం పెండింగ్‌లో ఉంది"
+
+#: parking_engine.py:35
+msgid "Allocated"
+msgstr "కేటాయించబడింది"
+
+#: parking_engine.py:36
+msgid "No slot available"
+msgstr "స్లాట్ అందుబాటులో లేదు"
+
+#: parking_engine.py:37
+msgid "Entered"
+msgstr "ప్రవేశించారు"
+
+#: parking_engine.py:38
+msgid "Exited"
+msgstr "నిష్క్రమించారు"
+
+#: parking_engine.py:39
+msgid "Rejected"
+msgstr "తిరస్కరించబడింది"
+
+#: parking_engine.py:40
+msgid "Needs reallocation"
+msgstr "మళ్లీ కేటాయించాల్సి ఉంది"
+
+#: parking_engine.py:41 templates/dashboard.html:224
+msgid "Cancelled"
+msgstr "రద్దు చేయబడింది"
+
+#: templates/_sidebar_nav.html:24
+msgid "Logout"
+msgstr "లాగౌట్"
+
+#: templates/base.html:52
+msgid "Smart Parking & Access Management"
+msgstr "స్మార్ట్ పార్కింగ్ & యాక్సెస్ మేనేజ్‌మెంట్"
+
+#: templates/dashboard.html:10
+#, python-format
+msgid "Welcome, %(name)s!"
+msgstr "నమస్కారం, %(name)s!"
+
+#: templates/dashboard.html:10
+msgid "Welcome!"
+msgstr "నమస్కారం!"
+
+#: templates/dashboard.html:26
+msgid "Today's Visitors"
+msgstr "నేటి విజిటర్లు"
+
+#: templates/dashboard.html:34
+msgid "My Parking Slot"
+msgid_plural "My Parking Slots"
+msgstr[0] "నా పార్కింగ్ స్లాట్"
+msgstr[1] "నా పార్కింగ్ స్లాట్‌లు"
+
+#: templates/dashboard.html:42
+msgid "Pending Approvals"
+msgstr "పెండింగ్‌లో ఉన్న ఆమోదాలు"
+
+#: templates/dashboard.html:50 templates/dashboard.html:77
+#: templates/dashboard.html:112
+msgid "Unread Notifications"
+msgstr "చదవని నోటిఫికేషన్లు"
+
+#: templates/dashboard.html:59
+msgid "Commission Earned Today"
+msgstr "నేడు సంపాదించిన కమీషన్"
+
+#: templates/dashboard.html:69 templates/dashboard.html:242
+msgid "Today's Expected Visitors"
+msgstr "నేడు రాబోయే విజిటర్లు"
+
+#: templates/dashboard.html:86 templates/dashboard.html:278
+msgid "Company Parking Slots"
+msgstr "కంపెనీ పార్కింగ్ స్లాట్లు"
+
+#: templates/dashboard.html:94
+msgid "Vacant Now"
+msgstr "ఇప్పుడు ఖాళీగా ఉన్నవి"
+
+#: templates/dashboard.html:103
+msgid "Employees"
+msgstr "ఉద్యోగులు"
+
+#: templates/dashboard.html:121
+msgid "New Visitor Request"
+msgstr "కొత్త విజిటర్ రిక్వెస్ట్"
+
+#: templates/dashboard.html:122
+msgid "List My Parking Slot"
+msgstr "నా పార్కింగ్ స్లాట్‌ను లిస్ట్ చేయండి"
+
+#: templates/dashboard.html:124
+msgid "Scan Visitor QR"
+msgstr "విజిటర్ QR స్కాన్ చేయండి"
+
+#: templates/dashboard.html:125
+msgid "Log Unexpected Visitor"
+msgstr "ఊహించని విజిటర్‌ను లాగ్ చేయండి"
+
+#: templates/dashboard.html:127
+msgid "View Company Parking"
+msgstr "కంపెనీ పార్కింగ్ చూడండి"
+
+#: templates/dashboard.html:130
+msgid "Team Directory"
+msgstr "టీమ్ డైరెక్టరీ"
+
+#: templates/dashboard.html:140
+msgid "Today's Visitor Requests"
+msgstr "నేటి విజిటర్ రిక్వెస్ట్‌లు"
+
+#: templates/dashboard.html:146 templates/dashboard.html:248
+msgid "Visitor"
+msgstr "విజిటర్"
+
+#: templates/dashboard.html:147 templates/dashboard.html:249
+msgid "Vehicle"
+msgstr "వాహనం"
+
+#: templates/dashboard.html:148 templates/dashboard.html:217
+#: templates/dashboard.html:251
+msgid "Time"
+msgstr "సమయం"
+
+#: templates/dashboard.html:149 templates/dashboard.html:188
+#: templates/dashboard.html:219 templates/dashboard.html:252
+#: templates/dashboard.html:287
+msgid "Status"
+msgstr "స్థితి"
+
+#: templates/dashboard.html:150
+msgid "Pass"
+msgstr "పాస్"
+
+#: templates/dashboard.html:162 templates/dashboard.html:264
+msgid "View"
+msgstr "చూడండి"
+
+#: templates/dashboard.html:173
+msgid "No visitor requests for today."
+msgstr "నేటికి విజిటర్ రిక్వెస్ట్‌లు లేవు."
+
+#: templates/dashboard.html:180
+msgid "My Parking Slots"
+msgstr "నా పార్కింగ్ స్లాట్‌లు"
+
+#: templates/dashboard.html:186 templates/dashboard.html:216
+#: templates/dashboard.html:284
+msgid "Slot"
+msgstr "స్లాట్"
+
+#: templates/dashboard.html:187 templates/dashboard.html:285
+msgid "Floor"
+msgstr "ఫ్లోర్"
+
+#: templates/dashboard.html:203
+msgid "No parking slot is linked to your profile yet."
+msgstr "మీ ప్రొఫైల్‌కు ఇంకా పార్కింగ్ స్లాట్ లింక్ చేయబడలేదు."
+
+#: templates/dashboard.html:211
+msgid "Your Listed Availability Today"
+msgstr "నేడు మీరు లిస్ట్ చేసిన లభ్యత"
+
+#: templates/dashboard.html:218
+msgid "Rent/hr"
+msgstr "అద్దె/గంట"
+
+#: templates/dashboard.html:224
+msgid "Available"
+msgstr "అందుబాటులో ఉంది"
+
+#: templates/dashboard.html:224
+msgid "Matched"
+msgstr "మ్యాచ్ అయింది"
+
+#: templates/dashboard.html:224
+msgid "Completed"
+msgstr "పూర్తయింది"
+
+#: templates/dashboard.html:250
+msgid "Visiting"
+msgstr "సందర్శన"
+
+#: templates/dashboard.html:271
+msgid "No expected visitors for today yet."
+msgstr "నేటికి ఇంకా ఎలాంటి విజిటర్లు ఆశించబడలేదు."
+
+#: templates/dashboard.html:286
+msgid "Assigned To"
+msgstr "కేటాయించబడింది"
+
+#: templates/dashboard.html:301
+#, python-format
+msgid "Visitor: %(name)s"
+msgstr "విజిటర్: %(name)s"
+
+#: templates/dashboard.html:314
+msgid "No parking slots configured for your company yet."
+msgstr "మీ కంపెనీ కోసం ఇంకా పార్కింగ్ స్లాట్‌లు కాన్ఫిగర్ చేయబడలేదు."
+
+#: templates/dashboard.html:316
+msgid "Add some"
+msgstr "కొన్ని జోడించండి"
+
+#: templates/dashboard.html:326
+msgid "Tomorrow's Transport Request"
+msgstr "రేపటి ట్రాన్స్‌పోర్ట్ రిక్వెస్ట్"
+
+#: templates/dashboard.html:327
+msgid "Manage"
+msgstr "మేనేజ్ చేయండి"
+
+#: templates/dashboard.html:335 templates/dashboard.html:411
+#, python-format
+msgid "Shift: %(from)s – %(to)s"
+msgstr "షిఫ్ట్: %(from)s – %(to)s"
+
+#: templates/dashboard.html:339
+msgid "View Parking Pass"
+msgstr "పార్కింగ్ పాస్ చూడండి"
+
+#: templates/dashboard.html:343
+msgid "No request submitted for tomorrow. The 9 PM cutoff has passed."
+msgstr "రేపటి కోసం ఎలాంటి రిక్వెస్ట్ సమర్పించబడలేదు. రాత్రి 9 గంటల గడువు ముగిసింది."
+
+#: templates/dashboard.html:346
+msgid "You haven't requested parking for tomorrow yet."
+msgstr "మీరు రేపటి కోసం ఇంకా పార్కింగ్ కోసం అభ్యర్థించలేదు."
+
+#: templates/dashboard.html:347
+msgid "Submit before 9 PM"
+msgstr "రాత్రి 9 గంటలకు ముందు సమర్పించండి"
+
+#: templates/dashboard.html:362
+msgid "Name"
+msgstr "పేరు"
+
+#: templates/dashboard.html:363
+msgid "Employee ID"
+msgstr "ఉద్యోగి ఐడి"
+
+#: templates/dashboard.html:364
+msgid "Shift"
+msgstr "షిఫ్ట్"
+
+#: templates/dashboard.html:365
+msgid "Contact"
+msgstr "సంప్రదింపు"
+
+#: templates/dashboard.html:382
+msgid "No employees have joined yet."
+msgstr "ఇంకా ఏ ఉద్యోగి చేరలేదు."
+
+#: templates/dashboard.html:383
+msgid "Share your"
+msgstr "మీ"
+
+#: templates/dashboard.html:383
+msgid "invite link"
+msgstr "ఆహ్వాన లింక్‌ను షేర్ చేయండి"
+
+#: templates/dashboard.html:395
+msgid "Property"
+msgstr "ప్రాపర్టీ"
+
+#: templates/dashboard.html:405
+msgid "Your Role"
+msgstr "మీ పాత్ర"
+
+#: templates/dashboard.html:414
+msgid "View My Profile"
+msgstr "నా ప్రొఫైల్ చూడండి"
+
+#: templates/dashboard.html:426
+msgid "Recent Notifications"
+msgstr "ఇటీవలి నోటిఫికేషన్లు"
+
+#: templates/dashboard.html:427
+msgid "View all"
+msgstr "అన్నీ చూడండి"
+
+#: templates/dashboard.html:435
+msgid "New"
+msgstr "కొత్తది"
+
+#: templates/dashboard.html:443
+msgid "No notifications yet."
+msgstr "ఇంకా నోటిఫికేషన్‌లు లేవు."
+
+#: templates/role_selection.html:7
+msgid "Joining"
+msgstr "చేరిక"
+
+#: templates/role_selection.html:9
+msgid "How will you be using FluxPark here?"
+msgstr "మీరు ఇక్కడ FluxParkని ఎలా ఉపయోగిస్తారు?"
+
+#: templates/role_selection.html:13
+msgid "Select your role"
+msgstr "మీ పాత్రను ఎంచుకోండి"
+
+#: templates/role_selection.html:15
+msgid "Choose a role…"
+msgstr "ఒక పాత్రను ఎంచుకోండి…"
+
+#: templates/role_selection.html:23
+msgid "Continue"
+msgstr "కొనసాగించండి"
+
+#: templates/signup.html:9
+#, python-format
+msgid ""
+"You've been invited to join %(property)s — %(company)s. Sign up below to "
+"continue."
+msgstr "మీరు %(property)s — %(company)sలో చేరడానికి ఆహ్వానించబడ్డారు. కొనసాగించడానికి దిగువ సైన్ అప్ చేయండి."
+
+#: templates/signup.html:11
+#, python-format
+msgid "You've been invited to join %(property)s. Sign up below to continue."
+msgstr "మీరు %(property)sలో చేరడానికి ఆహ్వానించబడ్డారు. కొనసాగించడానికి దిగువ సైన్ అప్ చేయండి."
+
+#: templates/signup.html:16
+msgid "Create your account"
+msgstr "మీ ఖాతాను సృష్టించండి"
+
+#: templates/signup.html:18
+msgid "How would you like to verify?"
+msgstr "మీరు ఎలా వెరిఫై చేయాలనుకుంటున్నారు?"
+
+#: templates/signup.html:21
+msgid "Email"
+msgstr "ఇమెయిల్"
+
+#: templates/signup.html:24
+msgid "Phone Number"
+msgstr "ఫోన్ నంబర్"
+
+#: templates/signup.html:28
+msgid "Email or Phone Number"
+msgstr "ఇమెయిల్ లేదా ఫోన్ నంబర్"
+
+#: templates/signup.html:30
+msgid "A verification code (OTP) will be sent here."
+msgstr "ఇక్కడ ఒక వెరిఫికేషన్ కోడ్ (OTP) పంపబడుతుంది."
+
+#: templates/signup.html:34
+msgid "Send OTP"
+msgstr "OTP పంపండి"
+
+#: templates/verify_otp.html:5
+msgid "Verify your account"
+msgstr "మీ ఖాతాను వెరిఫై చేయండి"
+
+#: templates/verify_otp.html:6
+msgid "We've sent a 6-digit verification code to"
+msgstr "మేము ఈ 6-అంకెల వెరిఫికేషన్ కోడ్‌ను పంపాము:"
+
+#: templates/verify_otp.html:10
+msgid "Enter Verification Code"
+msgstr "వెరిఫికేషన్ కోడ్‌ను నమోదు చేయండి"
+
+#: templates/verify_otp.html:16
+msgid "Verify OTP"
+msgstr "OTPని వెరిఫై చేయండి"
+
+#: templates/verify_otp.html:22
+msgid "Resend OTP"
+msgstr "OTPని తిరిగి పంపండి"
+
+#: templates/verify_otp.html:28
+msgid "Use a different email or phone number"
+msgstr "వేరే ఇమెయిల్ లేదా ఫోన్ నంబర్‌ను ఉపయోగించండి"

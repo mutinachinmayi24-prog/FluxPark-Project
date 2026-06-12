@@ -5,30 +5,33 @@
   {% if invite_info %}
     <div class="alert alert-success">
       <i class="bi bi-envelope-paper-heart me-1"></i>
-      You've been invited to join <strong>{{ invite_info.property.name }}</strong>{% if invite_info.sub_room %} &mdash; <strong>{{ invite_info.sub_room.company_name }}</strong>{% endif %}.
-      Sign up below to continue.
+      {% if invite_info.sub_room %}
+        {{ _("You've been invited to join %(property)s — %(company)s. Sign up below to continue.", property=invite_info.property.name, company=invite_info.sub_room.company_name) }}
+      {% else %}
+        {{ _("You've been invited to join %(property)s. Sign up below to continue.", property=invite_info.property.name) }}
+      {% endif %}
     </div>
   {% endif %}
 
-  <h5 class="fw-semibold mb-3">Create your account</h5>
+  <h5 class="fw-semibold mb-3">{{ _('Create your account') }}</h5>
   <form method="POST" action="{{ url_for('signup', invite=request.args.get('invite')) }}">
-    <label class="form-label">How would you like to verify?</label>
+    <label class="form-label">{{ _('How would you like to verify?') }}</label>
     <div class="btn-group w-100 contact-toggle mb-3" role="group">
       <input type="radio" class="btn-check" name="contact_type" id="contact_type_email" value="email" autocomplete="off" checked>
-      <label class="btn btn-outline-brand" for="contact_type_email"><i class="bi bi-envelope me-1"></i>Email</label>
+      <label class="btn btn-outline-brand" for="contact_type_email"><i class="bi bi-envelope me-1"></i>{{ _('Email') }}</label>
 
       <input type="radio" class="btn-check" name="contact_type" id="contact_type_phone" value="phone" autocomplete="off">
-      <label class="btn btn-outline-brand" for="contact_type_phone"><i class="bi bi-phone me-1"></i>Phone Number</label>
+      <label class="btn btn-outline-brand" for="contact_type_phone"><i class="bi bi-phone me-1"></i>{{ _('Phone Number') }}</label>
     </div>
 
     <div class="mb-4">
-      <label for="contact" class="form-label">Email or Phone Number</label>
+      <label for="contact" class="form-label">{{ _('Email or Phone Number') }}</label>
       <input type="email" class="form-control form-control-lg" name="contact" id="contact" placeholder="you@example.com" required>
-      <div class="form-text">A verification code (OTP) will be sent here.</div>
+      <div class="form-text">{{ _('A verification code (OTP) will be sent here.') }}</div>
     </div>
 
     <button type="submit" class="btn btn-brand btn-lg w-100">
-      <i class="bi bi-send me-1"></i> Send OTP
+      <i class="bi bi-send me-1"></i> {{ _('Send OTP') }}
     </button>
   </form>
 {% endblock %}

@@ -1,3 +1,5 @@
+from flask_babel import lazy_gettext as _l
+
 PROPERTY_TYPES = [
     ("apartment", "Apartment"),
     ("gated_community", "Gated Community"),
@@ -7,17 +9,32 @@ PROPERTY_TYPES = [
 RESIDENTIAL_PROPERTY_TYPES = ("apartment", "gated_community")
 
 RESIDENTIAL_ROLES = [
-    ("owner", "Owner"),
-    ("tenant", "Tenant"),
-    ("committee", "Committee"),
-    ("security", "Security"),
+    ("owner", _l("Owner")),
+    ("tenant", _l("Tenant")),
+    ("committee", _l("Committee")),
+    ("security", _l("Security")),
 ]
 
 OFFICE_ROLES = [
-    ("employee", "Employee"),
-    ("security", "Security"),
-    ("manager", "Manager"),
+    ("employee", _l("Employee")),
+    ("security", _l("Security")),
+    ("manager", _l("Manager")),
 ]
+
+ROLE_LABELS = {
+    "owner": _l("Owner"),
+    "tenant": _l("Tenant"),
+    "committee": _l("Committee"),
+    "security": _l("Security"),
+    "employee": _l("Employee"),
+    "manager": _l("Manager"),
+}
+
+PROPERTY_TYPE_LABELS = {
+    "apartment": _l("Apartment"),
+    "gated_community": _l("Gated Community"),
+    "office": _l("Office"),
+}
 
 VEHICLE_TYPES = ["Bike", "Car", "Auto", "Truck", "Camper", "Cycle", "Other"]
 

@@ -17,13 +17,16 @@ from flask import (
     session,
     url_for,
 )
+from flask_babel import Babel, _, get_locale
 
 from constants import (
     OFFICE_ROLES,
     OTP_VALIDITY_MINUTES,
+    PROPERTY_TYPE_LABELS,
     PROPERTY_TYPES,
     RESIDENTIAL_PROPERTY_TYPES,
     RESIDENTIAL_ROLES,
+    ROLE_LABELS,
     VEHICLE_TYPES,
 )
 from extensions import db
@@ -48,6 +51,7 @@ from parking_engine import (
     REQUEST_STATUS_LABELS,
     SLOT_STATUS_CLASSES,
     SLOT_STATUS_LABELS,
+    allocate_unexpected_visitor,
     compute_slot_status,
     generate_office_parking_slots,
     generate_parking_slots,
@@ -64,17 +68,34 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "dev-secret-key-change-in-production")
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config["LANGUAGES"] = {"en": "English", "hi": "हिन्दी", "te": "తెలుగు"}
+app.config["BABEL_DEFAULT_LOCALE"] = "en"
+app.config["BABEL_TRANSLATION_DIRECTORIES"] = "translations"
 
 db.init_app(app)
 
 with app.app_context():
     db.create_all()
 
+
+def select_locale():
+    lang = session.get("lang")
+    if lang in app.config["LANGUAGES"]:
+        return lang
+    return request.accept_languages.best_match(app.config["LANGUAGES"].keys())
+
+
+babel = Babel(app, locale_selector=select_locale)
+
 app.jinja_env.globals.update(
     SLOT_STATUS_LABELS=SLOT_STATUS_LABELS,
     SLOT_STATUS_CLASSES=SLOT_STATUS_CLASSES,
     REQUEST_STATUS_LABELS=REQUEST_STATUS_LABELS,
     REQUEST_STATUS_CLASSES=REQUEST_STATUS_CLASSES,
+    ROLE_LABELS=ROLE_LABELS,
+    PROPERTY_TYPE_LABELS=PROPERTY_TYPE_LABELS,
+    get_locale=get_locale,
+    LANGUAGES=app.config["LANGUAGES"],
 )
 
 EMAIL_REGEX = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
@@ -150,6 +171,17 @@ def _today_transport_allocations(property_id, today):
     return {tr.parking_slot_id: tr for tr in rows}
 
 
+def _today_visitor_allocations(property_id, today):
+    """Map parking_slot_id -> allocated/entered VisitorRequest for `today`, for office slots."""
+    rows = VisitorRequest.query.filter(
+        VisitorRequest.property_id == property_id,
+        VisitorRequest.date == today,
+        VisitorRequest.status.in_(("allocated", "entered")),
+        VisitorRequest.parking_slot_id.isnot(None),
+    ).all()
+    return {vr.parking_slot_id: vr for vr in rows}
+
+
 def _role_profile_label(role_profile):
     d = role_profile.data
     name = (
@@ -159,55 +191,77 @@ def _role_profile_label(role_profile):
         or d.get("employee_name")
         or "Unknown"
     )
+    role_label = str(ROLE_LABELS.get(role_profile.role, role_profile.role.title()))
     flat = d.get("flat_no") or d.get("head_flat_no")
     if flat:
-        return f"{flat} - {name} ({role_profile.role.title()})"
-    return f"{name} ({role_profile.role.title()})"
+        return f"{flat} - {name} ({role_label})"
+    return f"{name} ({role_label})"
+
+
+def _approvable_host_ids(role_profile):
+    """RoleProfile ids whose pending visitor requests this profile may approve/deny.
+
+    Residents (owner/tenant/committee) can only act on their own requests. An
+    office manager can act on requests for any employee/manager in their
+    company (sub_room); an office employee can only act on their own.
+    """
+    if role_profile.role == "manager" and role_profile.sub_room_id:
+        return [
+            rp.id
+            for rp in RoleProfile.query.filter(
+                RoleProfile.property_id == role_profile.property_id,
+                RoleProfile.sub_room_id == role_profile.sub_room_id,
+                RoleProfile.role.in_(("employee", "manager")),
+            ).all()
+        ]
+    return [role_profile.id]
 
 
 def build_nav_items(role_profile):
     prop = Property.query.get(role_profile.property_id)
     role = role_profile.role
-    items = [{"endpoint": "dashboard", "label": "Dashboard", "icon": "bi-speedometer2"}]
+    items = [{"endpoint": "dashboard", "label": _("Dashboard"), "icon": "bi-speedometer2"}]
 
     if prop and prop.property_type in RESIDENTIAL_PROPERTY_TYPES:
         if role in ("owner", "tenant", "committee"):
-            items.append({"endpoint": "visitor_request", "label": "Visitor Request", "icon": "bi-person-plus"})
-            items.append({"endpoint": "parking_availability", "label": "Parking Availability", "icon": "bi-calendar2-check"})
+            items.append({"endpoint": "visitor_request", "label": _("Visitor Request"), "icon": "bi-person-plus"})
+            items.append({"endpoint": "parking_availability", "label": _("Parking Availability"), "icon": "bi-calendar2-check"})
 
-        items.append({"endpoint": "parking_slots", "label": "Parking Slots", "icon": "bi-grid-3x3-gap"})
-        items.append({"endpoint": "parking_map", "label": "Parking Map", "icon": "bi-map"})
+        items.append({"endpoint": "parking_slots", "label": _("Parking Slots"), "icon": "bi-grid-3x3-gap"})
+        items.append({"endpoint": "parking_map", "label": _("Parking Map"), "icon": "bi-map"})
 
         if role == "security":
-            items.append({"endpoint": "security_scan", "label": "Scan Entry / Exit", "icon": "bi-qr-code-scan"})
-            items.append({"endpoint": "unexpected_visitor", "label": "Unexpected Visitor", "icon": "bi-person-exclamation"})
+            items.append({"endpoint": "security_scan", "label": _("Scan Entry / Exit"), "icon": "bi-qr-code-scan"})
+            items.append({"endpoint": "unexpected_visitor", "label": _("Unexpected Visitor"), "icon": "bi-person-exclamation"})
 
-        items.append({"endpoint": "notifications", "label": "Notifications", "icon": "bi-bell"})
+        items.append({"endpoint": "notifications", "label": _("Notifications"), "icon": "bi-bell"})
 
         if role in ("owner", "tenant", "committee"):
-            items.append({"endpoint": "payments", "label": "Payments", "icon": "bi-cash-coin"})
+            items.append({"endpoint": "payments", "label": _("Payments"), "icon": "bi-cash-coin"})
 
         if role in ("owner", "committee"):
-            items.append({"endpoint": "members", "label": "Members", "icon": "bi-people"})
-            items.append({"endpoint": "invite_links", "label": "Invite Links", "icon": "bi-person-plus-fill"})
+            items.append({"endpoint": "members", "label": _("Members"), "icon": "bi-people"})
+            items.append({"endpoint": "invite_links", "label": _("Invite Links"), "icon": "bi-person-plus-fill"})
     else:
         if role in ("employee", "manager"):
-            items.append({"endpoint": "parking_slots", "label": "Company Parking", "icon": "bi-grid-3x3-gap"})
-            items.append({"endpoint": "parking_map", "label": "Parking Map", "icon": "bi-map"})
-            items.append({"endpoint": "transport_request", "label": "Transport Request", "icon": "bi-car-front"})
+            items.append({"endpoint": "parking_slots", "label": _("Company Parking"), "icon": "bi-grid-3x3-gap"})
+            items.append({"endpoint": "parking_map", "label": _("Parking Map"), "icon": "bi-map"})
+            items.append({"endpoint": "transport_request", "label": _("Transport Request"), "icon": "bi-car-front"})
 
         if role == "security":
-            items.append({"endpoint": "security_scan", "label": "Scan Entry / Exit", "icon": "bi-qr-code-scan"})
+            items.append({"endpoint": "security_scan", "label": _("Scan Entry / Exit"), "icon": "bi-qr-code-scan"})
+            items.append({"endpoint": "unexpected_visitor", "label": _("Unexpected Visitor"), "icon": "bi-person-exclamation"})
 
-        items.append({"endpoint": "notifications", "label": "Notifications", "icon": "bi-bell"})
+        items.append({"endpoint": "notifications", "label": _("Notifications"), "icon": "bi-bell"})
 
         if role in ("employee", "manager"):
-            items.append({"endpoint": "members", "label": "Team", "icon": "bi-people"})
+            items.append({"endpoint": "members", "label": _("Team"), "icon": "bi-people"})
 
         if role == "manager":
-            items.append({"endpoint": "invite_links", "label": "Invite Links", "icon": "bi-person-plus-fill"})
+            items.append({"endpoint": "payments", "label": _("Rent Ledger"), "icon": "bi-cash-coin"})
+            items.append({"endpoint": "invite_links", "label": _("Invite Links"), "icon": "bi-person-plus-fill"})
 
-    items.append({"endpoint": "my_profile", "label": "My Profile", "icon": "bi-person-circle"})
+    items.append({"endpoint": "my_profile", "label": _("My Profile"), "icon": "bi-person-circle"})
     return items
 
 
@@ -299,6 +353,13 @@ def index():
     return redirect(url_for("signup"))
 
 
+@app.route("/set-language/<lang_code>")
+def set_language(lang_code):
+    if lang_code in app.config["LANGUAGES"]:
+        session["lang"] = lang_code
+    return redirect(request.referrer or url_for("index"))
+
+
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
     invite_token = request.args.get("invite")
@@ -317,7 +378,7 @@ def signup():
                 session["property_type"] = "office"
                 session["sub_room_id"] = obj.id
         else:
-            flash("This invite link is invalid or has expired.", "danger")
+            flash(_("This invite link is invalid or has expired."), "danger")
 
     if request.method == "POST":
         contact_type = request.form.get("contact_type")
@@ -325,11 +386,11 @@ def signup():
         contact = raw_contact.lower() if contact_type == "email" else raw_contact
 
         if contact_type not in ("email", "phone"):
-            flash("Please choose email or phone.", "danger")
+            flash(_("Please choose email or phone."), "danger")
         elif contact_type == "email" and not EMAIL_REGEX.match(contact):
-            flash("Please enter a valid email address.", "danger")
+            flash(_("Please enter a valid email address."), "danger")
         elif contact_type == "phone" and not PHONE_REGEX.match(contact):
-            flash("Please enter a valid 10-digit mobile number.", "danger")
+            flash(_("Please enter a valid 10-digit mobile number."), "danger")
         else:
             session["contact"] = contact
             session["contact_type"] = contact_type
@@ -361,9 +422,9 @@ def verify_otp():
             .first()
         )
         if not otp or otp.is_expired():
-            flash("Your OTP has expired. Please request a new one.", "danger")
+            flash(_("Your OTP has expired. Please request a new one."), "danger")
         elif otp.code != code:
-            flash("Incorrect OTP. Please try again.", "danger")
+            flash(_("Incorrect OTP. Please try again."), "danger")
         else:
             otp.verified = True
             db.session.commit()
@@ -604,7 +665,7 @@ def role_selection():
     if request.method == "POST":
         role = request.form.get("role")
         if role not in dict(roles):
-            flash("Please select a role.", "danger")
+            flash(_("Please select a role."), "danger")
         else:
             session["selected_role"] = role
             return redirect(url_for("role_form", role=role))
@@ -891,6 +952,7 @@ def dashboard():
     company_vacant_count = 0
     team_members = []
     today_allocations = {}
+    today_visitor_allocations = {}
     tomorrow_transport_request = None
     transport_cutoff_passed = False
 
@@ -949,6 +1011,7 @@ def dashboard():
         company_slot_rows = [(slot, compute_slot_status(slot, today, now_dt)) for slot in company_slots]
         company_vacant_count = sum(1 for _, status in company_slot_rows if status == "vacant")
         today_allocations = _today_transport_allocations(role_profile.property_id, today)
+        today_visitor_allocations = _today_visitor_allocations(role_profile.property_id, today)
         tomorrow = today + timedelta(days=1)
         transport_cutoff_passed = now_dt.time() >= TRANSPORT_REQUEST_CUTOFF
         tomorrow_transport_request = TransportRequest.query.filter_by(
@@ -982,6 +1045,7 @@ def dashboard():
         company_vacant_count=company_vacant_count,
         team_members=team_members,
         today_allocations=today_allocations,
+        today_visitor_allocations=today_visitor_allocations,
         tomorrow_transport_request=tomorrow_transport_request,
         transport_cutoff_passed=transport_cutoff_passed,
         role_profile_label=_role_profile_label,
@@ -1432,6 +1496,7 @@ def parking_slots():
     now_dt = now_ist()
     slot_rows = [(slot, compute_slot_status(slot, today, now_dt)) for slot in slots]
     today_allocations = _today_transport_allocations(role_profile.property_id, today)
+    today_visitor_allocations = _today_visitor_allocations(role_profile.property_id, today)
 
     residents = []
     if can_edit:
@@ -1453,6 +1518,7 @@ def parking_slots():
         property=prop,
         slot_rows=slot_rows,
         today_allocations=today_allocations,
+        today_visitor_allocations=today_visitor_allocations,
         residents=residents,
         can_edit=can_edit,
         role_profile_label=_role_profile_label,
@@ -1510,9 +1576,12 @@ def notifications():
     )
 
     pending_requests = []
-    if role_profile.role in ("owner", "tenant", "committee"):
+    if role_profile.role in ("owner", "tenant", "committee", "employee", "manager"):
         pending_requests = (
-            VisitorRequest.query.filter_by(host_role_profile_id=role_profile.id, status="pending_approval")
+            VisitorRequest.query.filter(
+                VisitorRequest.host_role_profile_id.in_(_approvable_host_ids(role_profile)),
+                VisitorRequest.status == "pending_approval",
+            )
             .order_by(VisitorRequest.date, VisitorRequest.from_time)
             .all()
         )
@@ -1522,6 +1591,7 @@ def notifications():
         role_profile=role_profile,
         notifications=items,
         pending_requests=pending_requests,
+        role_profile_label=_role_profile_label,
         show_sidebar=True,
     )
 
@@ -1561,7 +1631,7 @@ def approve_visitor_request(request_id):
         return redirect_resp
 
     vr = VisitorRequest.query.get_or_404(request_id)
-    if vr.host_role_profile_id != role_profile.id:
+    if vr.host_role_profile_id not in _approvable_host_ids(role_profile):
         abort(403)
     if vr.status != "pending_approval":
         flash("This request has already been processed.", "warning")
@@ -1569,7 +1639,11 @@ def approve_visitor_request(request_id):
 
     vr.status = "pending_allocation"
     db.session.flush()
-    try_match_request(vr)
+    prop = Property.query.get(vr.property_id)
+    if prop.property_type in RESIDENTIAL_PROPERTY_TYPES:
+        try_match_request(vr)
+    else:
+        allocate_unexpected_visitor(vr)
     db.session.commit()
     if vr.status == "allocated":
         flash(f"Approved {vr.visitor_name} and allocated a parking slot.", "success")
@@ -1586,7 +1660,7 @@ def deny_visitor_request(request_id):
         return redirect_resp
 
     vr = VisitorRequest.query.get_or_404(request_id)
-    if vr.host_role_profile_id != role_profile.id:
+    if vr.host_role_profile_id not in _approvable_host_ids(role_profile):
         abort(403)
     if vr.status != "pending_approval":
         flash("This request has already been processed.", "warning")
@@ -1616,8 +1690,11 @@ def payments():
     role_profile, redirect_resp = _require_role_profile()
     if redirect_resp:
         return redirect_resp
-    if role_profile.role not in ("owner", "tenant", "committee"):
+    if role_profile.role not in ("owner", "tenant", "committee", "manager"):
         abort(403)
+
+    prop = Property.query.get(role_profile.property_id)
+    is_office = prop.property_type not in RESIDENTIAL_PROPERTY_TYPES
 
     payable = (
         Transaction.query.filter_by(payer_role_profile_id=role_profile.id)
@@ -1647,9 +1724,12 @@ def payments():
     return render_template(
         "payments.html",
         role_profile=role_profile,
+        property=prop,
+        is_office=is_office,
         payable=payable,
         receivable=receivable,
         commission_total=commission_total,
+        role_profile_label=_role_profile_label,
         show_sidebar=True,
     )
 
@@ -1747,7 +1827,7 @@ def remove_member(member_id):
 @app.route("/visitor-pass/<token>")
 def visitor_pass(token):
     vr = VisitorRequest.query.filter_by(qr_token=token).first_or_404()
-    slot = vr.slot_availability.parking_slot if vr.slot_availability else None
+    slot = vr.slot_availability.parking_slot if vr.slot_availability else vr.parking_slot
 
     return render_template(
         "visitor_pass.html",
@@ -1831,13 +1911,14 @@ def security_visitor(token):
         abort(403)
 
     vr = VisitorRequest.query.filter_by(qr_token=token, property_id=role_profile.property_id).first_or_404()
-    slot = vr.slot_availability.parking_slot if vr.slot_availability else None
+    slot = vr.slot_availability.parking_slot if vr.slot_availability else vr.parking_slot
 
     return render_template(
         "security_visitor.html",
         role_profile=role_profile,
         visitor_request=vr,
         slot=slot,
+        role_profile_label=_role_profile_label,
         show_sidebar=True,
     )
 
@@ -1954,9 +2035,13 @@ def unexpected_visitor():
     if role_profile.role != "security":
         abort(403)
 
+    prop = Property.query.get(role_profile.property_id)
+    is_office = prop.property_type not in RESIDENTIAL_PROPERTY_TYPES
+    host_roles = ("employee", "manager") if is_office else ("owner", "tenant", "committee")
+
     hosts = RoleProfile.query.filter(
         RoleProfile.property_id == role_profile.property_id,
-        RoleProfile.role.in_(("owner", "tenant", "committee")),
+        RoleProfile.role.in_(host_roles),
     ).all()
 
     if request.method == "POST":
@@ -1985,7 +2070,7 @@ def unexpected_visitor():
         if (
             not host
             or host.property_id != role_profile.property_id
-            or host.role not in ("owner", "tenant", "committee")
+            or host.role not in host_roles
         ):
             errors.append("Please select who the visitor is here to see.")
 
@@ -2024,15 +2109,27 @@ def unexpected_visitor():
             )
             db.session.add(vr)
             db.session.flush()
-            notify(
-                host.id,
-                "Unexpected visitor needs approval",
-                f"Security logged a walk-in visitor {visitor_name} ({visitor_phone}), "
-                f"{vehicle_type} {vehicle_number}, on {date_val} from "
-                f"{from_time.strftime('%H:%M')} to {to_time.strftime('%H:%M')}"
-                f"{' for: ' + purpose if purpose else ''}. Please approve or deny.",
-                link=url_for("notifications"),
-            )
+
+            notify_ids = {host.id}
+            if host.sub_room_id:
+                notify_ids.update(
+                    rp.id
+                    for rp in RoleProfile.query.filter(
+                        RoleProfile.property_id == role_profile.property_id,
+                        RoleProfile.sub_room_id == host.sub_room_id,
+                        RoleProfile.role == "manager",
+                    ).all()
+                )
+            for notify_id in notify_ids:
+                notify(
+                    notify_id,
+                    "Unexpected visitor needs approval",
+                    f"Security logged a walk-in visitor {visitor_name} ({visitor_phone}), "
+                    f"{vehicle_type} {vehicle_number}, on {date_val} from "
+                    f"{from_time.strftime('%H:%M')} to {to_time.strftime('%H:%M')}"
+                    f"{' for: ' + purpose if purpose else ''}. Please approve or deny.",
+                    link=url_for("notifications"),
+                )
             db.session.commit()
             flash("Visitor logged. Waiting for resident approval.", "success")
             return redirect(url_for("unexpected_visitor"))
