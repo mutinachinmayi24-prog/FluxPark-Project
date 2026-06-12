@@ -33,9 +33,9 @@
           <div class="col-md-6">
             <label for="host_role_profile_id" class="form-label">Visiting</label>
             <select class="form-select" id="host_role_profile_id" name="host_role_profile_id" required>
-              <option value="" disabled {% if not form_data.get('host_role_profile_id') %}selected{% endif %}>Select resident</option>
+              <option value="" disabled {% if not form_data.get('host_role_profile_id') %}selected{% endif %}>Select {{ 'employee' if hosts and hosts[0].sub_room else 'resident' }}</option>
               {% for h in hosts %}
-                <option value="{{ h.id }}" {% if form_data.get('host_role_profile_id')|string == h.id|string %}selected{% endif %}>{{ role_profile_label(h) }}</option>
+                <option value="{{ h.id }}" {% if form_data.get('host_role_profile_id')|string == h.id|string %}selected{% endif %}>{{ role_profile_label(h) }}{% if h.sub_room %} &mdash; {{ h.sub_room.company_name }}{% endif %}</option>
               {% endfor %}
             </select>
           </div>
@@ -96,7 +96,7 @@
               {% for r in recent %}
                 <tr>
                   <td>{{ r.visitor_name }}<br><span class="text-muted small">{{ r.visitor_phone }}</span></td>
-                  <td>{{ role_profile_label(r.host_role_profile) }}</td>
+                  <td>{{ role_profile_label(r.host_role_profile) }}{% if r.host_role_profile.sub_room %} &mdash; {{ r.host_role_profile.sub_room.company_name }}{% endif %}</td>
                   <td>{{ r.date.strftime('%d %b %Y') }}</td>
                   <td>{{ r.from_time.strftime('%H:%M') }} - {{ r.to_time.strftime('%H:%M') }}</td>
                   <td><span class="badge bg-{{ REQUEST_STATUS_CLASSES[r.status] }}">{{ REQUEST_STATUS_LABELS[r.status] }}</span></td>

@@ -33,7 +33,12 @@
         <div class="col-sm-6 col-lg-3">
           <div class="text-muted small">Visiting</div>
           <div class="fw-semibold">
-            {{ visitor_request.host_role_profile.data.get('flat_no') or visitor_request.host_role_profile.data.get('head_flat_no') or '—' }}
+            {% set host = visitor_request.host_role_profile %}
+            {% if host.data.get('flat_no') or host.data.get('head_flat_no') %}
+              {{ host.data.get('flat_no') or host.data.get('head_flat_no') }}
+            {% else %}
+              {{ role_profile_label(host) }}{% if host.sub_room %} &mdash; {{ host.sub_room.company_name }}{% endif %}
+            {% endif %}
           </div>
         </div>
       </div>

@@ -3,7 +3,11 @@
 
 {% block content %}
   <h3 class="fw-bold mb-1">Payments</h3>
-  <p class="text-muted mb-4">Visitor parking charges you owe and amounts due to you.</p>
+  {% if is_office %}
+    <p class="text-muted mb-4">Cross-company spare-slot rent you owe and amounts due to you.</p>
+  {% else %}
+    <p class="text-muted mb-4">Visitor parking charges you owe and amounts due to you.</p>
+  {% endif %}
 
   {% if commission_total is not none %}
     <div class="card border-0 shadow-sm mb-4">
@@ -25,7 +29,7 @@
                 <th>Description</th>
                 <th>To</th>
                 <th>Base</th>
-                <th>Commission</th>
+                {% if not is_office %}<th>Commission</th>{% endif %}
                 <th>Total</th>
                 <th>Status</th>
                 <th></th>
@@ -35,9 +39,9 @@
               {% for t in payable %}
                 <tr>
                   <td>{{ t.description }}</td>
-                  <td>{{ t.payee_role_profile.data.get('flat_no') or t.payee_role_profile.data.get('head_flat_no') or '—' }}</td>
+                  <td>{{ role_profile_label(t.payee_role_profile) }}{% if t.payee_role_profile.sub_room %} &mdash; {{ t.payee_role_profile.sub_room.company_name }}{% endif %}</td>
                   <td>&#8377;{{ "%.2f"|format(t.base_amount) }}</td>
-                  <td>&#8377;{{ "%.2f"|format(t.commission_amount) }} <span class="text-muted small">(to committee)</span></td>
+                  {% if not is_office %}<td>&#8377;{{ "%.2f"|format(t.commission_amount) }} <span class="text-muted small">(to committee)</span></td>{% endif %}
                   <td class="fw-semibold">&#8377;{{ "%.2f"|format(t.total_amount) }}</td>
                   <td>
                     <span class="badge bg-{{ 'success' if t.status == 'paid' else 'warning' }}">{{ t.status.title() }}</span>
@@ -80,7 +84,7 @@
               {% for t in receivable %}
                 <tr>
                   <td>{{ t.description }}</td>
-                  <td>{{ t.payer_role_profile.data.get('flat_no') or t.payer_role_profile.data.get('tenant_name') or '—' }}</td>
+                  <td>{{ role_profile_label(t.payer_role_profile) }}{% if t.payer_role_profile.sub_room %} &mdash; {{ t.payer_role_profile.sub_room.company_name }}{% endif %}</td>
                   <td class="fw-semibold">&#8377;{{ "%.2f"|format(t.base_amount) }}</td>
                   <td>
                     <span class="badge bg-{{ 'success' if t.status == 'paid' else 'warning' }}">{{ t.status.title() }}</span>

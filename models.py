@@ -159,6 +159,7 @@ class VisitorRequest(db.Model):
     created_by_role_profile_id = db.Column(db.Integer, db.ForeignKey("role_profile.id"), nullable=True)
     status = db.Column(db.String(20), nullable=False, default="pending_allocation")
     slot_availability_id = db.Column(db.Integer, db.ForeignKey("slot_availability.id"), nullable=True)
+    parking_slot_id = db.Column(db.Integer, db.ForeignKey("parking_slot.id"), nullable=True)
     qr_token = db.Column(db.String(32), unique=True, nullable=False, default=generate_token)
     entry_time = db.Column(db.DateTime, nullable=True)
     exit_time = db.Column(db.DateTime, nullable=True)
@@ -173,6 +174,7 @@ class VisitorRequest(db.Model):
     slot_availability = db.relationship(
         "SlotAvailability", backref=db.backref("visitor_request", uselist=False)
     )
+    parking_slot = db.relationship("ParkingSlot", backref="visitor_requests")
 
 
 class TransportRequest(db.Model):

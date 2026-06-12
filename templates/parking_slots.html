@@ -35,6 +35,8 @@
                       {{ role_profile_label(slot.home_role_profile) }}
                     {% elif today_allocations.get(slot.id) %}
                       {{ role_profile_label(today_allocations[slot.id].role_profile) }}
+                    {% elif today_visitor_allocations.get(slot.id) %}
+                      Visitor: {{ today_visitor_allocations[slot.id].visitor_name }}
                     {% else %}
                       &mdash;
                     {% endif %}

@@ -25,6 +25,7 @@
               <span class="text-muted small">
                 {{ r.date.strftime('%d %b %Y') }}, {{ r.from_time.strftime('%H:%M') }} - {{ r.to_time.strftime('%H:%M') }}
                 {% if r.purpose %} &middot; {{ r.purpose }}{% endif %}
+                {% if r.host_role_profile_id != role_profile.id %} &middot; Visiting: {{ role_profile_label(r.host_role_profile) }}{% endif %}
               </span>
             </div>
             <div class="d-flex gap-2">

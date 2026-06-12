@@ -1,7 +1,7 @@
 :root {
   --fp-primary: #4f46e5;
   --fp-primary-dark: #3730a3;
-  --fp-accent: #06b6d4;
+  --fp-accent: #818cf8;
   --fp-bg: #f1f5f9;
 }
 
@@ -50,7 +50,7 @@ body {
 /* ---------------------------------------------------------------------- */
 
 .auth-wrapper {
-  background: linear-gradient(135deg, #eef2ff 0%, #e0f2fe 100%);
+  background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
   padding: 1rem;
 }
 
