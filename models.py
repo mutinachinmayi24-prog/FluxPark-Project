@@ -175,6 +175,32 @@ class VisitorRequest(db.Model):
     )
 
 
+class TransportRequest(db.Model):
+    __tablename__ = "transport_request"
+    id = db.Column(db.Integer, primary_key=True)
+    role_profile_id = db.Column(db.Integer, db.ForeignKey("role_profile.id"), nullable=False)
+    property_id = db.Column(db.Integer, db.ForeignKey("property.id"), nullable=False)
+    sub_room_id = db.Column(db.Integer, db.ForeignKey("sub_room.id"), nullable=True)
+    date = db.Column(db.Date, nullable=False)
+    vehicle_type = db.Column(db.String(20), nullable=False)
+    vehicle_number = db.Column(db.String(20), nullable=False)
+    from_time = db.Column(db.Time, nullable=False)
+    to_time = db.Column(db.Time, nullable=False)
+    status = db.Column(db.String(20), nullable=False, default="pending_allocation")
+    parking_slot_id = db.Column(db.Integer, db.ForeignKey("parking_slot.id"), nullable=True)
+    qr_token = db.Column(db.String(32), unique=True, nullable=False, default=generate_token)
+    entry_time = db.Column(db.DateTime, nullable=True)
+    exit_time = db.Column(db.DateTime, nullable=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    __table_args__ = (
+        db.UniqueConstraint("role_profile_id", "date", name="uq_transport_request_profile_date"),
+    )
+
+    role_profile = db.relationship("RoleProfile", backref="transport_requests")
+    parking_slot = db.relationship("ParkingSlot", backref="transport_requests")
+
+
 class Notification(db.Model):
     __tablename__ = "notification"
     id = db.Column(db.Integer, primary_key=True)

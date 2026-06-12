@@ -3,7 +3,13 @@
 
 {% block content %}
   <h3 class="fw-bold mb-1">Parking Slots</h3>
-  <p class="text-muted mb-4">Live status of every parking slot in your property.</p>
+  <p class="text-muted mb-4">
+    {% if property.property_type == 'office' %}
+      Live status of every parking slot allocated to your company.
+    {% else %}
+      Live status of every parking slot in your property.
+    {% endif %}
+  </p>
 
   <div class="card border-0 shadow-sm mb-4">
     <div class="card-body">
@@ -24,7 +30,15 @@
                 <tr>
                   <td>{{ slot.slot_number }}</td>
                   <td>{{ slot.floor or '—' }}</td>
-                  <td>{{ role_profile_label(slot.home_role_profile) if slot.home_role_profile else '—' }}</td>
+                  <td>
+                    {% if slot.home_role_profile %}
+                      {{ role_profile_label(slot.home_role_profile) }}
+                    {% elif today_allocations.get(slot.id) %}
+                      {{ role_profile_label(today_allocations[slot.id].role_profile) }}
+                    {% else %}
+                      &mdash;
+                    {% endif %}
+                  </td>
                   <td><span class="badge bg-{{ SLOT_STATUS_CLASSES[status] }}">{{ SLOT_STATUS_LABELS[status] }}</span></td>
                 </tr>
               {% endfor %}

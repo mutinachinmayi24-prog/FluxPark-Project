@@ -3,6 +3,9 @@
 
 {% block content %}
   <h5 class="fw-semibold mb-1">{{ property.name }}</h5>
+  {% if sub_room %}
+    <p class="text-muted mb-1">Joining <strong>{{ sub_room.company_name }}</strong></p>
+  {% endif %}
   <p class="text-muted">How will you be using FluxPark here?</p>
 
   <form method="POST">

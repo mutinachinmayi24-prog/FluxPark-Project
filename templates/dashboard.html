@@ -76,6 +76,41 @@
           </div>
         </div>
       </div>
+    {% elif role_profile.role in ('employee', 'manager') %}
+      <div class="col-6 col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body text-center">
+            <div class="display-6 fw-bold text-brand">{{ company_slot_rows|length }}</div>
+            <div class="text-muted small">Company Parking Slots</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body text-center">
+            <div class="display-6 fw-bold text-brand">{{ company_vacant_count }}</div>
+            <div class="text-muted small">Vacant Now</div>
+          </div>
+        </div>
+      </div>
+      {% if role_profile.role == 'manager' %}
+        <div class="col-6 col-md-3">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center">
+              <div class="display-6 fw-bold text-brand">{{ team_members|length }}</div>
+              <div class="text-muted small">Employees</div>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+      <div class="col-6 col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body text-center">
+            <div class="display-6 fw-bold text-brand">{{ unread_count }}</div>
+            <div class="text-muted small">Unread Notifications</div>
+          </div>
+        </div>
+      </div>
     {% endif %}
   </div>
 
@@ -86,6 +121,12 @@
     {% elif role_profile.role == 'security' %}
       <a href="{{ url_for('security_scan') }}" class="btn btn-brand"><i class="bi bi-qr-code-scan me-1"></i> Scan Visitor QR</a>
       <a href="{{ url_for('unexpected_visitor') }}" class="btn btn-outline-brand"><i class="bi bi-person-plus me-1"></i> Log Unexpected Visitor</a>
+    {% elif role_profile.role in ('employee', 'manager') %}
+      <a href="{{ url_for('parking_slots') }}" class="btn btn-brand"><i class="bi bi-grid-3x3-gap me-1"></i> View Company Parking</a>
+      <a href="{{ url_for('transport_request') }}" class="btn btn-outline-brand"><i class="bi bi-car-front me-1"></i> Transport Request</a>
+      {% if role_profile.role == 'manager' %}
+        <a href="{{ url_for('members') }}" class="btn btn-outline-brand"><i class="bi bi-people me-1"></i> Team Directory</a>
+      {% endif %}
     {% endif %}
   </div>
 
@@ -228,6 +269,117 @@
             {% endif %}
           </div>
         </div>
+      {% elif role_profile.role in ('employee', 'manager') %}
+        <div class="card border-0 shadow-sm mb-3">
+          <div class="card-body">
+            <h6 class="section-title">Company Parking Slots</h6>
+            {% if company_slot_rows %}
+              <div class="table-responsive">
+                <table class="table table-sm align-middle mb-0">
+                  <thead>
+                    <tr>
+                      <th>Slot</th>
+                      <th>Floor</th>
+                      <th>Assigned To</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for slot, status in company_slot_rows %}
+                      <tr>
+                        <td>{{ slot.slot_number }}</td>
+                        <td>{{ slot.floor or '—' }}</td>
+                        <td>
+                          {% if slot.home_role_profile %}
+                            {{ role_profile_label(slot.home_role_profile) }}
+                          {% elif today_allocations.get(slot.id) %}
+                            {{ role_profile_label(today_allocations[slot.id].role_profile) }}
+                          {% else %}
+                            &mdash;
+                          {% endif %}
+                        </td>
+                        <td><span class="badge bg-{{ SLOT_STATUS_CLASSES[status] }}">{{ SLOT_STATUS_LABELS[status] }}</span></td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            {% else %}
+              <p class="text-muted mb-0">
+                No parking slots configured for your company yet.
+                {% if role_profile.role == 'manager' %}
+                  <a href="{{ url_for('parking_slots') }}">Add some</a>.
+                {% endif %}
+              </p>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="card border-0 shadow-sm mb-3">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h6 class="section-title mb-0">Tomorrow's Transport Request</h6>
+              <a href="{{ url_for('transport_request') }}" class="small">Manage</a>
+            </div>
+            {% if tomorrow_transport_request %}
+              <p class="mb-1">
+                <span class="badge bg-{{ REQUEST_STATUS_CLASSES[tomorrow_transport_request.status] }}">{{ REQUEST_STATUS_LABELS[tomorrow_transport_request.status] }}</span>
+                {{ tomorrow_transport_request.vehicle_type }} &mdash; {{ tomorrow_transport_request.vehicle_number }}
+              </p>
+              <p class="text-muted small mb-{% if tomorrow_transport_request.status == 'allocated' %}2{% else %}0{% endif %}">
+                Shift: {{ tomorrow_transport_request.from_time.strftime('%H:%M') }} - {{ tomorrow_transport_request.to_time.strftime('%H:%M') }}
+              </p>
+              {% if tomorrow_transport_request.status == 'allocated' %}
+                <a href="{{ url_for('transport_pass', token=tomorrow_transport_request.qr_token) }}" class="btn btn-sm btn-brand">
+                  <i class="bi bi-qr-code me-1"></i> View Parking Pass
+                </a>
+              {% endif %}
+            {% elif transport_cutoff_passed %}
+              <p class="text-muted mb-0">No request submitted for tomorrow. The 9 PM cutoff has passed.</p>
+            {% else %}
+              <p class="text-muted mb-0">
+                You haven't requested parking for tomorrow yet.
+                <a href="{{ url_for('transport_request') }}">Submit before 9 PM</a>.
+              </p>
+            {% endif %}
+          </div>
+        </div>
+
+        {% if role_profile.role == 'manager' %}
+          <div class="card border-0 shadow-sm mb-3">
+            <div class="card-body">
+              <h6 class="section-title">Team</h6>
+              {% if team_members %}
+                <div class="table-responsive">
+                  <table class="table table-sm align-middle mb-0">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Employee ID</th>
+                        <th>Shift</th>
+                        <th>Contact</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for member in team_members %}
+                        <tr>
+                          <td>{{ member.data.get('employee_name', '—') }}</td>
+                          <td>{{ member.data.get('employee_id', '—') }}</td>
+                          <td>{{ member.data.get('shift_from', '—') }} – {{ member.data.get('shift_to', '—') }}</td>
+                          <td>{{ member.user.contact or '—' }}</td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              {% else %}
+                <p class="text-muted mb-0">
+                  No employees have joined yet. Share your <a href="{{ url_for('invite_links') }}">invite link</a>.
+                </p>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
       {% endif %}
 
       <div class="row g-3">
@@ -248,6 +400,9 @@
               <p class="mb-1 text-capitalize"><i class="bi bi-person-badge me-2 text-brand"></i>{{ role_profile.role }}</p>
               {% if sub_room %}
                 <p class="mb-1"><i class="bi bi-building me-2 text-brand"></i>{{ sub_room.company_name }}</p>
+              {% endif %}
+              {% if role_profile.role in ('employee', 'manager') and role_profile.data.get('shift_from') %}
+                <p class="mb-1"><i class="bi bi-clock me-2 text-brand"></i>Shift: {{ role_profile.data.get('shift_from') }} – {{ role_profile.data.get('shift_to') }}</p>
               {% endif %}
               <a href="{{ url_for('my_profile') }}" class="btn btn-sm btn-outline-brand mt-2">
                 <i class="bi bi-person-circle me-1"></i> View My Profile

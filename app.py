@@ -2,7 +2,7 @@ import io
 import os
 import re
 import secrets
-from datetime import datetime, timedelta
+from datetime import datetime, time, timedelta
 from functools import wraps
 
 import qrcode
@@ -37,6 +37,7 @@ from models import (
     SlotAvailability,
     SubRoom,
     Transaction,
+    TransportRequest,
     User,
     Vehicle,
     VisitorRequest,
@@ -48,11 +49,13 @@ from parking_engine import (
     SLOT_STATUS_CLASSES,
     SLOT_STATUS_LABELS,
     compute_slot_status,
+    generate_office_parking_slots,
     generate_parking_slots,
     handle_emergency_return,
     link_home_slot,
     notify,
     now_ist,
+    run_pending_transport_allocations,
     try_match_availability,
     try_match_request,
 )
@@ -136,6 +139,17 @@ def _parse_time(value):
     return datetime.strptime(value, "%H:%M").time()
 
 
+def _today_transport_allocations(property_id, today):
+    """Map parking_slot_id -> allocated/entered TransportRequest for `today`, for office slots."""
+    rows = TransportRequest.query.filter(
+        TransportRequest.property_id == property_id,
+        TransportRequest.date == today,
+        TransportRequest.status.in_(("allocated", "entered")),
+        TransportRequest.parking_slot_id.isnot(None),
+    ).all()
+    return {tr.parking_slot_id: tr for tr in rows}
+
+
 def _role_profile_label(role_profile):
     d = role_profile.data
     name = (
@@ -175,8 +189,23 @@ def build_nav_items(role_profile):
 
         if role in ("owner", "committee"):
             items.append({"endpoint": "members", "label": "Members", "icon": "bi-people"})
+            items.append({"endpoint": "invite_links", "label": "Invite Links", "icon": "bi-person-plus-fill"})
     else:
+        if role in ("employee", "manager"):
+            items.append({"endpoint": "parking_slots", "label": "Company Parking", "icon": "bi-grid-3x3-gap"})
+            items.append({"endpoint": "parking_map", "label": "Parking Map", "icon": "bi-map"})
+            items.append({"endpoint": "transport_request", "label": "Transport Request", "icon": "bi-car-front"})
+
+        if role == "security":
+            items.append({"endpoint": "security_scan", "label": "Scan Entry / Exit", "icon": "bi-qr-code-scan"})
+
         items.append({"endpoint": "notifications", "label": "Notifications", "icon": "bi-bell"})
+
+        if role in ("employee", "manager"):
+            items.append({"endpoint": "members", "label": "Team", "icon": "bi-people"})
+
+        if role == "manager":
+            items.append({"endpoint": "invite_links", "label": "Invite Links", "icon": "bi-person-plus-fill"})
 
     items.append({"endpoint": "my_profile", "label": "My Profile", "icon": "bi-person-circle"})
     return items
@@ -499,7 +528,10 @@ def property_form_office():
             db.session.add(prop)
             db.session.flush()
             for company in companies:
-                db.session.add(SubRoom(property_id=prop.id, **company))
+                sub_room = SubRoom(property_id=prop.id, **company)
+                db.session.add(sub_room)
+                db.session.flush()
+                generate_office_parking_slots(prop.id, sub_room)
             db.session.commit()
             session["property_id"] = prop.id
             session["property_type"] = "office"
@@ -521,20 +553,35 @@ def invite_links():
     sub_room_links = [
         (sub_room, url_for("join", token=sub_room.invite_token, _external=True)) for sub_room in prop.sub_rooms
     ]
+    onboarding = not session.get("role_profile_id")
 
     return render_template(
         "invite_links.html",
         property=prop,
         invite_url=invite_url,
         sub_room_links=sub_room_links,
+        sub_rooms=prop.sub_rooms,
+        onboarding=onboarding,
+        show_sidebar=not onboarding,
     )
 
 
-@app.route("/invite-links/next")
+@app.route("/invite-links/next", methods=["GET", "POST"])
 @login_required
 def invite_links_next():
-    if not session.get("property_id"):
+    property_id = session.get("property_id")
+    if not property_id:
         return redirect(url_for("property_setup"))
+
+    prop = Property.query.get_or_404(property_id)
+    if prop.property_type == "office":
+        sub_room_id = request.form.get("sub_room_id", type=int)
+        valid_ids = {sub_room.id for sub_room in prop.sub_rooms}
+        if sub_room_id not in valid_ids:
+            flash("Please select your company to continue.", "danger")
+            return redirect(url_for("invite_links"))
+        session["sub_room_id"] = sub_room_id
+
     return redirect(url_for("role_selection"))
 
 
@@ -552,6 +599,7 @@ def role_selection():
 
     prop = Property.query.get_or_404(property_id)
     roles = RESIDENTIAL_ROLES if prop.property_type in RESIDENTIAL_PROPERTY_TYPES else OFFICE_ROLES
+    sub_room = SubRoom.query.get(session["sub_room_id"]) if session.get("sub_room_id") else None
 
     if request.method == "POST":
         role = request.form.get("role")
@@ -561,7 +609,7 @@ def role_selection():
             session["selected_role"] = role
             return redirect(url_for("role_form", role=role))
 
-    return render_template("role_selection.html", roles=roles, property=prop)
+    return render_template("role_selection.html", roles=roles, property=prop, sub_room=sub_room)
 
 
 # ---------------------------------------------------------------------------
@@ -839,6 +887,12 @@ def dashboard():
     pending_approvals = 0
     commission_today = None
     today_visitors = []
+    company_slot_rows = []
+    company_vacant_count = 0
+    team_members = []
+    today_allocations = {}
+    tomorrow_transport_request = None
+    transport_cutoff_passed = False
 
     if role_profile.role in ("owner", "tenant", "committee"):
         today_requests = (
@@ -883,6 +937,33 @@ def dashboard():
             .order_by(VisitorRequest.from_time)
             .all()
         )
+    elif role_profile.role in ("employee", "manager"):
+        run_pending_transport_allocations(role_profile.property_id, now_dt)
+        company_slots = (
+            ParkingSlot.query.filter_by(
+                property_id=role_profile.property_id, sub_room_id=role_profile.sub_room_id
+            )
+            .order_by(ParkingSlot.entrance_rank, ParkingSlot.slot_number)
+            .all()
+        )
+        company_slot_rows = [(slot, compute_slot_status(slot, today, now_dt)) for slot in company_slots]
+        company_vacant_count = sum(1 for _, status in company_slot_rows if status == "vacant")
+        today_allocations = _today_transport_allocations(role_profile.property_id, today)
+        tomorrow = today + timedelta(days=1)
+        transport_cutoff_passed = now_dt.time() >= TRANSPORT_REQUEST_CUTOFF
+        tomorrow_transport_request = TransportRequest.query.filter_by(
+            role_profile_id=role_profile.id, date=tomorrow
+        ).first()
+        if role_profile.role == "manager":
+            team_members = (
+                RoleProfile.query.filter_by(
+                    property_id=role_profile.property_id,
+                    sub_room_id=role_profile.sub_room_id,
+                    role="employee",
+                )
+                .order_by(RoleProfile.id)
+                .all()
+            )
 
     return render_template(
         "dashboard.html",
@@ -897,6 +978,12 @@ def dashboard():
         today_availabilities=today_availabilities,
         commission_today=commission_today,
         today_visitors=today_visitors,
+        company_slot_rows=company_slot_rows,
+        company_vacant_count=company_vacant_count,
+        team_members=team_members,
+        today_allocations=today_allocations,
+        tomorrow_transport_request=tomorrow_transport_request,
+        transport_cutoff_passed=transport_cutoff_passed,
         role_profile_label=_role_profile_label,
         show_sidebar=True,
     )
@@ -1125,6 +1212,112 @@ def parking_availability_return(availability_id):
 
 
 # ---------------------------------------------------------------------------
+# Transport requests (office employees & managers)
+# ---------------------------------------------------------------------------
+
+TRANSPORT_REQUEST_CUTOFF = time(21, 0)
+
+
+@app.route("/transport-request", methods=["GET", "POST"])
+@login_required
+def transport_request():
+    role_profile, redirect_resp = _require_role_profile()
+    if redirect_resp:
+        return redirect_resp
+    if role_profile.role not in ("employee", "manager"):
+        abort(403)
+
+    now_dt = now_ist()
+    tomorrow = now_dt.date() + timedelta(days=1)
+    cutoff_passed = now_dt.time() >= TRANSPORT_REQUEST_CUTOFF
+
+    run_pending_transport_allocations(role_profile.property_id, now_dt)
+
+    existing = TransportRequest.query.filter_by(role_profile_id=role_profile.id, date=tomorrow).first()
+
+    if request.method == "POST":
+        action = _strip(request.form, "action")
+
+        if action == "cancel":
+            if not existing or existing.status != "pending_allocation":
+                flash("There's no pending request for tomorrow to cancel.", "warning")
+            elif cutoff_passed:
+                flash("The 9 PM cutoff has passed; this request can no longer be changed.", "danger")
+            else:
+                db.session.delete(existing)
+                db.session.commit()
+                flash("Transport request for tomorrow cancelled.", "info")
+            return redirect(url_for("transport_request"))
+
+        if existing:
+            flash("You've already submitted a transport request for tomorrow.", "warning")
+            return redirect(url_for("transport_request"))
+        if cutoff_passed:
+            flash("Requests for tomorrow's parking must be submitted before 9 PM today.", "danger")
+            return redirect(url_for("transport_request"))
+
+        vehicle_type = _strip(request.form, "vehicle_type")
+        vehicle_number = _strip(request.form, "vehicle_number").upper()
+        from_str = _strip(request.form, "from_time")
+        to_str = _strip(request.form, "to_time")
+
+        errors = []
+        if vehicle_type not in VEHICLE_TYPES:
+            errors.append("Please select a vehicle type.")
+        if not vehicle_number:
+            errors.append("Please enter the vehicle number.")
+        if not from_str or not to_str:
+            errors.append("Please fill in your shift start and end time.")
+
+        if not errors:
+            tr = TransportRequest(
+                role_profile_id=role_profile.id,
+                property_id=role_profile.property_id,
+                sub_room_id=role_profile.sub_room_id,
+                date=tomorrow,
+                vehicle_type=vehicle_type,
+                vehicle_number=vehicle_number,
+                from_time=_parse_time(from_str),
+                to_time=_parse_time(to_str),
+                status="pending_allocation",
+            )
+            db.session.add(tr)
+            db.session.commit()
+            flash("Transport request for tomorrow submitted. Slots are allocated after the 9 PM cutoff.", "success")
+            return redirect(url_for("transport_request"))
+
+        for error in errors:
+            flash(error, "danger")
+
+    history = (
+        TransportRequest.query.filter_by(role_profile_id=role_profile.id)
+        .order_by(TransportRequest.date.desc())
+        .limit(14)
+        .all()
+    )
+
+    data = role_profile.data or {}
+    defaults = {
+        "vehicle_type": data.get("vehicle_type", ""),
+        "vehicle_number": data.get("vehicle_number", ""),
+        "from_time": data.get("shift_from", ""),
+        "to_time": data.get("shift_to", ""),
+    }
+
+    return render_template(
+        "transport_request.html",
+        role_profile=role_profile,
+        tomorrow=tomorrow,
+        existing=existing,
+        cutoff_passed=cutoff_passed,
+        history=history,
+        vehicle_types=VEHICLE_TYPES,
+        defaults=defaults,
+        show_sidebar=True,
+    )
+
+
+# ---------------------------------------------------------------------------
 # Parking slots & map
 # ---------------------------------------------------------------------------
 
@@ -1136,7 +1329,9 @@ def parking_slots():
     if redirect_resp:
         return redirect_resp
 
-    can_edit = role_profile.role in ("owner", "committee")
+    prop = Property.query.get(role_profile.property_id)
+    is_office = prop.property_type not in RESIDENTIAL_PROPERTY_TYPES
+    can_edit = role_profile.role in ("owner", "committee", "manager")
 
     if request.method == "POST":
         if not can_edit:
@@ -1191,6 +1386,8 @@ def parking_slots():
                     slot = ParkingSlot.query.get(int(slot_id))
                     if slot is None or slot.property_id != role_profile.property_id:
                         continue
+                    if is_office and slot.sub_room_id != role_profile.sub_room_id:
+                        continue
                     clash = existing.get(row["slot_number"])
                     if clash is not None and clash.id != slot.id:
                         errors.append(f"Slot number '{row['slot_number']}' is already in use.")
@@ -1208,6 +1405,7 @@ def parking_slots():
                         continue
                     new_slot = ParkingSlot(
                         property_id=role_profile.property_id,
+                        sub_room_id=role_profile.sub_room_id if is_office else None,
                         slot_number=row["slot_number"],
                         floor=row["floor"],
                         entrance_rank=row["entrance_rank"],
@@ -1226,26 +1424,35 @@ def parking_slots():
             flash("Parking layout updated.", "success")
         return redirect(url_for("parking_slots"))
 
-    slots = (
-        ParkingSlot.query.filter_by(property_id=role_profile.property_id)
-        .order_by(ParkingSlot.entrance_rank, ParkingSlot.slot_number)
-        .all()
-    )
+    slot_query = ParkingSlot.query.filter_by(property_id=role_profile.property_id)
+    if is_office:
+        slot_query = slot_query.filter_by(sub_room_id=role_profile.sub_room_id)
+    slots = slot_query.order_by(ParkingSlot.entrance_rank, ParkingSlot.slot_number).all()
     today = now_ist().date()
     now_dt = now_ist()
     slot_rows = [(slot, compute_slot_status(slot, today, now_dt)) for slot in slots]
+    today_allocations = _today_transport_allocations(role_profile.property_id, today)
 
     residents = []
     if can_edit:
-        residents = RoleProfile.query.filter(
-            RoleProfile.property_id == role_profile.property_id,
-            RoleProfile.role.in_(("owner", "tenant", "committee")),
-        ).all()
+        if is_office:
+            residents = RoleProfile.query.filter(
+                RoleProfile.property_id == role_profile.property_id,
+                RoleProfile.sub_room_id == role_profile.sub_room_id,
+                RoleProfile.role.in_(("employee", "manager")),
+            ).all()
+        else:
+            residents = RoleProfile.query.filter(
+                RoleProfile.property_id == role_profile.property_id,
+                RoleProfile.role.in_(("owner", "tenant", "committee")),
+            ).all()
 
     return render_template(
         "parking_slots.html",
         role_profile=role_profile,
+        property=prop,
         slot_rows=slot_rows,
+        today_allocations=today_allocations,
         residents=residents,
         can_edit=can_edit,
         role_profile_label=_role_profile_label,
@@ -1260,11 +1467,13 @@ def parking_map():
     if redirect_resp:
         return redirect_resp
 
-    slots = (
-        ParkingSlot.query.filter_by(property_id=role_profile.property_id)
-        .order_by(ParkingSlot.entrance_rank, ParkingSlot.slot_number)
-        .all()
-    )
+    prop = Property.query.get(role_profile.property_id)
+    is_office = prop.property_type not in RESIDENTIAL_PROPERTY_TYPES
+
+    slot_query = ParkingSlot.query.filter_by(property_id=role_profile.property_id)
+    if is_office:
+        slot_query = slot_query.filter_by(sub_room_id=role_profile.sub_room_id)
+    slots = slot_query.order_by(ParkingSlot.entrance_rank, ParkingSlot.slot_number).all()
     today = now_ist().date()
     now_dt = now_ist()
 
@@ -1276,6 +1485,7 @@ def parking_map():
     return render_template(
         "parking_map.html",
         role_profile=role_profile,
+        property=prop,
         floors=floors,
         show_sidebar=True,
     )
@@ -1482,17 +1692,20 @@ def members():
     if redirect_resp:
         return redirect_resp
 
-    profiles = (
-        RoleProfile.query.filter_by(property_id=role_profile.property_id)
-        .order_by(RoleProfile.role, RoleProfile.id)
-        .all()
-    )
+    prop = Property.query.get(role_profile.property_id)
+    is_office = prop.property_type not in RESIDENTIAL_PROPERTY_TYPES
+
+    profile_query = RoleProfile.query.filter_by(property_id=role_profile.property_id)
+    if is_office:
+        profile_query = profile_query.filter_by(sub_room_id=role_profile.sub_room_id)
+    profiles = profile_query.order_by(RoleProfile.role, RoleProfile.id).all()
 
     return render_template(
         "members.html",
         role_profile=role_profile,
+        property=prop,
         profiles=profiles,
-        can_remove=role_profile.role in ("owner", "committee"),
+        can_remove=role_profile.role in ("owner", "committee", "manager"),
         show_sidebar=True,
     )
 
@@ -1503,11 +1716,13 @@ def remove_member(member_id):
     role_profile, redirect_resp = _require_role_profile()
     if redirect_resp:
         return redirect_resp
-    if role_profile.role not in ("owner", "committee"):
+    if role_profile.role not in ("owner", "committee", "manager"):
         abort(403)
 
     member = RoleProfile.query.get_or_404(member_id)
     if member.property_id != role_profile.property_id:
+        abort(404)
+    if role_profile.role == "manager" and member.sub_room_id != role_profile.sub_room_id:
         abort(404)
     if member.id == role_profile.id:
         flash("You cannot remove yourself.", "danger")
@@ -1554,6 +1769,33 @@ def qr_image(token):
 
 
 # ---------------------------------------------------------------------------
+# Transport pass & QR code (office)
+# ---------------------------------------------------------------------------
+
+
+@app.route("/transport-pass/<token>")
+def transport_pass(token):
+    tr = TransportRequest.query.filter_by(qr_token=token).first_or_404()
+
+    return render_template(
+        "transport_pass.html",
+        transport_request=tr,
+    )
+
+
+@app.route("/transport-qr/<token>.png")
+def transport_qr_image(token):
+    tr = TransportRequest.query.filter_by(qr_token=token).first_or_404()
+    pass_url = url_for("transport_pass", token=tr.qr_token, _external=True)
+
+    img = qrcode.make(pass_url)
+    buf = io.BytesIO()
+    img.save(buf, format="PNG")
+    buf.seek(0)
+    return send_file(buf, mimetype="image/png")
+
+
+# ---------------------------------------------------------------------------
 # Security: QR scan, entry/exit, unexpected visitors
 # ---------------------------------------------------------------------------
 
@@ -1569,11 +1811,12 @@ def security_scan():
 
     if request.method == "POST":
         token = _strip(request.form, "token").rstrip("/").rsplit("/", 1)[-1]
-        vr = VisitorRequest.query.filter_by(qr_token=token, property_id=role_profile.property_id).first()
-        if not vr:
-            flash("No visitor found for that code.", "danger")
-            return redirect(url_for("security_scan"))
-        return redirect(url_for("security_visitor", token=token))
+        if VisitorRequest.query.filter_by(qr_token=token, property_id=role_profile.property_id).first():
+            return redirect(url_for("security_visitor", token=token))
+        if TransportRequest.query.filter_by(qr_token=token, property_id=role_profile.property_id).first():
+            return redirect(url_for("security_transport", token=token))
+        flash("No pass found for that code.", "danger")
+        return redirect(url_for("security_scan"))
 
     return render_template("security_scan.html", role_profile=role_profile, show_sidebar=True)
 
@@ -1639,6 +1882,67 @@ def security_visitor_exit(token):
     db.session.commit()
     flash(f"{vr.visitor_name} marked as exited.", "success")
     return redirect(url_for("security_visitor", token=token))
+
+
+@app.route("/security/transport/<token>")
+@login_required
+def security_transport(token):
+    role_profile, redirect_resp = _require_role_profile()
+    if redirect_resp:
+        return redirect_resp
+    if role_profile.role != "security":
+        abort(403)
+
+    tr = TransportRequest.query.filter_by(qr_token=token, property_id=role_profile.property_id).first_or_404()
+
+    return render_template(
+        "security_transport.html",
+        role_profile=role_profile,
+        transport_request=tr,
+        show_sidebar=True,
+    )
+
+
+@app.route("/security/transport/<token>/entry", methods=["POST"])
+@login_required
+def security_transport_entry(token):
+    role_profile, redirect_resp = _require_role_profile()
+    if redirect_resp:
+        return redirect_resp
+    if role_profile.role != "security":
+        abort(403)
+
+    tr = TransportRequest.query.filter_by(qr_token=token, property_id=role_profile.property_id).first_or_404()
+    if tr.status != "allocated":
+        flash("This pass cannot be marked as entered right now.", "warning")
+        return redirect(url_for("security_transport", token=token))
+
+    tr.status = "entered"
+    tr.entry_time = now_ist()
+    db.session.commit()
+    flash("Marked as entered.", "success")
+    return redirect(url_for("security_transport", token=token))
+
+
+@app.route("/security/transport/<token>/exit", methods=["POST"])
+@login_required
+def security_transport_exit(token):
+    role_profile, redirect_resp = _require_role_profile()
+    if redirect_resp:
+        return redirect_resp
+    if role_profile.role != "security":
+        abort(403)
+
+    tr = TransportRequest.query.filter_by(qr_token=token, property_id=role_profile.property_id).first_or_404()
+    if tr.status != "entered":
+        flash("This pass cannot be marked as exited right now.", "warning")
+        return redirect(url_for("security_transport", token=token))
+
+    tr.status = "exited"
+    tr.exit_time = now_ist()
+    db.session.commit()
+    flash("Marked as exited.", "success")
+    return redirect(url_for("security_transport", token=token))
 
 
 @app.route("/security/unexpected-visitor", methods=["GET", "POST"])

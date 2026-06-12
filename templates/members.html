@@ -6,7 +6,7 @@
 {%- endmacro %}
 
 {% macro member_flat(p) -%}
-  {{ p.data.get('flat_no') or p.data.get('head_flat_no') or '—' }}
+  {{ p.data.get('flat_no') or p.data.get('head_flat_no') or p.data.get('employee_id') or '—' }}
 {%- endmacro %}
 
 {% block content %}
@@ -21,9 +21,9 @@
             <tr>
               <th>Name</th>
               <th>Role</th>
-              <th>Flat / Unit</th>
+              <th>{% if property.property_type == 'office' %}Employee ID{% else %}Flat / Unit{% endif %}</th>
               <th>Contact</th>
-              <th>Vehicles</th>
+              {% if property.property_type == 'office' %}<th>Shift</th>{% else %}<th>Vehicles</th>{% endif %}
               {% if can_remove %}<th></th>{% endif %}
             </tr>
           </thead>
@@ -34,13 +34,17 @@
                 <td class="text-capitalize">{{ p.role }}</td>
                 <td>{{ member_flat(p) }}</td>
                 <td>{{ p.user.contact or '—' }}</td>
-                <td>
-                  {% if p.vehicles %}
-                    {% for v in p.vehicles %}{{ v.vehicle_number }}{% if not loop.last %}, {% endif %}{% endfor %}
-                  {% else %}
-                    &mdash;
-                  {% endif %}
-                </td>
+                {% if property.property_type == 'office' %}
+                  <td>{{ p.data.get('shift_from', '—') }} – {{ p.data.get('shift_to', '—') }}</td>
+                {% else %}
+                  <td>
+                    {% if p.vehicles %}
+                      {% for v in p.vehicles %}{{ v.vehicle_number }}{% if not loop.last %}, {% endif %}{% endfor %}
+                    {% else %}
+                      &mdash;
+                    {% endif %}
+                  </td>
+                {% endif %}
                 {% if can_remove %}
                   <td>
                     {% if p.id != role_profile.id %}

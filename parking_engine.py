@@ -5,14 +5,22 @@ there is no background scheduler. Times are treated as naive Asia/Kolkata
 wall-clock values throughout.
 """
 
-from datetime import datetime, timedelta
+from datetime import datetime, time, timedelta
 from types import SimpleNamespace
 from zoneinfo import ZoneInfo
 
 from flask import url_for
 
 from extensions import db
-from models import Notification, ParkingSlot, RoleProfile, SlotAvailability, Transaction, VisitorRequest
+from models import (
+    Notification,
+    ParkingSlot,
+    RoleProfile,
+    SlotAvailability,
+    Transaction,
+    TransportRequest,
+    VisitorRequest,
+)
 
 IST = ZoneInfo("Asia/Kolkata")
 BUFFER_MINUTES = 15
@@ -24,6 +32,7 @@ REQUEST_STATUS_LABELS = {
     "pending_allocation": "Pending allocation",
     "pending_approval": "Pending approval",
     "allocated": "Allocated",
+    "no_slot": "No slot available",
     "entered": "Entered",
     "exited": "Exited",
     "rejected": "Rejected",
@@ -34,6 +43,7 @@ REQUEST_STATUS_CLASSES = {
     "pending_allocation": "warning",
     "pending_approval": "info",
     "allocated": "primary",
+    "no_slot": "danger",
     "entered": "success",
     "exited": "secondary",
     "rejected": "danger",
@@ -114,6 +124,41 @@ def generate_parking_slots(property_id, count):
             )
         )
     db.session.commit()
+
+
+def generate_office_parking_slots(property_id, sub_room):
+    """Create parking slots for one company (SubRoom) of a newly-created office property."""
+    count = (sub_room.num_parking_spaces or 0) + (sub_room.extra_parking or 0)
+    if count <= 0:
+        return
+
+    existing = ParkingSlot.query.filter_by(property_id=property_id).all()
+    existing_numbers = {s.slot_number for s in existing}
+    other_company_prefixes = {
+        s.slot_number.split("-")[0] for s in existing if s.sub_room_id != sub_room.id
+    }
+    rank = len(existing)
+
+    prefix = "".join(ch for ch in sub_room.company_name.upper() if ch.isalnum())[:3] or "CO"
+    if prefix in other_company_prefixes:
+        prefix = f"{prefix}{sub_room.id}"
+
+    for i in range(1, count + 1):
+        rank += 1
+        slot_number = f"{prefix}-{i}"
+        if slot_number in existing_numbers:
+            continue
+        db.session.add(
+            ParkingSlot(
+                property_id=property_id,
+                sub_room_id=sub_room.id,
+                slot_number=slot_number,
+                floor=sub_room.floor_allocation or None,
+                entrance_rank=rank,
+                ramp_rank=rank,
+            )
+        )
+    db.session.flush()
 
 
 def link_home_slot(role_profile, parking_space_number):
@@ -265,6 +310,88 @@ def try_match_availability(availability):
     return best
 
 
+def allocate_transport_requests(property_id, target_date):
+    """Match pending TransportRequests for `target_date` to free ParkingSlots.
+
+    Each request is matched within its own company (sub_room) first; if none of
+    that company's slots are free, it overflows to a free slot belonging to
+    another company in the same property (cross-company allocation).
+    """
+    pending = (
+        TransportRequest.query.filter_by(
+            property_id=property_id, date=target_date, status="pending_allocation"
+        )
+        .order_by(TransportRequest.created_at, TransportRequest.id)
+        .all()
+    )
+    if not pending:
+        return
+
+    slots = (
+        ParkingSlot.query.filter_by(property_id=property_id)
+        .order_by(ParkingSlot.entrance_rank, ParkingSlot.ramp_rank)
+        .all()
+    )
+    taken = {
+        tr.parking_slot_id
+        for tr in TransportRequest.query.filter(
+            TransportRequest.property_id == property_id,
+            TransportRequest.date == target_date,
+            TransportRequest.parking_slot_id.isnot(None),
+        ).all()
+    }
+
+    for req in pending:
+        own = [s for s in slots if s.sub_room_id == req.sub_room_id and s.id not in taken]
+        other = [s for s in slots if s.sub_room_id != req.sub_room_id and s.id not in taken]
+        chosen = own[0] if own else (other[0] if other else None)
+
+        if chosen is None:
+            req.status = "no_slot"
+            notify(
+                req.role_profile_id,
+                "No parking slot available",
+                f"No parking slot was available for {target_date.strftime('%d %b %Y')}. "
+                f"We'll allocate one if a slot frees up.",
+                link=url_for("transport_request"),
+            )
+            continue
+
+        req.parking_slot_id = chosen.id
+        req.status = "allocated"
+        taken.add(chosen.id)
+        note = "" if chosen.sub_room_id == req.sub_room_id else " from another company's spare capacity"
+        pass_link = url_for("transport_pass", token=req.qr_token)
+        notify(
+            req.role_profile_id,
+            "Parking slot allocated",
+            f"Slot {chosen.slot_number} has been allocated to you for "
+            f"{target_date.strftime('%d %b %Y')}{note}. Show your pass at the gate: {pass_link}",
+            link=pass_link,
+        )
+
+    db.session.commit()
+
+
+def run_pending_transport_allocations(property_id, now_dt):
+    """Allocate any TransportRequests whose 9 PM submission cutoff has passed."""
+    today = now_dt.date()
+    cutoff_date = today + timedelta(days=1) if now_dt.time() >= time(21, 0) else today
+
+    pending_dates = (
+        db.session.query(TransportRequest.date)
+        .filter(
+            TransportRequest.property_id == property_id,
+            TransportRequest.status == "pending_allocation",
+            TransportRequest.date <= cutoff_date,
+        )
+        .distinct()
+        .all()
+    )
+    for (target_date,) in pending_dates:
+        allocate_transport_requests(property_id, target_date)
+
+
 def compute_slot_status(slot, today, now_dt):
     """Return 'vacant' | 'booked' | 'occupied' for a parking slot right now."""
     availabilities = SlotAvailability.query.filter(
@@ -281,6 +408,20 @@ def compute_slot_status(slot, today, now_dt):
             visitor_request = avail.visitor_request
             if visitor_request and visitor_request.status == "entered":
                 return "occupied"
+            return "booked"
+
+    transport_request = TransportRequest.query.filter(
+        TransportRequest.parking_slot_id == slot.id,
+        TransportRequest.date == today,
+        TransportRequest.status.in_(("allocated", "entered")),
+    ).first()
+    if transport_request:
+        if transport_request.status == "entered":
+            return "occupied"
+        start, end = _window(transport_request.date, transport_request.from_time, transport_request.to_time)
+        if start <= now_dt <= end:
+            return "occupied"
+        if now_dt < start:
             return "booked"
 
     return "occupied" if slot.home_role_profile_id else "vacant"
