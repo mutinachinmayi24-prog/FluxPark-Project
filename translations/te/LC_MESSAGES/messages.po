@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-06-12 12:33+0530\n"
+"POT-Creation-Date: 2026-06-12 13:31+0530\n"
 "PO-Revision-Date: 2026-06-12 12:33+0530\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: te\n"
@@ -18,97 +18,134 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
 
-#: app.py:223
+#: app.py:235
 msgid "Dashboard"
 msgstr "డాష్‌బోర్డ్"
 
-#: app.py:227
+#: app.py:236 templates/ai_assistant.html:2 templates/ai_assistant.html:6
+msgid "AI Assistant"
+msgstr "AI సహాయకుడు"
+
+#: app.py:240
 msgid "Visitor Request"
 msgstr "విజిటర్ రిక్వెస్ట్"
 
-#: app.py:228
+#: app.py:241
 msgid "Parking Availability"
 msgstr "పార్కింగ్ లభ్యత"
 
-#: app.py:230
+#: app.py:243
 msgid "Parking Slots"
 msgstr "పార్కింగ్ స్లాట్‌లు"
 
-#: app.py:231 app.py:248
+#: app.py:244 app.py:263
 msgid "Parking Map"
 msgstr "పార్కింగ్ మ్యాప్"
 
-#: app.py:234 app.py:252
+#: app.py:247 app.py:267
 msgid "Scan Entry / Exit"
 msgstr "ఎంట్రీ / ఎగ్జిట్ స్కాన్ చేయండి"
 
-#: app.py:235 app.py:253
+#: app.py:248 app.py:268
 msgid "Unexpected Visitor"
 msgstr "ఊహించని విజిటర్"
 
-#: app.py:237 app.py:255
+#: app.py:249 app.py:258 app.py:269 app.py:277 templates/visitor_log.html:2
+#: templates/visitor_log.html:6
+msgid "Visitor Log"
+msgstr "విజిటర్ లాగ్"
+
+#: app.py:251 app.py:271
 msgid "Notifications"
 msgstr "నోటిఫికేషన్లు"
 
-#: app.py:240
+#: app.py:254
 msgid "Payments"
 msgstr "చెల్లింపులు"
 
-#: app.py:243
+#: app.py:257
 msgid "Members"
 msgstr "సభ్యులు"
 
-#: app.py:244 app.py:262
+#: app.py:259 app.py:279
 msgid "Invite Links"
 msgstr "ఆహ్వాన లింకులు"
 
-#: app.py:247
+#: app.py:262
 msgid "Company Parking"
 msgstr "కంపెనీ పార్కింగ్"
 
-#: app.py:249 templates/dashboard.html:128
+#: app.py:264 templates/dashboard.html:128
 msgid "Transport Request"
 msgstr "ట్రాన్స్‌పోర్ట్ రిక్వెస్ట్"
 
-#: app.py:258 templates/dashboard.html:356
+#: app.py:274 templates/dashboard.html:356
 msgid "Team"
 msgstr "టీమ్"
 
-#: app.py:261
+#: app.py:278
 msgid "Rent Ledger"
 msgstr "అద్దె లెడ్జర్"
 
-#: app.py:264
+#: app.py:281
 msgid "My Profile"
 msgstr "నా ప్రొఫైల్"
 
-#: app.py:381
+#: app.py:398
 msgid "This invite link is invalid or has expired."
 msgstr "ఈ ఆహ్వాన లింక్ చెల్లదు లేదా గడువు ముగిసింది."
 
-#: app.py:389
+#: app.py:406
 msgid "Please choose email or phone."
 msgstr "దయచేసి ఇమెయిల్ లేదా ఫోన్ ఎంచుకోండి."
 
-#: app.py:391
+#: app.py:408
 msgid "Please enter a valid email address."
 msgstr "దయచేసి సరైన ఇమెయిల్ చిరునామా నమోదు చేయండి."
 
-#: app.py:393
+#: app.py:410
 msgid "Please enter a valid 10-digit mobile number."
 msgstr "దయచేసి సరైన 10-అంకెల మొబైల్ నంబర్‌ను నమోదు చేయండి."
 
-#: app.py:425
+#: app.py:442
 msgid "Your OTP has expired. Please request a new one."
 msgstr "మీ OTP గడువు ముగిసింది. దయచేసి కొత్త OTP అభ్యర్థించండి."
 
-#: app.py:427
+#: app.py:444
 msgid "Incorrect OTP. Please try again."
 msgstr "తప్పు OTP. దయచేసి మళ్ళీ ప్రయత్నించండి."
 
-#: app.py:668
+#: app.py:685
 msgid "Please select a role."
 msgstr "దయచేసి ఒక పాత్రను ఎంచుకోండి."
+
+#: app.py:2045
+msgid ""
+"Sorry, I couldn't reach the AI provider. Check your AI settings and try "
+"again."
+msgstr ""
+"క్షమించండి, AI ప్రొవైడర్‌ను చేరుకోలేకపోయాను. మీ AI సెట్టింగ్‌లను తనిఖీ "
+"చేసి, మళ్లీ ప్రయత్నించండి."
+
+#: app.py:2105
+#, python-format
+msgid "Connected to Ollama at %(host)s. Installed models: %(models)s"
+msgstr ""
+"%(host)s వద్ద Ollamaకు కనెక్ట్ అయింది. ఇన్‌స్టాల్ చేసిన మోడల్‌లు: "
+"%(models)s"
+
+#: app.py:2106
+msgid "none"
+msgstr "ఏదీ లేదు"
+
+#: app.py:2111
+#, python-format
+msgid "Could not reach Ollama at %(host)s: %(error)s"
+msgstr "%(host)s వద్ద Ollamaను చేరుకోలేకపోయాను: %(error)s"
+
+#: app.py:2115
+msgid "AI settings saved."
+msgstr "AI సెట్టింగ్‌లు సేవ్ చేయబడ్డాయి."
 
 #: constants.py:12 constants.py:25
 msgid "Owner"
@@ -198,6 +235,143 @@ msgstr "రద్దు చేయబడింది"
 msgid "Logout"
 msgstr "లాగౌట్"
 
+#: templates/ai_assistant.html:8 templates/ai_assistant.html:21
+#: templates/ai_settings.html:2 templates/ai_settings.html:6
+msgid "AI Settings"
+msgstr "AI సెట్టింగ్‌లు"
+
+#: templates/ai_assistant.html:11
+msgid ""
+"Ask about your parking slots, visitor passes, transport requests, or how "
+"to use FluxPark."
+msgstr ""
+"మీ పార్కింగ్ స్లాట్‌లు, విజిటర్ పాస్‌లు, ట్రాన్స్‌పోర్ట్ రిక్వెస్ట్‌లు "
+"లేదా FluxParkను ఎలా ఉపయోగించాలో అడగండి."
+
+#: templates/ai_assistant.html:17
+msgid "Local AI (Ollama) is not reachable right now."
+msgstr "లోకల్ AI (Ollama) ఇప్పుడు అందుబాటులో లేదు."
+
+#: templates/ai_assistant.html:20
+msgid ""
+"Start Ollama on this machine, or switch to a Bring-Your-Own-Key provider "
+"in"
+msgstr ""
+"ఈ మిషన్‌లో Ollamaను ప్రారంభించండి, లేదా దీనిలో Bring-Your-Own-Key "
+"ప్రొవైడర్‌కు మార్చండి"
+
+#: templates/ai_assistant.html:38
+msgid "No messages yet. Say hello!"
+msgstr "ఇంకా సందేశాలు లేవు. నమస్కారం చెప్పండి!"
+
+#: templates/ai_assistant.html:44
+msgid "Type your question…"
+msgstr "మీ ప్రశ్నను టైప్ చేయండి…"
+
+#: templates/ai_assistant.html:49
+msgid "Clear conversation"
+msgstr "సంభాషణను తొలగించండి"
+
+#: templates/ai_settings.html:8
+msgid "Back to AI Assistant"
+msgstr "AI సహాయకుడికి తిరిగి వెళ్ళండి"
+
+#: templates/ai_settings.html:11
+msgid ""
+"Choose how the AI Assistant generates its answers: run a model locally "
+"with Ollama (free, private, runs on this machine), or bring your own API "
+"key for a hosted provider."
+msgstr ""
+"AI సహాయకుడు తన సమాధానాలను ఎలా రూపొందించాలో ఎంచుకోండి: Ollamaతో మోడల్‌ను "
+"లోకల్‌గా రన్ చేయండి (ఫ్రీ, ప్రైవేట్, ఈ మిషన్‌లో రన్ అవుతుంది), లేదా "
+"హోస్ట్ చేసిన ప్రొవైడర్ కోసం మీ స్వంత API కీని ఉపయోగించండి."
+
+#: templates/ai_settings.html:16
+msgid "Provider"
+msgstr "ప్రొవైడర్"
+
+#: templates/ai_settings.html:21
+msgid "Local AI Inference (Ollama)"
+msgstr "లోకల్ AI అనుమితి (Ollama)"
+
+#: templates/ai_settings.html:23
+msgid "Connected"
+msgstr "కనెక్ట్ అయింది"
+
+#: templates/ai_settings.html:25
+msgid "Not detected"
+msgstr "కనుగొనబడలేదు"
+
+#: templates/ai_settings.html:27
+msgid "Runs entirely on your own machine — no data leaves your network."
+msgstr ""
+"ఇది పూర్తిగా మీ స్వంత మిషన్‌లో రన్ అవుతుంది — మీ నెట్‌వర్క్ నుండి డేటా "
+"ఎక్కడికీ వెళ్లదు."
+
+#: templates/ai_settings.html:33
+msgid "Ollama host"
+msgstr "Ollama హోస్ట్"
+
+#: templates/ai_settings.html:37 templates/ai_settings.html:81
+msgid "Model"
+msgstr "మోడల్"
+
+#: templates/ai_settings.html:44
+msgid "Installed models:"
+msgstr "ఇన్‌స్టాల్ చేసిన మోడల్‌లు:"
+
+#: templates/ai_settings.html:46
+msgid "Ollama is running, but no models are installed yet. Run"
+msgstr "Ollama రన్ అవుతోంది, కానీ ఇంకా మోడల్‌లు ఇన్‌స్టాల్ కాలేదు. రన్ చేయండి"
+
+#: templates/ai_settings.html:53
+msgid "Ollama not detected at this host."
+msgstr "ఈ హోస్ట్ వద్ద Ollama కనుగొనబడలేదు."
+
+#: templates/ai_settings.html:55
+msgid "Install it from"
+msgstr "దీన్ని ఇక్కడ నుండి ఇన్‌స్టాల్ చేయండి"
+
+#: templates/ai_settings.html:56
+msgid "run"
+msgstr "రన్ చేయండి"
+
+#: templates/ai_settings.html:56
+msgid "then"
+msgstr "తరువాత"
+
+#: templates/ai_settings.html:61
+msgid "Test connection"
+msgstr "కనెక్షన్‌ను పరీక్షించండి"
+
+#: templates/ai_settings.html:70
+msgid "Bring Your Own Key (BYOK)"
+msgstr "మీ స్వంత కీని తీసుకురండి (BYOK)"
+
+#: templates/ai_settings.html:71
+msgid "Use a hosted, OpenAI-compatible API with your own API key."
+msgstr "మీ స్వంత API కీతో హోస్ట్ చేసిన, OpenAI-అనుకూల APIని ఉపయోగించండి."
+
+#: templates/ai_settings.html:77
+msgid "API base URL"
+msgstr "API బేస్ URL"
+
+#: templates/ai_settings.html:85
+msgid "API key"
+msgstr "API కీ"
+
+#: templates/ai_settings.html:86
+msgid "Enter to set/replace"
+msgstr "సెట్/మార్చడానికి నమోదు చేయండి"
+
+#: templates/ai_settings.html:90
+msgid "A key is currently saved. Check to remove it."
+msgstr "ఇప్పుడు ఒక కీ సేవ్ చేయబడింది. దాన్ని తీసివేయడానికి చెక్ చేయండి."
+
+#: templates/ai_settings.html:98
+msgid "Save settings"
+msgstr "సెట్టింగ్‌లను సేవ్ చేయండి"
+
 #: templates/base.html:52
 msgid "Smart Parking & Access Management"
 msgstr "స్మార్ట్ పార్కింగ్ & యాక్సెస్ మేనేజ్‌మెంట్"
@@ -279,21 +453,24 @@ msgid "Today's Visitor Requests"
 msgstr "నేటి విజిటర్ రిక్వెస్ట్‌లు"
 
 #: templates/dashboard.html:146 templates/dashboard.html:248
+#: templates/visitor_log.html:45
 msgid "Visitor"
 msgstr "విజిటర్"
 
 #: templates/dashboard.html:147 templates/dashboard.html:249
+#: templates/visitor_log.html:46
 msgid "Vehicle"
 msgstr "వాహనం"
 
 #: templates/dashboard.html:148 templates/dashboard.html:217
-#: templates/dashboard.html:251
+#: templates/dashboard.html:251 templates/visitor_log.html:47
 msgid "Time"
 msgstr "సమయం"
 
 #: templates/dashboard.html:149 templates/dashboard.html:188
 #: templates/dashboard.html:219 templates/dashboard.html:252
-#: templates/dashboard.html:287
+#: templates/dashboard.html:287 templates/visitor_log.html:21
+#: templates/visitor_log.html:49
 msgid "Status"
 msgstr "స్థితి"
 
@@ -390,7 +567,9 @@ msgstr "పార్కింగ్ పాస్ చూడండి"
 
 #: templates/dashboard.html:343
 msgid "No request submitted for tomorrow. The 9 PM cutoff has passed."
-msgstr "రేపటి కోసం ఎలాంటి రిక్వెస్ట్ సమర్పించబడలేదు. రాత్రి 9 గంటల గడువు ముగిసింది."
+msgstr ""
+"రేపటి కోసం ఎలాంటి రిక్వెస్ట్ సమర్పించబడలేదు. రాత్రి 9 గంటల గడువు "
+"ముగిసింది."
 
 #: templates/dashboard.html:346
 msgid "You haven't requested parking for tomorrow yet."
@@ -481,12 +660,16 @@ msgstr "కొనసాగించండి"
 msgid ""
 "You've been invited to join %(property)s — %(company)s. Sign up below to "
 "continue."
-msgstr "మీరు %(property)s — %(company)sలో చేరడానికి ఆహ్వానించబడ్డారు. కొనసాగించడానికి దిగువ సైన్ అప్ చేయండి."
+msgstr ""
+"మీరు %(property)s — %(company)sలో చేరడానికి ఆహ్వానించబడ్డారు. "
+"కొనసాగించడానికి దిగువ సైన్ అప్ చేయండి."
 
 #: templates/signup.html:11
 #, python-format
 msgid "You've been invited to join %(property)s. Sign up below to continue."
-msgstr "మీరు %(property)sలో చేరడానికి ఆహ్వానించబడ్డారు. కొనసాగించడానికి దిగువ సైన్ అప్ చేయండి."
+msgstr ""
+"మీరు %(property)sలో చేరడానికి ఆహ్వానించబడ్డారు. కొనసాగించడానికి దిగువ "
+"సైన్ అప్ చేయండి."
 
 #: templates/signup.html:16
 msgid "Create your account"
@@ -539,3 +722,44 @@ msgstr "OTPని తిరిగి పంపండి"
 #: templates/verify_otp.html:28
 msgid "Use a different email or phone number"
 msgstr "వేరే ఇమెయిల్ లేదా ఫోన్ నంబర్‌ను ఉపయోగించండి"
+
+#: templates/visitor_log.html:8
+msgid "Export CSV"
+msgstr "CSVను ఎక్స్‌పోర్ట్ చేయండి"
+
+#: templates/visitor_log.html:11
+msgid "Searchable history of all visitor requests for your property."
+msgstr "మీ ప్రాపర్టీ యొక్క అన్ని విజిటర్ రిక్వెస్ట్‌ల శోధించగల చరిత్ర."
+
+#: templates/visitor_log.html:17
+msgid "Search"
+msgstr "శోధించండి"
+
+#: templates/visitor_log.html:18
+msgid "Name, phone, or vehicle number"
+msgstr "పేరు, ఫోన్ లేదా వాహన నంబర్"
+
+#: templates/visitor_log.html:23
+msgid "All statuses"
+msgstr "అన్ని స్థితులు"
+
+#: templates/visitor_log.html:30
+msgid "Filter"
+msgstr "ఫిల్టర్ చేయండి"
+
+#: templates/visitor_log.html:31
+msgid "Reset"
+msgstr "రీసెట్ చేయండి"
+
+#: templates/visitor_log.html:44
+msgid "Date"
+msgstr "తేదీ"
+
+#: templates/visitor_log.html:48
+msgid "Host"
+msgstr "హోస్ట్"
+
+#: templates/visitor_log.html:73
+msgid "No visitor records match your search."
+msgstr "మీ శోధనకు సరిపోలే విజిటర్ రికార్డులు లేవు."
+

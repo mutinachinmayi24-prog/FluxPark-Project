@@ -10,7 +10,12 @@
 {%- endmacro %}
 
 {% block content %}
-  <h3 class="fw-bold mb-1">Members</h3>
+  <div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-1">
+    <h3 class="fw-bold mb-1">Members</h3>
+    <a class="btn btn-sm btn-outline-brand" href="{{ url_for('export_members_csv') }}">
+      <i class="bi bi-download me-1"></i>Export CSV
+    </a>
+  </div>
   <p class="text-muted mb-4">Everyone registered in your property.</p>
 
   <div class="card border-0 shadow-sm">

@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}{{ _('Visitor Log') }} - FluxPark{% endblock %}
+
+{% block content %}
+  <div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-1">
+    <h3 class="fw-bold mb-1">{{ _('Visitor Log') }}</h3>
+    <a class="btn btn-sm btn-outline-brand" href="{{ url_for('export_visitor_log_csv', q=search, status=status_filter) }}">
+      <i class="bi bi-download me-1"></i>{{ _('Export CSV') }}
+    </a>
+  </div>
+  <p class="text-muted mb-4">{{ _('Searchable history of all visitor requests for your property.') }}</p>
+
+  <div class="card border-0 shadow-sm mb-3">
+    <div class="card-body">
+      <form method="GET" class="row g-2 align-items-end">
+        <div class="col-12 col-md-5">
+          <label class="form-label small text-muted mb-1">{{ _('Search') }}</label>
+          <input type="text" name="q" class="form-control" placeholder="{{ _('Name, phone, or vehicle number') }}" value="{{ search }}">
+        </div>
+        <div class="col-12 col-md-4">
+          <label class="form-label small text-muted mb-1">{{ _('Status') }}</label>
+          <select name="status" class="form-select">
+            <option value="">{{ _('All statuses') }}</option>
+            {% for key, label in status_options.items() %}
+              <option value="{{ key }}" {% if status_filter == key %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-12 col-md-3 d-flex gap-2">
+          <button type="submit" class="btn btn-brand flex-grow-1">{{ _('Filter') }}</button>
+          <a href="{{ url_for('visitor_log') }}" class="btn btn-outline-secondary">{{ _('Reset') }}</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="card border-0 shadow-sm">
+    <div class="card-body">
+      {% if records %}
+        <div class="table-responsive">
+          <table class="table table-sm align-middle">
+            <thead>
+              <tr>
+                <th>{{ _('Date') }}</th>
+                <th>{{ _('Visitor') }}</th>
+                <th>{{ _('Vehicle') }}</th>
+                <th>{{ _('Time') }}</th>
+                <th>{{ _('Host') }}</th>
+                <th>{{ _('Status') }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for r in records %}
+                <tr>
+                  <td>{{ r.date.strftime('%d %b %Y') }}</td>
+                  <td>
+                    {{ r.visitor_name }}
+                    <div class="text-muted small">{{ r.visitor_phone }}</div>
+                  </td>
+                  <td>{{ r.vehicle_number }}<div class="text-muted small text-capitalize">{{ r.vehicle_type }}</div></td>
+                  <td>{{ r.from_time.strftime('%H:%M') }} &ndash; {{ r.to_time.strftime('%H:%M') }}</td>
+                  <td>
+                    {{ role_profile_label(r.host_role_profile) }}
+                    {% if r.host_role_profile.sub_room %} &mdash; {{ r.host_role_profile.sub_room.company_name }}{% endif %}
+                  </td>
+                  <td><span class="badge bg-{{ status_classes.get(r.status, 'secondary') }}">{{ status_options.get(r.status, r.status) }}</span></td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <p class="text-muted mb-0">{{ _('No visitor records match your search.') }}</p>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

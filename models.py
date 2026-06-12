@@ -234,3 +234,36 @@ class Transaction(db.Model):
     payer_role_profile = db.relationship("RoleProfile", foreign_keys=[payer_role_profile_id])
     payee_role_profile = db.relationship("RoleProfile", foreign_keys=[payee_role_profile_id])
     visitor_request = db.relationship("VisitorRequest", backref="transactions")
+
+
+class AISettings(db.Model):
+    """Per-user AI provider configuration: local Ollama inference, or BYOK hosted provider."""
+
+    __tablename__ = "ai_settings"
+    id = db.Column(db.Integer, primary_key=True)
+    role_profile_id = db.Column(db.Integer, db.ForeignKey("role_profile.id"), unique=True, nullable=False)
+    provider = db.Column(db.String(20), nullable=False, default="ollama")  # "ollama" or "byok"
+    ollama_host = db.Column(db.String(200), nullable=True)
+    ollama_model = db.Column(db.String(100), nullable=True)
+    byok_base_url = db.Column(db.String(200), nullable=True)
+    byok_api_key = db.Column(db.String(200), nullable=True)
+    byok_model = db.Column(db.String(100), nullable=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    role_profile = db.relationship(
+        "RoleProfile", backref=db.backref("ai_settings", uselist=False, cascade="all, delete-orphan")
+    )
+
+
+class AIChatMessage(db.Model):
+    """A single message in a role profile's AI assistant chat history."""
+
+    __tablename__ = "ai_chat_message"
+    id = db.Column(db.Integer, primary_key=True)
+    role_profile_id = db.Column(db.Integer, db.ForeignKey("role_profile.id"), nullable=False)
+    role = db.Column(db.String(10), nullable=False)  # "user" or "assistant"
+    content = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    role_profile = db.relationship("RoleProfile", backref="ai_chat_messages")

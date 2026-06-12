@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-06-12 12:33+0530\n"
+"POT-Creation-Date: 2026-06-12 13:31+0530\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,96 +17,129 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
 
-#: app.py:223
+#: app.py:235
 msgid "Dashboard"
 msgstr ""
 
-#: app.py:227
-msgid "Visitor Request"
-msgstr ""
-
-#: app.py:228
-msgid "Parking Availability"
-msgstr ""
-
-#: app.py:230
-msgid "Parking Slots"
-msgstr ""
-
-#: app.py:231 app.py:248
-msgid "Parking Map"
-msgstr ""
-
-#: app.py:234 app.py:252
-msgid "Scan Entry / Exit"
-msgstr ""
-
-#: app.py:235 app.py:253
-msgid "Unexpected Visitor"
-msgstr ""
-
-#: app.py:237 app.py:255
-msgid "Notifications"
+#: app.py:236 templates/ai_assistant.html:2 templates/ai_assistant.html:6
+msgid "AI Assistant"
 msgstr ""
 
 #: app.py:240
-msgid "Payments"
+msgid "Visitor Request"
+msgstr ""
+
+#: app.py:241
+msgid "Parking Availability"
 msgstr ""
 
 #: app.py:243
+msgid "Parking Slots"
+msgstr ""
+
+#: app.py:244 app.py:263
+msgid "Parking Map"
+msgstr ""
+
+#: app.py:247 app.py:267
+msgid "Scan Entry / Exit"
+msgstr ""
+
+#: app.py:248 app.py:268
+msgid "Unexpected Visitor"
+msgstr ""
+
+#: app.py:249 app.py:258 app.py:269 app.py:277 templates/visitor_log.html:2
+#: templates/visitor_log.html:6
+msgid "Visitor Log"
+msgstr ""
+
+#: app.py:251 app.py:271
+msgid "Notifications"
+msgstr ""
+
+#: app.py:254
+msgid "Payments"
+msgstr ""
+
+#: app.py:257
 msgid "Members"
 msgstr ""
 
-#: app.py:244 app.py:262
+#: app.py:259 app.py:279
 msgid "Invite Links"
 msgstr ""
 
-#: app.py:247
+#: app.py:262
 msgid "Company Parking"
 msgstr ""
 
-#: app.py:249 templates/dashboard.html:128
+#: app.py:264 templates/dashboard.html:128
 msgid "Transport Request"
 msgstr ""
 
-#: app.py:258 templates/dashboard.html:356
+#: app.py:274 templates/dashboard.html:356
 msgid "Team"
 msgstr ""
 
-#: app.py:261
+#: app.py:278
 msgid "Rent Ledger"
 msgstr ""
 
-#: app.py:264
+#: app.py:281
 msgid "My Profile"
 msgstr ""
 
-#: app.py:381
+#: app.py:398
 msgid "This invite link is invalid or has expired."
 msgstr ""
 
-#: app.py:389
+#: app.py:406
 msgid "Please choose email or phone."
 msgstr ""
 
-#: app.py:391
+#: app.py:408
 msgid "Please enter a valid email address."
 msgstr ""
 
-#: app.py:393
+#: app.py:410
 msgid "Please enter a valid 10-digit mobile number."
 msgstr ""
 
-#: app.py:425
+#: app.py:442
 msgid "Your OTP has expired. Please request a new one."
 msgstr ""
 
-#: app.py:427
+#: app.py:444
 msgid "Incorrect OTP. Please try again."
 msgstr ""
 
-#: app.py:668
+#: app.py:685
 msgid "Please select a role."
+msgstr ""
+
+#: app.py:2045
+msgid ""
+"Sorry, I couldn't reach the AI provider. Check your AI settings and try "
+"again."
+msgstr ""
+
+#: app.py:2105
+#, python-format
+msgid "Connected to Ollama at %(host)s. Installed models: %(models)s"
+msgstr ""
+
+#: app.py:2106
+msgid "none"
+msgstr ""
+
+#: app.py:2111
+#, python-format
+msgid "Could not reach Ollama at %(host)s: %(error)s"
+msgstr ""
+
+#: app.py:2115
+msgid "AI settings saved."
 msgstr ""
 
 #: constants.py:12 constants.py:25
@@ -197,6 +230,134 @@ msgstr ""
 msgid "Logout"
 msgstr ""
 
+#: templates/ai_assistant.html:8 templates/ai_assistant.html:21
+#: templates/ai_settings.html:2 templates/ai_settings.html:6
+msgid "AI Settings"
+msgstr ""
+
+#: templates/ai_assistant.html:11
+msgid ""
+"Ask about your parking slots, visitor passes, transport requests, or how "
+"to use FluxPark."
+msgstr ""
+
+#: templates/ai_assistant.html:17
+msgid "Local AI (Ollama) is not reachable right now."
+msgstr ""
+
+#: templates/ai_assistant.html:20
+msgid ""
+"Start Ollama on this machine, or switch to a Bring-Your-Own-Key provider "
+"in"
+msgstr ""
+
+#: templates/ai_assistant.html:38
+msgid "No messages yet. Say hello!"
+msgstr ""
+
+#: templates/ai_assistant.html:44
+msgid "Type your question…"
+msgstr ""
+
+#: templates/ai_assistant.html:49
+msgid "Clear conversation"
+msgstr ""
+
+#: templates/ai_settings.html:8
+msgid "Back to AI Assistant"
+msgstr ""
+
+#: templates/ai_settings.html:11
+msgid ""
+"Choose how the AI Assistant generates its answers: run a model locally "
+"with Ollama (free, private, runs on this machine), or bring your own API "
+"key for a hosted provider."
+msgstr ""
+
+#: templates/ai_settings.html:16
+msgid "Provider"
+msgstr ""
+
+#: templates/ai_settings.html:21
+msgid "Local AI Inference (Ollama)"
+msgstr ""
+
+#: templates/ai_settings.html:23
+msgid "Connected"
+msgstr ""
+
+#: templates/ai_settings.html:25
+msgid "Not detected"
+msgstr ""
+
+#: templates/ai_settings.html:27
+msgid "Runs entirely on your own machine — no data leaves your network."
+msgstr ""
+
+#: templates/ai_settings.html:33
+msgid "Ollama host"
+msgstr ""
+
+#: templates/ai_settings.html:37 templates/ai_settings.html:81
+msgid "Model"
+msgstr ""
+
+#: templates/ai_settings.html:44
+msgid "Installed models:"
+msgstr ""
+
+#: templates/ai_settings.html:46
+msgid "Ollama is running, but no models are installed yet. Run"
+msgstr ""
+
+#: templates/ai_settings.html:53
+msgid "Ollama not detected at this host."
+msgstr ""
+
+#: templates/ai_settings.html:55
+msgid "Install it from"
+msgstr ""
+
+#: templates/ai_settings.html:56
+msgid "run"
+msgstr ""
+
+#: templates/ai_settings.html:56
+msgid "then"
+msgstr ""
+
+#: templates/ai_settings.html:61
+msgid "Test connection"
+msgstr ""
+
+#: templates/ai_settings.html:70
+msgid "Bring Your Own Key (BYOK)"
+msgstr ""
+
+#: templates/ai_settings.html:71
+msgid "Use a hosted, OpenAI-compatible API with your own API key."
+msgstr ""
+
+#: templates/ai_settings.html:77
+msgid "API base URL"
+msgstr ""
+
+#: templates/ai_settings.html:85
+msgid "API key"
+msgstr ""
+
+#: templates/ai_settings.html:86
+msgid "Enter to set/replace"
+msgstr ""
+
+#: templates/ai_settings.html:90
+msgid "A key is currently saved. Check to remove it."
+msgstr ""
+
+#: templates/ai_settings.html:98
+msgid "Save settings"
+msgstr ""
+
 #: templates/base.html:52
 msgid "Smart Parking & Access Management"
 msgstr ""
@@ -278,21 +439,24 @@ msgid "Today's Visitor Requests"
 msgstr ""
 
 #: templates/dashboard.html:146 templates/dashboard.html:248
+#: templates/visitor_log.html:45
 msgid "Visitor"
 msgstr ""
 
 #: templates/dashboard.html:147 templates/dashboard.html:249
+#: templates/visitor_log.html:46
 msgid "Vehicle"
 msgstr ""
 
 #: templates/dashboard.html:148 templates/dashboard.html:217
-#: templates/dashboard.html:251
+#: templates/dashboard.html:251 templates/visitor_log.html:47
 msgid "Time"
 msgstr ""
 
 #: templates/dashboard.html:149 templates/dashboard.html:188
 #: templates/dashboard.html:219 templates/dashboard.html:252
-#: templates/dashboard.html:287
+#: templates/dashboard.html:287 templates/visitor_log.html:21
+#: templates/visitor_log.html:49
 msgid "Status"
 msgstr ""
 
@@ -537,5 +701,45 @@ msgstr ""
 
 #: templates/verify_otp.html:28
 msgid "Use a different email or phone number"
+msgstr ""
+
+#: templates/visitor_log.html:8
+msgid "Export CSV"
+msgstr ""
+
+#: templates/visitor_log.html:11
+msgid "Searchable history of all visitor requests for your property."
+msgstr ""
+
+#: templates/visitor_log.html:17
+msgid "Search"
+msgstr ""
+
+#: templates/visitor_log.html:18
+msgid "Name, phone, or vehicle number"
+msgstr ""
+
+#: templates/visitor_log.html:23
+msgid "All statuses"
+msgstr ""
+
+#: templates/visitor_log.html:30
+msgid "Filter"
+msgstr ""
+
+#: templates/visitor_log.html:31
+msgid "Reset"
+msgstr ""
+
+#: templates/visitor_log.html:44
+msgid "Date"
+msgstr ""
+
+#: templates/visitor_log.html:48
+msgid "Host"
+msgstr ""
+
+#: templates/visitor_log.html:73
+msgid "No visitor records match your search."
 msgstr ""
 

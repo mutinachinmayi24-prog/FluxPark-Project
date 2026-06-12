@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %}{{ _('AI Settings') }} - FluxPark{% endblock %}
+
+{% block content %}
+  <div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-1">
+    <h3 class="fw-bold mb-1"><i class="bi bi-gear me-2"></i>{{ _('AI Settings') }}</h3>
+    <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('ai_assistant') }}">
+      <i class="bi bi-robot me-1"></i>{{ _('Back to AI Assistant') }}
+    </a>
+  </div>
+  <p class="text-muted mb-4">{{ _('Choose how the AI Assistant generates its answers: run a model locally with Ollama (free, private, runs on this machine), or bring your own API key for a hosted provider.') }}</p>
+
+  <form method="POST">
+    <div class="card border-0 shadow-sm mb-3">
+      <div class="card-body">
+        <h6 class="section-title">{{ _('Provider') }}</h6>
+
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="radio" name="provider" id="provider-ollama" value="ollama" {% if provider != 'byok' %}checked{% endif %}>
+          <label class="form-check-label" for="provider-ollama">
+            <strong>{{ _('Local AI Inference (Ollama)') }}</strong>
+            {% if ollama_running %}
+              <span class="badge bg-success ms-2">{{ _('Connected') }}</span>
+            {% else %}
+              <span class="badge bg-secondary ms-2">{{ _('Not detected') }}</span>
+            {% endif %}
+            <div class="text-muted small">{{ _('Runs entirely on your own machine — no data leaves your network.') }}</div>
+          </label>
+        </div>
+
+        <div class="ps-4 mb-3 row g-2">
+          <div class="col-12 col-md-7">
+            <label class="form-label small text-muted mb-1">{{ _('Ollama host') }}</label>
+            <input type="text" name="ollama_host" class="form-control" value="{{ ollama_host }}" placeholder="http://localhost:11434">
+          </div>
+          <div class="col-12 col-md-5">
+            <label class="form-label small text-muted mb-1">{{ _('Model') }}</label>
+            <input type="text" name="ollama_model" class="form-control" value="{{ ollama_model }}" placeholder="llama3.2">
+          </div>
+          {% if ollama_running %}
+            <div class="col-12">
+              <div class="text-muted small">
+                {% if available_models %}
+                  {{ _('Installed models:') }} {{ available_models|join(', ') }}
+                {% else %}
+                  {{ _('Ollama is running, but no models are installed yet. Run') }} <code>ollama pull {{ ollama_model }}</code>.
+                {% endif %}
+              </div>
+            </div>
+          {% else %}
+            <div class="col-12">
+              <div class="text-muted small">
+                {{ _('Ollama not detected at this host.') }}
+                {% if ollama_error %}<span>({{ ollama_error }})</span>{% endif %}
+                {{ _('Install it from') }} <a href="https://ollama.com" target="_blank" rel="noopener">ollama.com</a>,
+                {{ _('run') }} <code>ollama serve</code>, {{ _('then') }} <code>ollama pull {{ ollama_model }}</code>.
+              </div>
+            </div>
+          {% endif %}
+          <div class="col-12">
+            <button type="submit" name="action" value="test" class="btn btn-sm btn-outline-brand">{{ _('Test connection') }}</button>
+          </div>
+        </div>
+
+        <hr>
+
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="radio" name="provider" id="provider-byok" value="byok" {% if provider == 'byok' %}checked{% endif %}>
+          <label class="form-check-label" for="provider-byok">
+            <strong>{{ _('Bring Your Own Key (BYOK)') }}</strong>
+            <div class="text-muted small">{{ _('Use a hosted, OpenAI-compatible API with your own API key.') }}</div>
+          </label>
+        </div>
+
+        <div class="ps-4 row g-2">
+          <div class="col-12 col-md-7">
+            <label class="form-label small text-muted mb-1">{{ _('API base URL') }}</label>
+            <input type="text" name="byok_base_url" class="form-control" value="{{ byok_base_url }}" placeholder="https://api.openai.com/v1">
+          </div>
+          <div class="col-12 col-md-5">
+            <label class="form-label small text-muted mb-1">{{ _('Model') }}</label>
+            <input type="text" name="byok_model" class="form-control" value="{{ byok_model }}" placeholder="gpt-4o-mini">
+          </div>
+          <div class="col-12">
+            <label class="form-label small text-muted mb-1">{{ _('API key') }}</label>
+            <input type="password" name="byok_api_key" class="form-control" placeholder="{{ _('Enter to set/replace') if has_byok_key else 'sk-...' }}" autocomplete="off">
+            {% if has_byok_key %}
+              <div class="form-check mt-1">
+                <input class="form-check-input" type="checkbox" name="clear_byok_key" value="1" id="clear-byok-key">
+                <label class="form-check-label small text-muted" for="clear-byok-key">{{ _('A key is currently saved. Check to remove it.') }}</label>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" name="action" value="save" class="btn btn-brand">{{ _('Save settings') }}</button>
+  </form>
+{% endblock %}

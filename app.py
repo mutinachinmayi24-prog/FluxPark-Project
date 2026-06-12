@@ -1,3 +1,4 @@
+import csv
 import io
 import os
 import re
@@ -8,6 +9,7 @@ from functools import wraps
 import qrcode
 from flask import (
     Flask,
+    Response,
     abort,
     flash,
     redirect,
@@ -29,8 +31,18 @@ from constants import (
     ROLE_LABELS,
     VEHICLE_TYPES,
 )
+from ai_engine import (
+    DEFAULT_BYOK_BASE_URL,
+    DEFAULT_BYOK_MODEL,
+    DEFAULT_OLLAMA_HOST,
+    DEFAULT_OLLAMA_MODEL,
+    get_chat_reply,
+    ollama_status,
+)
 from extensions import db
 from models import (
+    AIChatMessage,
+    AISettings,
     BankDetail,
     Notification,
     OTPRequest,
@@ -221,6 +233,7 @@ def build_nav_items(role_profile):
     prop = Property.query.get(role_profile.property_id)
     role = role_profile.role
     items = [{"endpoint": "dashboard", "label": _("Dashboard"), "icon": "bi-speedometer2"}]
+    items.append({"endpoint": "ai_assistant", "label": _("AI Assistant"), "icon": "bi-robot"})
 
     if prop and prop.property_type in RESIDENTIAL_PROPERTY_TYPES:
         if role in ("owner", "tenant", "committee"):
@@ -233,6 +246,7 @@ def build_nav_items(role_profile):
         if role == "security":
             items.append({"endpoint": "security_scan", "label": _("Scan Entry / Exit"), "icon": "bi-qr-code-scan"})
             items.append({"endpoint": "unexpected_visitor", "label": _("Unexpected Visitor"), "icon": "bi-person-exclamation"})
+            items.append({"endpoint": "visitor_log", "label": _("Visitor Log"), "icon": "bi-journal-text"})
 
         items.append({"endpoint": "notifications", "label": _("Notifications"), "icon": "bi-bell"})
 
@@ -241,6 +255,7 @@ def build_nav_items(role_profile):
 
         if role in ("owner", "committee"):
             items.append({"endpoint": "members", "label": _("Members"), "icon": "bi-people"})
+            items.append({"endpoint": "visitor_log", "label": _("Visitor Log"), "icon": "bi-journal-text"})
             items.append({"endpoint": "invite_links", "label": _("Invite Links"), "icon": "bi-person-plus-fill"})
     else:
         if role in ("employee", "manager"):
@@ -251,6 +266,7 @@ def build_nav_items(role_profile):
         if role == "security":
             items.append({"endpoint": "security_scan", "label": _("Scan Entry / Exit"), "icon": "bi-qr-code-scan"})
             items.append({"endpoint": "unexpected_visitor", "label": _("Unexpected Visitor"), "icon": "bi-person-exclamation"})
+            items.append({"endpoint": "visitor_log", "label": _("Visitor Log"), "icon": "bi-journal-text"})
 
         items.append({"endpoint": "notifications", "label": _("Notifications"), "icon": "bi-bell"})
 
@@ -258,6 +274,7 @@ def build_nav_items(role_profile):
             items.append({"endpoint": "members", "label": _("Team"), "icon": "bi-people"})
 
         if role == "manager":
+            items.append({"endpoint": "visitor_log", "label": _("Visitor Log"), "icon": "bi-journal-text"})
             items.append({"endpoint": "payments", "label": _("Rent Ledger"), "icon": "bi-cash-coin"})
             items.append({"endpoint": "invite_links", "label": _("Invite Links"), "icon": "bi-person-plus-fill"})
 
@@ -1817,6 +1834,311 @@ def remove_member(member_id):
     db.session.commit()
     flash("Member removed.", "success")
     return redirect(url_for("members"))
+
+
+def _visitor_log_query(role_profile, prop):
+    """Base VisitorRequest query for this property, scoped to the viewer's company for offices."""
+    query = VisitorRequest.query.filter_by(property_id=role_profile.property_id)
+    is_office = prop.property_type not in RESIDENTIAL_PROPERTY_TYPES
+    if is_office and role_profile.sub_room_id:
+        host_ids = [
+            rp.id
+            for rp in RoleProfile.query.filter_by(
+                property_id=role_profile.property_id, sub_room_id=role_profile.sub_room_id
+            ).all()
+        ]
+        query = query.filter(VisitorRequest.host_role_profile_id.in_(host_ids))
+    return query
+
+
+@app.route("/visitor-log")
+@login_required
+def visitor_log():
+    role_profile, redirect_resp = _require_role_profile()
+    if redirect_resp:
+        return redirect_resp
+    if role_profile.role not in ("owner", "committee", "manager", "security"):
+        abort(403)
+
+    prop = Property.query.get(role_profile.property_id)
+    query = _visitor_log_query(role_profile, prop)
+
+    search = request.args.get("q", "").strip()
+    if search:
+        like = f"%{search}%"
+        query = query.filter(
+            db.or_(
+                VisitorRequest.visitor_name.ilike(like),
+                VisitorRequest.vehicle_number.ilike(like),
+                VisitorRequest.visitor_phone.ilike(like),
+            )
+        )
+
+    status_filter = request.args.get("status", "").strip()
+    if status_filter:
+        query = query.filter(VisitorRequest.status == status_filter)
+
+    records = query.order_by(VisitorRequest.date.desc(), VisitorRequest.from_time.desc()).limit(500).all()
+
+    return render_template(
+        "visitor_log.html",
+        role_profile=role_profile,
+        property=prop,
+        records=records,
+        search=search,
+        status_filter=status_filter,
+        status_options=REQUEST_STATUS_LABELS,
+        status_classes=REQUEST_STATUS_CLASSES,
+        role_profile_label=_role_profile_label,
+        show_sidebar=True,
+    )
+
+
+@app.route("/visitor-log/export.csv")
+@login_required
+def export_visitor_log_csv():
+    role_profile, redirect_resp = _require_role_profile()
+    if redirect_resp:
+        return redirect_resp
+    if role_profile.role not in ("owner", "committee", "manager", "security"):
+        abort(403)
+
+    prop = Property.query.get(role_profile.property_id)
+    records = (
+        _visitor_log_query(role_profile, prop)
+        .order_by(VisitorRequest.date.desc(), VisitorRequest.from_time.desc())
+        .all()
+    )
+
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow([
+        "Date", "Visitor Name", "Phone", "Vehicle Type", "Vehicle Number",
+        "From", "To", "Purpose", "Host", "Status", "Entry Time", "Exit Time",
+    ])
+    for r in records:
+        writer.writerow([
+            r.date.isoformat(),
+            r.visitor_name,
+            r.visitor_phone,
+            r.vehicle_type,
+            r.vehicle_number,
+            r.from_time.strftime("%H:%M"),
+            r.to_time.strftime("%H:%M"),
+            r.purpose or "-",
+            _role_profile_label(r.host_role_profile),
+            REQUEST_STATUS_LABELS.get(r.status, r.status),
+            r.entry_time.strftime("%Y-%m-%d %H:%M") if r.entry_time else "-",
+            r.exit_time.strftime("%Y-%m-%d %H:%M") if r.exit_time else "-",
+        ])
+
+    return Response(
+        output.getvalue(),
+        mimetype="text/csv",
+        headers={"Content-Disposition": "attachment; filename=visitor_log.csv"},
+    )
+
+
+@app.route("/members/export.csv")
+@login_required
+def export_members_csv():
+    role_profile, redirect_resp = _require_role_profile()
+    if redirect_resp:
+        return redirect_resp
+
+    prop = Property.query.get(role_profile.property_id)
+    is_office = prop.property_type not in RESIDENTIAL_PROPERTY_TYPES
+
+    profile_query = RoleProfile.query.filter_by(property_id=role_profile.property_id)
+    if is_office:
+        profile_query = profile_query.filter_by(sub_room_id=role_profile.sub_room_id)
+    profiles = profile_query.order_by(RoleProfile.role, RoleProfile.id).all()
+
+    output = io.StringIO()
+    writer = csv.writer(output)
+    if is_office:
+        writer.writerow(["Name", "Role", "Employee ID", "Contact", "Shift From", "Shift To"])
+        for p in profiles:
+            d = p.data or {}
+            name = d.get("name") or d.get("employee_name") or "-"
+            writer.writerow([
+                name, p.role, d.get("employee_id", "-"), p.user.contact or "-",
+                d.get("shift_from", "-"), d.get("shift_to", "-"),
+            ])
+    else:
+        writer.writerow(["Name", "Role", "Flat / Unit", "Contact", "Vehicles"])
+        for p in profiles:
+            d = p.data or {}
+            name = d.get("name") or d.get("tenant_name") or d.get("head_name") or "-"
+            flat = d.get("flat_no") or d.get("head_flat_no") or "-"
+            vehicles = ", ".join(v.vehicle_number for v in p.vehicles) or "-"
+            writer.writerow([name, p.role, flat, p.user.contact or "-", vehicles])
+
+    return Response(
+        output.getvalue(),
+        mimetype="text/csv",
+        headers={"Content-Disposition": "attachment; filename=members.csv"},
+    )
+
+
+# ---------------------------------------------------------------------------
+# AI assistant (local Ollama inference, with BYOK option)
+# ---------------------------------------------------------------------------
+
+
+def _get_ai_settings(role_profile):
+    return AISettings.query.filter_by(role_profile_id=role_profile.id).first()
+
+
+def _ai_system_prompt(role_profile):
+    prop = Property.query.get(role_profile.property_id)
+    role_label = str(ROLE_LABELS.get(role_profile.role, role_profile.role.title()))
+    property_label = str(PROPERTY_TYPE_LABELS.get(prop.property_type, prop.property_type))
+    lines = [
+        "You are the FluxPark AI assistant, built into a smart parking and access "
+        "management app for residential and office properties.",
+        f'The current user is a {role_label} at "{prop.name}" ({property_label}).',
+        "Help them with questions about parking slots, visitor passes, transport "
+        "requests, payments, and how to use FluxPark. Keep answers short, friendly, "
+        "and practical.",
+    ]
+    if role_profile.sub_room_id:
+        sub_room = SubRoom.query.get(role_profile.sub_room_id)
+        if sub_room:
+            lines.append(f'Their company is "{sub_room.company_name}".')
+    return "\n".join(lines)
+
+
+@app.route("/ai-assistant", methods=["GET", "POST"])
+@login_required
+def ai_assistant():
+    role_profile, redirect_resp = _require_role_profile()
+    if redirect_resp:
+        return redirect_resp
+
+    if request.method == "POST":
+        if request.form.get("action") == "clear":
+            AIChatMessage.query.filter_by(role_profile_id=role_profile.id).delete()
+            db.session.commit()
+            return redirect(url_for("ai_assistant"))
+
+        user_text = request.form.get("message", "").strip()
+        if user_text:
+            db.session.add(AIChatMessage(role_profile_id=role_profile.id, role="user", content=user_text))
+            db.session.commit()
+
+            history = (
+                AIChatMessage.query.filter_by(role_profile_id=role_profile.id)
+                .order_by(AIChatMessage.id.desc())
+                .limit(20)
+                .all()
+            )
+            history.reverse()
+            chat_messages = [{"role": "system", "content": _ai_system_prompt(role_profile)}]
+            chat_messages += [{"role": m.role, "content": m.content} for m in history]
+
+            settings = _get_ai_settings(role_profile)
+            reply, error = get_chat_reply(settings, chat_messages)
+            if error:
+                flash(error, "warning")
+                reply = reply or _(
+                    "Sorry, I couldn't reach the AI provider. Check your AI settings and try again."
+                )
+            db.session.add(AIChatMessage(role_profile_id=role_profile.id, role="assistant", content=reply))
+            db.session.commit()
+        return redirect(url_for("ai_assistant"))
+
+    chat_messages = (
+        AIChatMessage.query.filter_by(role_profile_id=role_profile.id)
+        .order_by(AIChatMessage.id.asc())
+        .all()
+    )
+    settings = _get_ai_settings(role_profile)
+    provider = settings.provider if settings else "ollama"
+    ollama_host = settings.ollama_host if settings and settings.ollama_host else DEFAULT_OLLAMA_HOST
+    is_running, _models, ollama_error = ollama_status(ollama_host)
+
+    return render_template(
+        "ai_assistant.html",
+        role_profile=role_profile,
+        chat_messages=chat_messages,
+        provider=provider,
+        ollama_running=is_running,
+        ollama_error=ollama_error,
+        show_sidebar=True,
+    )
+
+
+@app.route("/ai-settings", methods=["GET", "POST"])
+@login_required
+def ai_settings():
+    role_profile, redirect_resp = _require_role_profile()
+    if redirect_resp:
+        return redirect_resp
+
+    settings = _get_ai_settings(role_profile)
+
+    if request.method == "POST":
+        action = request.form.get("action", "save")
+        if settings is None:
+            settings = AISettings(role_profile_id=role_profile.id)
+            db.session.add(settings)
+
+        settings.provider = request.form.get("provider", "ollama")
+        settings.ollama_host = request.form.get("ollama_host", "").strip() or DEFAULT_OLLAMA_HOST
+        settings.ollama_model = request.form.get("ollama_model", "").strip() or DEFAULT_OLLAMA_MODEL
+        settings.byok_base_url = request.form.get("byok_base_url", "").strip() or DEFAULT_BYOK_BASE_URL
+        settings.byok_model = request.form.get("byok_model", "").strip() or DEFAULT_BYOK_MODEL
+
+        new_key = request.form.get("byok_api_key", "").strip()
+        if new_key:
+            settings.byok_api_key = new_key
+        elif request.form.get("clear_byok_key") == "1":
+            settings.byok_api_key = None
+
+        db.session.commit()
+
+        if action == "test":
+            is_running, models, error = ollama_status(settings.ollama_host)
+            if is_running:
+                flash(
+                    _("Connected to Ollama at %(host)s. Installed models: %(models)s",
+                      host=settings.ollama_host, models=", ".join(models) or _("none")),
+                    "success",
+                )
+            else:
+                flash(
+                    _("Could not reach Ollama at %(host)s: %(error)s", host=settings.ollama_host, error=error),
+                    "danger",
+                )
+        else:
+            flash(_("AI settings saved."), "success")
+
+        return redirect(url_for("ai_settings"))
+
+    provider = settings.provider if settings else "ollama"
+    ollama_host = settings.ollama_host if settings and settings.ollama_host else DEFAULT_OLLAMA_HOST
+    ollama_model = settings.ollama_model if settings and settings.ollama_model else DEFAULT_OLLAMA_MODEL
+    byok_base_url = settings.byok_base_url if settings and settings.byok_base_url else DEFAULT_BYOK_BASE_URL
+    byok_model = settings.byok_model if settings and settings.byok_model else DEFAULT_BYOK_MODEL
+    has_byok_key = bool(settings and settings.byok_api_key)
+
+    is_running, available_models, ollama_error = ollama_status(ollama_host)
+
+    return render_template(
+        "ai_settings.html",
+        role_profile=role_profile,
+        provider=provider,
+        ollama_host=ollama_host,
+        ollama_model=ollama_model,
+        byok_base_url=byok_base_url,
+        byok_model=byok_model,
+        has_byok_key=has_byok_key,
+        ollama_running=is_running,
+        available_models=available_models,
+        ollama_error=ollama_error,
+        show_sidebar=True,
+    )
 
 
 # ---------------------------------------------------------------------------
