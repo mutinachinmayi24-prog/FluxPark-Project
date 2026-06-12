@@ -820,11 +820,84 @@ def dashboard():
     prop = Property.query.get(role_profile.property_id)
     sub_room = SubRoom.query.get(role_profile.sub_room_id) if role_profile.sub_room_id else None
 
+    today = now_ist().date()
+    now_dt = now_ist()
+
+    unread_count = Notification.query.filter_by(
+        role_profile_id=role_profile.id, is_read=False
+    ).count()
+    recent_notifications = (
+        Notification.query.filter_by(role_profile_id=role_profile.id)
+        .order_by(Notification.created_at.desc())
+        .limit(5)
+        .all()
+    )
+
+    today_requests = []
+    my_slot_rows = []
+    today_availabilities = []
+    pending_approvals = 0
+    commission_today = None
+    today_visitors = []
+
+    if role_profile.role in ("owner", "tenant", "committee"):
+        today_requests = (
+            VisitorRequest.query.filter_by(host_role_profile_id=role_profile.id, date=today)
+            .order_by(VisitorRequest.from_time)
+            .all()
+        )
+        pending_approvals = VisitorRequest.query.filter_by(
+            host_role_profile_id=role_profile.id, status="pending_approval"
+        ).count()
+        my_slots = (
+            ParkingSlot.query.filter_by(
+                property_id=role_profile.property_id, home_role_profile_id=role_profile.id
+            )
+            .order_by(ParkingSlot.slot_number)
+            .all()
+        )
+        my_slot_rows = [(slot, compute_slot_status(slot, today, now_dt)) for slot in my_slots]
+        today_availabilities = (
+            SlotAvailability.query.filter_by(role_profile_id=role_profile.id, date=today)
+            .order_by(SlotAvailability.from_time)
+            .all()
+        )
+        if role_profile.role == "committee":
+            day_start = datetime.combine(today, datetime.min.time())
+            day_end = datetime.combine(today, datetime.max.time())
+            commission_today = (
+                db.session.query(db.func.sum(Transaction.commission_amount))
+                .filter(
+                    Transaction.property_id == role_profile.property_id,
+                    Transaction.status != "cancelled",
+                    Transaction.created_at >= day_start,
+                    Transaction.created_at <= day_end,
+                )
+                .scalar()
+                or 0
+            )
+    elif role_profile.role == "security":
+        today_visitors = (
+            VisitorRequest.query.filter_by(property_id=role_profile.property_id, date=today)
+            .filter(VisitorRequest.status.in_(("allocated", "entered", "exited")))
+            .order_by(VisitorRequest.from_time)
+            .all()
+        )
+
     return render_template(
         "dashboard.html",
         role_profile=role_profile,
         property=prop,
         sub_room=sub_room,
+        unread_count=unread_count,
+        recent_notifications=recent_notifications,
+        today_requests=today_requests,
+        pending_approvals=pending_approvals,
+        my_slot_rows=my_slot_rows,
+        today_availabilities=today_availabilities,
+        commission_today=commission_today,
+        today_visitors=today_visitors,
+        role_profile_label=_role_profile_label,
         show_sidebar=True,
     )
 
