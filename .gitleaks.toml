@@ -1,0 +1,18 @@
+title = "FluxPark gitleaks config"
+
+# Extend gitleaks' default ruleset (https://github.com/gitleaks/gitleaks)
+# with project-specific allowlisting for known, non-secret placeholder values.
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Known placeholder / example values that are not real secrets"
+regexes = [
+  '''dev-secret-key-change-in-production''',
+  '''change-this-to-a-long-random-secret-key''',
+]
+paths = [
+  '''\.env\.example$''',
+  '''translations/.*\.(po|mo|pot)$''',
+  '''messages\.pot$''',
+]

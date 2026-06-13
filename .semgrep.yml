@@ -1,0 +1,34 @@
+# Project-specific Semgrep rules for FluxPark.
+#
+# Run locally with:
+#   semgrep --config .semgrep.yml --config p/python --config p/flask .
+#
+# The CI pipeline (.gitlab-ci.yml) runs this alongside the registry's
+# `p/python` and `p/flask` rule packs.
+
+rules:
+  - id: flask-debug-true
+    languages: [python]
+    severity: WARNING
+    message: >-
+      Avoid running Flask with debug=True outside local development; it
+      enables the Werkzeug debugger, which allows remote code execution if
+      exposed, and leaks verbose error pages.
+    patterns:
+      - pattern: $APP.run(..., debug=True, ...)
+    metadata:
+      category: security
+      references:
+        - https://flask.palletsprojects.com/en/latest/debugging/
+
+  - id: hardcoded-secret-key-fallback
+    languages: [python]
+    severity: WARNING
+    message: >-
+      Avoid hardcoded fallback values for SECRET_KEY or other secrets read
+      from environment variables. Ensure a strong, unique value is always
+      supplied via the environment in production (see .env.example).
+    patterns:
+      - pattern: os.environ.get("SECRET_KEY", "...")
+    metadata:
+      category: security

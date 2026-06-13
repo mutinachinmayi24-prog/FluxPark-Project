@@ -1,0 +1,129 @@
+[project]
+name = "fluxpark"
+version = "0.1.0"
+description = "Parking management platform for residential and office properties, with role-based dashboards, visitor/transport workflows, an AI assistant, and English/Hindi/Telugu support."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "AGPL-3.0-or-later" }
+
+# ---------------------------------------------------------------------------
+# Ruff (lint + format)
+# ---------------------------------------------------------------------------
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+exclude = [
+    ".venv",
+    "venv",
+    "instance",
+    "translations",
+    ".specify",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "C4"]
+ignore = [
+    "E501", # line length is handled by the formatter
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+# ---------------------------------------------------------------------------
+# Mypy (type checking)
+# ---------------------------------------------------------------------------
+[tool.mypy]
+python_version = "3.11"
+ignore_missing_imports = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+no_implicit_optional = false
+exclude = ["tests/", "translations/", "\\.specify/"]
+
+# ---------------------------------------------------------------------------
+# Pylint
+# ---------------------------------------------------------------------------
+[tool.pylint.main]
+ignore = ["translations", ".specify", ".venv", "venv", "instance"]
+py-version = "3.11"
+
+[tool.pylint.format]
+max-line-length = 100
+
+[tool.pylint."messages control"]
+disable = [
+    "missing-module-docstring",
+    "missing-function-docstring",
+    "missing-class-docstring",
+    "too-many-lines",
+    "too-many-locals",
+    "too-many-branches",
+    "too-many-statements",
+    "too-many-arguments",
+    "too-many-positional-arguments",
+    "too-few-public-methods",
+    "duplicate-code",
+    "line-too-long",
+]
+
+# ---------------------------------------------------------------------------
+# Bandit (security static analysis)
+# ---------------------------------------------------------------------------
+[tool.bandit]
+exclude_dirs = ["tests", ".venv", "venv", "translations", ".specify", "instance"]
+# B104: binding to 0.0.0.0 is intentional for the dev server (see app.py / Dockerfile)
+skips = ["B104"]
+
+# ---------------------------------------------------------------------------
+# Vulture (dead code detection)
+# ---------------------------------------------------------------------------
+[tool.vulture]
+min_confidence = 80
+paths = [
+    "app.py",
+    "models.py",
+    "extensions.py",
+    "constants.py",
+    "parking_engine.py",
+    "ai_engine.py",
+    "tests",
+]
+exclude = ["translations/", ".venv/", "venv/", ".specify/"]
+ignore_decorators = [
+    "@app.route",
+    "@app.context_processor",
+    "@app.before_request",
+    "@app.errorhandler",
+    "@app.template_filter",
+    "@babel.localeselector",
+]
+
+# ---------------------------------------------------------------------------
+# Pytest
+# ---------------------------------------------------------------------------
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --cov=. --cov-report=term-missing --cov-fail-under=30"
+
+# ---------------------------------------------------------------------------
+# Coverage.py
+# ---------------------------------------------------------------------------
+[tool.coverage.run]
+branch = true
+source = ["."]
+omit = [
+    "tests/*",
+    ".venv/*",
+    "venv/*",
+    "translations/*",
+    ".specify/*",
+]
+
+[tool.coverage.report]
+fail_under = 30
+exclude_lines = [
+    "pragma: no cover",
+    "if __name__ == .__main__.:",
+    "raise NotImplementedError",
+]

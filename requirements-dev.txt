@@ -1,3 +1,25 @@
 -r requirements.txt
+
+# Linting / formatting / type checking
 ruff
 mypy
+pylint
+flake8
+
+# Security & dead-code analysis
+bandit[toml]
+semgrep
+vulture
+
+# Modernize Python syntax
+pyupgrade
+
+# Testing
+pytest
+pytest-cov
+
+# Dependency vulnerability audit
+pip-audit
+
+# Git hooks
+pre-commit

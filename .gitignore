@@ -4,3 +4,12 @@ instance/
 .env
 .venv/
 venv/
+
+# Test / coverage artifacts
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Linter / type-checker caches
+.ruff_cache/
+.mypy_cache/

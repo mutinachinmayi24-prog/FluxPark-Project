@@ -79,7 +79,7 @@ from parking_engine import (
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "dev-secret-key-change-in-production")
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL", "sqlite:///database.db")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["LANGUAGES"] = {"en": "English", "hi": "हिन्दी", "te": "తెలుగు"}
 app.config["BABEL_DEFAULT_LOCALE"] = "en"

@@ -1,0 +1,110 @@
+stages:
+  - lint
+  - security
+  - test
+  - changelog
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+cache:
+  key: "$CI_COMMIT_REF_SLUG-pip"
+  paths:
+    - .cache/pip
+
+default:
+  image: python:3.12-slim
+  before_script:
+    - python -m pip install --upgrade pip
+    - pip install -r requirements-dev.txt
+
+# ---------------------------------------------------------------------------
+# Lint / formatting / type checking
+# ---------------------------------------------------------------------------
+ruff:
+  stage: lint
+  script:
+    - ruff check .
+    - ruff format --check .
+
+flake8:
+  stage: lint
+  script:
+    - flake8 .
+
+pylint:
+  stage: lint
+  script:
+    - pylint app.py models.py extensions.py constants.py parking_engine.py ai_engine.py
+  allow_failure: true # tighten as the codebase is brought into compliance
+
+mypy:
+  stage: lint
+  script:
+    - mypy .
+  allow_failure: true # tighten as type hints are added
+
+pyupgrade:
+  stage: lint
+  script:
+    - pyupgrade --py311-plus $(git ls-files '*.py')
+  allow_failure: true
+
+vulture:
+  stage: lint
+  script:
+    - vulture
+  allow_failure: true # dead-code findings are reviewed manually before enforcing
+
+# ---------------------------------------------------------------------------
+# Security
+# ---------------------------------------------------------------------------
+bandit:
+  stage: security
+  script:
+    - bandit -c pyproject.toml -r .
+
+semgrep:
+  stage: security
+  image: semgrep/semgrep
+  script:
+    - semgrep --config .semgrep.yml --config p/python --config p/flask --error .
+
+gitleaks:
+  stage: security
+  image:
+    name: zricethezav/gitleaks:latest
+    entrypoint: [""]
+  script:
+    - gitleaks detect --source . --config .gitleaks.toml --no-banner --redact -v
+
+pip-audit:
+  stage: security
+  script:
+    - pip-audit -r requirements.txt
+  allow_failure: true # dependency advisories are triaged separately from blocking the pipeline
+
+# ---------------------------------------------------------------------------
+# Tests
+# ---------------------------------------------------------------------------
+pytest:
+  stage: test
+  script:
+    - pytest
+  coverage: '/TOTAL.+?(\d+(?:\.\d+)?%)/'
+
+# ---------------------------------------------------------------------------
+# Changelog
+# ---------------------------------------------------------------------------
+changelog:
+  stage: changelog
+  image:
+    name: orhunp/git-cliff:latest
+    entrypoint: [""]
+  script:
+    - git-cliff -o CHANGELOG.md
+  artifacts:
+    paths:
+      - CHANGELOG.md
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
