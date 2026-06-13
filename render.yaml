@@ -1,0 +1,14 @@
+# Render Blueprint — https://render.com/docs/blueprint-spec
+#
+# Deploy: on Render, click "New +" -> "Blueprint", connect this repo, and
+# Render will read this file to create the service below automatically.
+services:
+  - type: web
+    name: fluxpark
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /signup
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
