@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}{{ _('My Rooms') }} - FluxPark{% endblock %}
+
+{% block content %}
+  <h3 class="fw-bold mb-1">{{ _('My Rooms') }}</h3>
+  <p class="text-muted mb-4">{{ _('Switch between properties or companies you are part of, or join another using an invite link.') }}</p>
+
+  <div class="row g-3 mb-4">
+    {% for rp in role_profiles %}
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title mb-1">{{ rp.property.name }}</h5>
+            {% if rp.sub_room %}
+              <p class="text-muted small mb-2">{{ rp.sub_room.company_name }}</p>
+            {% endif %}
+            <span class="badge bg-brand align-self-start mb-3">{{ ROLE_LABELS.get(rp.role, rp.role.title()) }}</span>
+            <div class="mt-auto">
+              {% if rp.id == active_id %}
+                <span class="text-success fw-semibold small"><i class="bi bi-check-circle-fill me-1"></i>{{ _('Currently active') }}</span>
+              {% else %}
+                <form method="POST" action="{{ url_for('switch_room', role_profile_id=rp.id) }}">
+                  <button type="submit" class="btn btn-sm btn-outline-brand">{{ _('Switch to this room') }}</button>
+                </form>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <div class="col-12">
+        <p class="text-muted">{{ _("You haven't joined any rooms yet.") }}</p>
+      </div>
+    {% endfor %}
+  </div>
+
+  <div class="card border-0 shadow-sm">
+    <div class="card-body">
+      <h5 class="card-title">{{ _('Join another room') }}</h5>
+      <p class="text-muted small">{{ _('Paste an invite link or code you received to join another property or company.') }}</p>
+      <form method="POST" action="{{ url_for('join_room') }}" class="row g-2 align-items-end">
+        <div class="col-12 col-md-8">
+          <input type="text" name="invite" class="form-control" placeholder="{{ _('Invite link or code') }}" required>
+        </div>
+        <div class="col-12 col-md-4">
+          <button type="submit" class="btn btn-brand w-100">{{ _('Join') }}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

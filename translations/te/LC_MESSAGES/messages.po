@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-06-12 17:06+0530\n"
+"POT-Creation-Date: 2026-06-12 20:53+0530\n"
 "PO-Revision-Date: 2026-06-12 12:33+0530\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: te <LL@li.org>\n"
@@ -91,12 +91,16 @@ msgstr "టీమ్"
 msgid "Rent Ledger"
 msgstr "అద్దె లెడ్జర్"
 
-#: app.py:283 templates/my_profile.html:2 templates/my_profile.html:13
+#: app.py:283 templates/my_rooms.html:2 templates/my_rooms.html:5
+msgid "My Rooms"
+msgstr "నా రూమ్‌లు"
+
+#: app.py:284 templates/my_profile.html:2 templates/my_profile.html:13
 #: templates/parking_availability.html:60
 msgid "My Profile"
 msgstr "నా ప్రొఫైల్"
 
-#: app.py:319
+#: app.py:320
 #, python-format
 msgid ""
 "Demo mode: your verification code is %(code)s (valid for %(minutes)s "
@@ -105,193 +109,203 @@ msgstr ""
 "డెమో మోడ్: మీ వెరిఫికేషన్ కోడ్ %(code)s (ఇది %(minutes)s నిమిషాల పాటు "
 "చెల్లుబాటు అవుతుంది)."
 
-#: app.py:403
+#: app.py:407 app.py:1180
 msgid "This invite link is invalid or has expired."
 msgstr "ఈ ఆహ్వాన లింక్ చెల్లదు లేదా గడువు ముగిసింది."
 
-#: app.py:411
+#: app.py:415
 msgid "Please choose email or phone."
 msgstr "దయచేసి ఇమెయిల్ లేదా ఫోన్ ఎంచుకోండి."
 
-#: app.py:413
+#: app.py:417
 msgid "Please enter a valid email address."
 msgstr "దయచేసి సరైన ఇమెయిల్ చిరునామా నమోదు చేయండి."
 
-#: app.py:415
+#: app.py:419
 msgid "Please enter a valid 10-digit mobile number."
 msgstr "దయచేసి సరైన 10-అంకెల మొబైల్ నంబర్‌ను నమోదు చేయండి."
 
-#: app.py:447
+#: app.py:451
 msgid "Your OTP has expired. Please request a new one."
 msgstr "మీ OTP గడువు ముగిసింది. దయచేసి కొత్త OTP అభ్యర్థించండి."
 
-#: app.py:449
+#: app.py:453
 msgid "Incorrect OTP. Please try again."
 msgstr "తప్పు OTP. దయచేసి మళ్ళీ ప్రయత్నించండి."
 
-#: app.py:491
+#: app.py:498
 msgid "Please select a property type."
 msgstr "దయచేసి ఒక ప్రాపర్టీ రకాన్ని ఎంచుకోండి."
 
-#: app.py:518
+#: app.py:525
 msgid "Please select Apartment or Gated Community."
 msgstr "దయచేసి అపార్ట్‌మెంట్ లేదా గేటెడ్ కమ్యూనిటీని ఎంచుకోండి."
 
-#: app.py:520 app.py:572
+#: app.py:527 app.py:579
 msgid "Please enter the property name."
 msgstr "దయచేసి ప్రాపర్టీ పేరు నమోదు చేయండి."
 
-#: app.py:522 app.py:574
+#: app.py:529 app.py:581
 msgid "Please enter the address."
 msgstr "దయచేసి చిరునామా నమోదు చేయండి."
 
-#: app.py:524
+#: app.py:531
 msgid "Number of flats must be a number."
 msgstr "ఫ్లాట్ల సంఖ్య తప్పనిసరిగా ఒక సంఖ్య అయి ఉండాలి."
 
-#: app.py:526
+#: app.py:533
 msgid "Extra parking spaces must be a number."
 msgstr "అదనపు పార్కింగ్ స్థలాల సంఖ్య తప్పనిసరిగా ఒక సంఖ్య అయి ఉండాలి."
 
-#: app.py:586
+#: app.py:593
 #, python-format
 msgid "Please enter valid numbers for company '%(name)s'."
 msgstr "దయచేసి కంపెనీ '%(name)s' కోసం సరైన సంఖ్యలను నమోదు చేయండి."
 
-#: app.py:599
+#: app.py:606
 msgid "Please add at least one company."
 msgstr "దయచేసి కనీసం ఒక కంపెనీని జోడించండి."
 
-#: app.py:664
+#: app.py:671
 msgid "Please select your company to continue."
 msgstr "కొనసాగించడానికి దయచేసి మీ కంపెనీని ఎంచుకోండి."
 
-#: app.py:690
+#: app.py:697
 msgid "Please select a role."
 msgstr "దయచేసి ఒక పాత్రను ఎంచుకోండి."
 
-#: app.py:870
+#: app.py:877
 msgid "Please fill in all required fields."
 msgstr "దయచేసి అన్ని తప్పనిసరి ఫీల్డ్‌లను పూరించండి."
 
-#: app.py:875
+#: app.py:882
 msgid "Please enter your vehicle type and number for self-transport."
 msgstr ""
 "సెల్ఫ్-ట్రాన్స్‌పోర్ట్ కోసం దయచేసి మీ వాహన రకం మరియు నంబర్‌ను నమోదు చేయండి."
 
-#: app.py:880
+#: app.py:887
 msgid "Please fill in all required bank details."
 msgstr "దయచేసి అన్ని తప్పనిసరి బ్యాంక్ వివరాలను పూరించండి."
 
-#: app.py:884
+#: app.py:891
 msgid "Please add at least one vehicle."
 msgstr "దయచేసి కనీసం ఒక వాహనాన్ని జోడించండి."
 
-#: app.py:889
+#: app.py:896
 #, python-format
 msgid "Vehicle number(s) already registered to another member: %(numbers)s"
 msgstr "వాహన నంబర్(లు) ఇప్పటికే మరొక సభ్యునికి నమోదు చేయబడ్డాయి: %(numbers)s"
 
-#: app.py:894
+#: app.py:901
 #, python-format
 msgid "Vehicle number %(number)s is already registered to another member."
 msgstr "వాహన నంబర్ %(number)s ఇప్పటికే మరొక సభ్యునికి నమోదు చేయబడింది."
 
-#: app.py:899
+#: app.py:906
 msgid "This Employee ID is already registered."
 msgstr "ఈ ఉద్యోగి ఐడి ఇప్పటికే నమోదు చేయబడింది."
 
-#: app.py:1113
+#: app.py:1120
 msgid "Profile updated successfully."
 msgstr "ప్రొఫైల్ విజయవంతంగా అప్‌డేట్ చేయబడింది."
 
-#: app.py:1151 app.py:2386
+#: app.py:1168
+#, python-format
+msgid "Switched to %(name)s."
+msgstr "%(name)sకి మారారు."
+
+#: app.py:1202
+#, python-format
+msgid "You're already part of %(name)s."
+msgstr "మీరు ఇప్పటికే %(name)s లో భాగంగా ఉన్నారు."
+
+#: app.py:1237 app.py:2472
 msgid "Please enter the visitor's name."
 msgstr "దయచేసి విజిటర్ పేరును నమోదు చేయండి."
 
-#: app.py:1153 app.py:2388
+#: app.py:1239 app.py:2474
 msgid "Please enter a valid 10-digit visitor phone number."
 msgstr "దయచేసి విజిటర్ యొక్క సరైన 10-అంకెల ఫోన్ నంబర్‌ను నమోదు చేయండి."
 
-#: app.py:1155 app.py:1352 app.py:2390
+#: app.py:1241 app.py:1438 app.py:2476
 msgid "Please select a vehicle type."
 msgstr "దయచేసి ఒక వాహన రకాన్ని ఎంచుకోండి."
 
-#: app.py:1157 app.py:1354 app.py:2392
+#: app.py:1243 app.py:1440 app.py:2478
 msgid "Please enter the vehicle number."
 msgstr "దయచేసి వాహన నంబర్‌ను నమోదు చేయండి."
 
-#: app.py:1159 app.py:1232
+#: app.py:1245 app.py:1318
 msgid "Please fill in date, from time and to time."
 msgstr "దయచేసి తేదీ, ప్రారంభ సమయం మరియు ముగింపు సమయం నమోదు చేయండి."
 
-#: app.py:1179
+#: app.py:1265
 msgid "Visitor request created and a parking slot was allocated!"
 msgstr ""
 "విజిటర్ రిక్వెస్ట్ సృష్టించబడింది మరియు ఒక పార్కింగ్ స్లాట్ కేటాయించబడింది!"
 
-#: app.py:1181
+#: app.py:1267
 msgid "Visitor request created. We'll notify you once a slot is available."
 msgstr ""
 "విజిటర్ రిక్వెస్ట్ సృష్టించబడింది. స్లాట్ అందుబాటులోకి వచ్చిన వెంటనే మేము "
 "మీకు తెలియజేస్తాము."
 
-#: app.py:1230
+#: app.py:1316
 msgid "Please select a valid parking slot of yours."
 msgstr "దయచేసి మీ సరైన పార్కింగ్ స్లాట్‌ను ఎంచుకోండి."
 
-#: app.py:1238
+#: app.py:1324
 msgid "Rent per hour must be greater than zero."
 msgstr "గంటకు అద్దె సున్నా కంటే ఎక్కువగా ఉండాలి."
 
-#: app.py:1240
+#: app.py:1326
 msgid "Please enter a valid rent per hour."
 msgstr "దయచేసి గంటకు సరైన అద్దెను నమోదు చేయండి."
 
-#: app.py:1257
+#: app.py:1343
 msgid "Slot listed and already matched with a waiting visitor!"
 msgstr "స్లాట్ లిస్ట్ చేయబడింది మరియు వేచి ఉన్న విజిటర్‌తో మ్యాచ్ చేయబడింది!"
 
-#: app.py:1259
+#: app.py:1345
 msgid "Your parking slot has been listed as available."
 msgstr "మీ పార్కింగ్ స్లాట్ అందుబాటులో ఉన్నదిగా లిస్ట్ చేయబడింది."
 
-#: app.py:1292
+#: app.py:1378
 msgid "This slot isn't currently matched with a visitor."
 msgstr "ఈ స్లాట్ ప్రస్తుతం ఏ విజిటర్‌తోనూ మ్యాచ్ కాలేదు."
 
-#: app.py:1296
+#: app.py:1382
 msgid "Marked as returned. We've notified everyone affected."
 msgstr ""
 "తిరిగి వచ్చినట్లు మార్క్ చేయబడింది. ప్రభావితమైన అందరికీ మేము తెలియజేశాము."
 
-#: app.py:1329
+#: app.py:1415
 msgid "There's no pending request for tomorrow to cancel."
 msgstr "రద్దు చేయడానికి రేపటి కోసం ఎలాంటి పెండింగ్ రిక్వెస్ట్ లేదు."
 
-#: app.py:1331 templates/transport_request.html:37
+#: app.py:1417 templates/transport_request.html:37
 msgid "The 9 PM cutoff has passed; this request can no longer be changed."
 msgstr ""
 "రాత్రి 9 గంటల గడువు ముగిసింది; ఈ రిక్వెస్ట్‌ను ఇప్పుడు మార్చడం సాధ్యం కాదు."
 
-#: app.py:1335
+#: app.py:1421
 msgid "Transport request for tomorrow cancelled."
 msgstr "రేపటి కోసం ట్రాన్స్‌పోర్ట్ రిక్వెస్ట్ రద్దు చేయబడింది."
 
-#: app.py:1339
+#: app.py:1425
 msgid "You've already submitted a transport request for tomorrow."
 msgstr "మీరు రేపటి కోసం ఇప్పటికే ట్రాన్స్‌పోర్ట్ రిక్వెస్ట్‌ను సమర్పించారు."
 
-#: app.py:1342
+#: app.py:1428
 msgid "Requests for tomorrow's parking must be submitted before 9 PM today."
 msgstr ""
 "రేపటి పార్కింగ్ కోసం రిక్వెస్ట్‌లు ఈరోజు రాత్రి 9 గంటలలోపు సమర్పించాలి."
 
-#: app.py:1356
+#: app.py:1442
 msgid "Please fill in your shift start and end time."
 msgstr "దయచేసి మీ షిఫ్ట్ ప్రారంభ మరియు ముగింపు సమయాన్ని నమోదు చేయండి."
 
-#: app.py:1372
+#: app.py:1458
 msgid ""
 "Transport request for tomorrow submitted. Slots are allocated after the 9 PM"
 " cutoff."
@@ -299,65 +313,65 @@ msgstr ""
 "రేపటి కోసం ట్రాన్స్‌పోర్ట్ రిక్వెస్ట్ సమర్పించబడింది. రాత్రి 9 గంటల గడువు "
 "తర్వాత స్లాట్‌లు కేటాయించబడతాయి."
 
-#: app.py:1441
+#: app.py:1527
 #, python-format
 msgid "Duplicate slot number '%(slot_number)s' in the table."
 msgstr "టేబుల్‌లో నకిలీ స్లాట్ నంబర్ '%(slot_number)s' ఉంది."
 
-#: app.py:1449
+#: app.py:1535
 #, python-format
 msgid "Entrance/ramp rank for slot '%(slot_number)s' must be a number."
 msgstr ""
 "స్లాట్ '%(slot_number)s' కోసం ఎంట్రెన్స్/రాంప్ ర్యాంక్ తప్పనిసరిగా ఒక సంఖ్య "
 "అయి ఉండాలి."
 
-#: app.py:1479 app.py:1490
+#: app.py:1565 app.py:1576
 #, python-format
 msgid "Slot number '%(slot_number)s' is already in use."
 msgstr "స్లాట్ నంబర్ '%(slot_number)s' ఇప్పటికే ఉపయోగంలో ఉంది."
 
-#: app.py:1510
+#: app.py:1596
 msgid "Parking layout updated."
 msgstr "పార్కింగ్ లేఅవుట్ అప్‌డేట్ చేయబడింది."
 
-#: app.py:1659 app.py:1688
+#: app.py:1745 app.py:1774
 msgid "This request has already been processed."
 msgstr "ఈ రిక్వెస్ట్ ఇప్పటికే ప్రాసెస్ చేయబడింది."
 
-#: app.py:1671
+#: app.py:1757
 #, python-format
 msgid "Approved %(name)s and allocated a parking slot."
 msgstr "%(name)sను ఆమోదించి, ఒక పార్కింగ్ స్లాట్ కేటాయించబడింది."
 
-#: app.py:1673
+#: app.py:1759
 #, python-format
 msgid "Approved %(name)s. We'll notify you once a slot is available."
 msgstr ""
 "%(name)sను ఆమోదించాము. స్లాట్ అందుబాటులోకి వచ్చిన వెంటనే మేము మీకు "
 "తెలియజేస్తాము."
 
-#: app.py:1700
+#: app.py:1786
 #, python-format
 msgid "Denied entry for %(name)s."
 msgstr "%(name)s కోసం ఎంట్రీ తిరస్కరించబడింది."
 
-#: app.py:1770
+#: app.py:1856
 msgid "This payment has already been processed."
 msgstr "ఈ చెల్లింపు ఇప్పటికే ప్రాసెస్ చేయబడింది."
 
-#: app.py:1781
+#: app.py:1867
 msgid "Marked as paid."
 msgstr "చెల్లించినట్లు మార్క్ చేయబడింది."
 
-#: app.py:1830
+#: app.py:1916
 msgid "You cannot remove yourself."
 msgstr "మీరు మిమ్మల్ని మీరు తీసివేయలేరు."
 
-#: app.py:1840
+#: app.py:1926
 msgid "Member removed."
 msgstr "సభ్యుడు తీసివేయబడింది."
 
-#: app.py:2050
+#: app.py:2136
 msgid ""
 "Sorry, I couldn't reach the AI provider. Check your AI settings and try "
 "again."
@@ -365,192 +379,78 @@ msgstr ""
 "క్షమించండి, AI ప్రొవైడర్‌ను చేరుకోలేకపోయాను. మీ AI సెట్టింగ్‌లను తనిఖీ చేసి,"
 " మళ్లీ ప్రయత్నించండి."
 
-#: app.py:2110
+#: app.py:2196
 #, python-format
 msgid "Connected to Ollama at %(host)s. Installed models: %(models)s"
 msgstr ""
 "%(host)s వద్ద Ollamaకు కనెక్ట్ అయింది. ఇన్‌స్టాల్ చేసిన మోడల్‌లు: %(models)s"
 
-#: app.py:2111
+#: app.py:2197
 msgid "none"
 msgstr "ఏదీ లేదు"
 
-#: app.py:2116
+#: app.py:2202
 #, python-format
 msgid "Could not reach Ollama at %(host)s: %(error)s"
 msgstr "%(host)s వద్ద Ollamaను చేరుకోలేకపోయాను: %(error)s"
 
-#: app.py:2120
+#: app.py:2206
 msgid "AI settings saved."
 msgstr "AI సెట్టింగ్‌లు సేవ్ చేయబడ్డాయి."
 
-#: app.py:2225
+#: app.py:2311
 msgid "No pass found for that code."
 msgstr "ఆ కోడ్ కోసం ఏ పాస్ కనుగొనబడలేదు."
 
-#: app.py:2264
+#: app.py:2350
 msgid "This visitor cannot be marked as entered right now."
 msgstr "ఈ విజిటర్‌ను ఇప్పుడు ప్రవేశించినట్లు మార్క్ చేయడం సాధ్యం కాదు."
 
-#: app.py:2270
+#: app.py:2356
 #, python-format
 msgid "%(name)s marked as entered."
 msgstr "%(name)s ప్రవేశించినట్లు మార్క్ చేయబడింది."
 
-#: app.py:2285
+#: app.py:2371
 msgid "This visitor cannot be marked as exited right now."
 msgstr "ఈ విజిటర్‌ను ఇప్పుడు నిష్క్రమించినట్లు మార్క్ చేయడం సాధ్యం కాదు."
 
-#: app.py:2291
+#: app.py:2377
 #, python-format
 msgid "%(name)s marked as exited."
 msgstr "%(name)s నిష్క్రమించినట్లు మార్క్ చేయబడింది."
 
-#: app.py:2325
+#: app.py:2411
 msgid "This pass cannot be marked as entered right now."
 msgstr "ఈ పాస్‌ను ఇప్పుడు ప్రవేశించినట్లు మార్క్ చేయడం సాధ్యం కాదు."
 
-#: app.py:2331
+#: app.py:2417
 msgid "Marked as entered."
 msgstr "ప్రవేశించినట్లు మార్క్ చేయబడింది."
 
-#: app.py:2346
+#: app.py:2432
 msgid "This pass cannot be marked as exited right now."
 msgstr "ఈ పాస్‌ను ఇప్పుడు నిష్క్రమించినట్లు మార్క్ చేయడం సాధ్యం కాదు."
 
-#: app.py:2352
+#: app.py:2438
 msgid "Marked as exited."
 msgstr "నిష్క్రమించినట్లు మార్క్ చేయబడింది."
 
-#: app.py:2394
+#: app.py:2480
 msgid "Please select a date."
 msgstr "దయచేసి ఒక తేదీని ఎంచుకోండి."
 
-#: app.py:2402
+#: app.py:2488
 msgid "Please select who the visitor is here to see."
 msgstr "విజిటర్ ఎవరిని కలవడానికి వచ్చారో దయచేసి ఎంచుకోండి."
 
-#: app.py:2411
+#: app.py:2497
 msgid "Please enter the from and to time."
 msgstr "దయచేసి ప్రారంభ మరియు ముగింపు సమయాన్ని నమోదు చేయండి."
 
-#: app.py:2461
+#: app.py:2547
 msgid "Visitor logged. Waiting for resident approval."
 msgstr "విజిటర్ లాగ్ చేయబడింది. నివాసి ఆమోదం కోసం వేచి ఉంది."
-
-#: constants.py:4 constants.py:34 templates/property_form_residential.html:14
-msgid "Apartment"
-msgstr "అపార్ట్‌మెంట్"
-
-#: constants.py:5 constants.py:35 templates/property_form_residential.html:18
-msgid "Gated Community"
-msgstr "గేటెడ్ కమ్యూనిటీ"
-
-#: constants.py:6 constants.py:36
-msgid "Office"
-msgstr "ఆఫీసు"
-
-#: constants.py:12 constants.py:25
-msgid "Owner"
-msgstr "యజమాని"
-
-#: constants.py:13 constants.py:26
-msgid "Tenant"
-msgstr "అద్దెదారు"
-
-#: constants.py:14 constants.py:27
-msgid "Committee"
-msgstr "కమిటీ"
-
-#: constants.py:15 constants.py:20 constants.py:28
-msgid "Security"
-msgstr "సెక్యూరిటీ"
-
-#: constants.py:19 constants.py:29 templates/security_transport.html:12
-#: templates/transport_pass.html:11
-msgid "Employee"
-msgstr "ఉద్యోగి"
-
-#: constants.py:21 constants.py:30
-msgid "Manager"
-msgstr "మేనేజర్"
-
-#: constants.py:42
-msgid "Bike"
-msgstr "బైక్"
-
-#: constants.py:43
-msgid "Car"
-msgstr "కారు"
-
-#: constants.py:44
-msgid "Auto"
-msgstr "ఆటో"
-
-#: constants.py:45
-msgid "Truck"
-msgstr "ట్రక్"
-
-#: constants.py:46
-msgid "Camper"
-msgstr "క్యాంపర్"
-
-#: constants.py:47
-msgid "Cycle"
-msgstr "సైకిల్"
-
-#: constants.py:48
-msgid "Other"
-msgstr "ఇతర"
-
-#: parking_engine.py:29
-msgid "Vacant"
-msgstr "ఖాళీ"
-
-#: parking_engine.py:29
-msgid "Booked"
-msgstr "బుక్డ్"
-
-#: parking_engine.py:29
-msgid "Occupied"
-msgstr "ఆక్యుపైడ్"
-
-#: parking_engine.py:33
-msgid "Pending allocation"
-msgstr "కేటాయింపు పెండింగ్‌లో ఉంది"
-
-#: parking_engine.py:34
-msgid "Pending approval"
-msgstr "ఆమోదం పెండింగ్‌లో ఉంది"
-
-#: parking_engine.py:35
-msgid "Allocated"
-msgstr "కేటాయించబడింది"
-
-#: parking_engine.py:36
-msgid "No slot available"
-msgstr "స్లాట్ అందుబాటులో లేదు"
-
-#: parking_engine.py:37
-msgid "Entered"
-msgstr "ప్రవేశించారు"
-
-#: parking_engine.py:38
-msgid "Exited"
-msgstr "నిష్క్రమించారు"
-
-#: parking_engine.py:39
-msgid "Rejected"
-msgstr "తిరస్కరించబడింది"
-
-#: parking_engine.py:40
-msgid "Needs reallocation"
-msgstr "మళ్లీ కేటాయించాల్సి ఉంది"
-
-#: parking_engine.py:41 templates/dashboard.html:224
-#: templates/parking_availability.html:84
-msgid "Cancelled"
-msgstr "రద్దు చేయబడింది"
 
 #: templates/_bank_details.html:1 templates/my_profile.html:71
 #: templates/my_profile.html:122
@@ -930,6 +830,10 @@ msgstr "మ్యాచ్ అయింది"
 msgid "Completed"
 msgstr "పూర్తయింది"
 
+#: templates/dashboard.html:224 templates/parking_availability.html:84
+msgid "Cancelled"
+msgstr "రద్దు చేయబడింది"
+
 #: templates/dashboard.html:250 templates/security_visitor.html:34
 #: templates/unexpected_visitor.html:34 templates/unexpected_visitor.html:89
 msgid "Visiting"
@@ -1215,6 +1119,46 @@ msgstr "/ గంట"
 #: templates/my_profile.html:156
 msgid "Save Changes"
 msgstr "మార్పులను సేవ్ చేయండి"
+
+#: templates/my_rooms.html:6
+msgid ""
+"Switch between properties or companies you are part of, or join another "
+"using an invite link."
+msgstr ""
+"మీరు భాగంగా ఉన్న ప్రాపర్టీలు లేదా కంపెనీల మధ్య మారండి, లేదా ఆహ్వాన లింక్ "
+"ద్వారా మరొకదానిలో చేరండి."
+
+#: templates/my_rooms.html:20
+msgid "Currently active"
+msgstr "ప్రస్తుతం యాక్టివ్‌లో ఉంది"
+
+#: templates/my_rooms.html:23
+msgid "Switch to this room"
+msgstr "ఈ రూమ్‌కి మారండి"
+
+#: templates/my_rooms.html:32
+msgid "You haven't joined any rooms yet."
+msgstr "మీరు ఇంకా ఏ రూమ్‌లోనూ చేరలేదు."
+
+#: templates/my_rooms.html:39
+msgid "Join another room"
+msgstr "మరొక రూమ్‌లో చేరండి"
+
+#: templates/my_rooms.html:40
+msgid ""
+"Paste an invite link or code you received to join another property or "
+"company."
+msgstr ""
+"మరొక ప్రాపర్టీ లేదా కంపెనీలో చేరడానికి మీకు అందిన ఆహ్వాన లింక్ లేదా కోడ్‌ను "
+"పేస్ట్ చేయండి."
+
+#: templates/my_rooms.html:43
+msgid "Invite link or code"
+msgstr "ఆహ్వాన లింక్ లేదా కోడ్"
+
+#: templates/my_rooms.html:46
+msgid "Join"
+msgstr "చేరండి"
 
 #: templates/notifications.html:10
 msgid "Mark all as read"
@@ -1564,6 +1508,14 @@ msgstr "మీ అపార్ట్‌మెంట్ లేదా గేటె
 msgid "Property Type"
 msgstr "ప్రాపర్టీ రకం"
 
+#: templates/property_form_residential.html:14
+msgid "Apartment"
+msgstr "అపార్ట్‌మెంట్"
+
+#: templates/property_form_residential.html:18
+msgid "Gated Community"
+msgstr "గేటెడ్ కమ్యూనిటీ"
+
 #: templates/property_form_residential.html:23
 msgid "Name of the Apartment / Community"
 msgstr "అపార్ట్‌మెంట్ / కమ్యూనిటీ పేరు"
@@ -1762,6 +1714,10 @@ msgid "Verify the employee's details before allowing entry or exit."
 msgstr ""
 "ప్రవేశం లేదా నిష్క్రమణను అనుమతించే ముందు ఉద్యోగి వివరాలను నిర్ధారించండి."
 
+#: templates/security_transport.html:12 templates/transport_pass.html:11
+msgid "Employee"
+msgstr "ఉద్యోగి"
+
 #: templates/security_transport.html:34
 msgid "Company"
 msgstr "కంపెనీ"
@@ -1954,7 +1910,6 @@ msgid "For walk-in visitors who haven't been pre-approved by a resident."
 msgstr "నివాసి ద్వారా ముందుగా ఆమోదించబడని వాక్-ఇన్ విజిటర్ల కోసం."
 
 #: templates/unexpected_visitor.html:13 templates/visitor_request.html:15
-#, python-format
 msgid "Visitor Name"
 msgstr "విజిటర్ పేరు"
 
@@ -2077,3 +2032,75 @@ msgstr "పాస్ చూడండి"
 #: templates/visitor_request.html:101
 msgid "You haven't created any visitor requests yet."
 msgstr "మీరు ఇంకా ఏ విజిటర్ రిక్వెస్ట్‌ను సృష్టించలేదు."
+
+#~ msgid "Office"
+#~ msgstr "ఆఫీసు"
+
+#~ msgid "Owner"
+#~ msgstr "యజమాని"
+
+#~ msgid "Tenant"
+#~ msgstr "అద్దెదారు"
+
+#~ msgid "Committee"
+#~ msgstr "కమిటీ"
+
+#~ msgid "Security"
+#~ msgstr "సెక్యూరిటీ"
+
+#~ msgid "Manager"
+#~ msgstr "మేనేజర్"
+
+#~ msgid "Bike"
+#~ msgstr "బైక్"
+
+#~ msgid "Car"
+#~ msgstr "కారు"
+
+#~ msgid "Auto"
+#~ msgstr "ఆటో"
+
+#~ msgid "Truck"
+#~ msgstr "ట్రక్"
+
+#~ msgid "Camper"
+#~ msgstr "క్యాంపర్"
+
+#~ msgid "Cycle"
+#~ msgstr "సైకిల్"
+
+#~ msgid "Other"
+#~ msgstr "ఇతర"
+
+#~ msgid "Vacant"
+#~ msgstr "ఖాళీ"
+
+#~ msgid "Booked"
+#~ msgstr "బుక్డ్"
+
+#~ msgid "Occupied"
+#~ msgstr "ఆక్యుపైడ్"
+
+#~ msgid "Pending allocation"
+#~ msgstr "కేటాయింపు పెండింగ్‌లో ఉంది"
+
+#~ msgid "Pending approval"
+#~ msgstr "ఆమోదం పెండింగ్‌లో ఉంది"
+
+#~ msgid "Allocated"
+#~ msgstr "కేటాయించబడింది"
+
+#~ msgid "No slot available"
+#~ msgstr "స్లాట్ అందుబాటులో లేదు"
+
+#~ msgid "Entered"
+#~ msgstr "ప్రవేశించారు"
+
+#~ msgid "Exited"
+#~ msgstr "నిష్క్రమించారు"
+
+#~ msgid "Rejected"
+#~ msgstr "తిరస్కరించబడింది"
+
+#~ msgid "Needs reallocation"
+#~ msgstr "మళ్లీ కేటాయించాల్సి ఉంది"

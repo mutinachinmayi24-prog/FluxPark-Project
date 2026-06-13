@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-06-12 17:06+0530\n"
+"POT-Creation-Date: 2026-06-12 21:01+0530\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -90,447 +90,347 @@ msgstr ""
 msgid "Rent Ledger"
 msgstr ""
 
-#: app.py:283 templates/my_profile.html:2 templates/my_profile.html:13
+#: app.py:283 templates/my_rooms.html:2 templates/my_rooms.html:5
+msgid "My Rooms"
+msgstr ""
+
+#: app.py:284 templates/my_profile.html:2 templates/my_profile.html:13
 #: templates/parking_availability.html:60
 msgid "My Profile"
 msgstr ""
 
-#: app.py:319
+#: app.py:320
 #, python-format
 msgid ""
 "Demo mode: your verification code is %(code)s (valid for %(minutes)s "
 "minutes)."
 msgstr ""
 
-#: app.py:403
+#: app.py:407 app.py:1180
 msgid "This invite link is invalid or has expired."
 msgstr ""
 
-#: app.py:411
+#: app.py:415
 msgid "Please choose email or phone."
 msgstr ""
 
-#: app.py:413
+#: app.py:417
 msgid "Please enter a valid email address."
 msgstr ""
 
-#: app.py:415
+#: app.py:419
 msgid "Please enter a valid 10-digit mobile number."
 msgstr ""
 
-#: app.py:447
+#: app.py:451
 msgid "Your OTP has expired. Please request a new one."
 msgstr ""
 
-#: app.py:449
+#: app.py:453
 msgid "Incorrect OTP. Please try again."
 msgstr ""
 
-#: app.py:491
+#: app.py:498
 msgid "Please select a property type."
 msgstr ""
 
-#: app.py:518
+#: app.py:525
 msgid "Please select Apartment or Gated Community."
 msgstr ""
 
-#: app.py:520 app.py:572
+#: app.py:527 app.py:579
 msgid "Please enter the property name."
 msgstr ""
 
-#: app.py:522 app.py:574
+#: app.py:529 app.py:581
 msgid "Please enter the address."
 msgstr ""
 
-#: app.py:524
+#: app.py:531
 msgid "Number of flats must be a number."
 msgstr ""
 
-#: app.py:526
+#: app.py:533
 msgid "Extra parking spaces must be a number."
 msgstr ""
 
-#: app.py:586
+#: app.py:593
 #, python-format
 msgid "Please enter valid numbers for company '%(name)s'."
 msgstr ""
 
-#: app.py:599
+#: app.py:606
 msgid "Please add at least one company."
 msgstr ""
 
-#: app.py:664
+#: app.py:671
 msgid "Please select your company to continue."
 msgstr ""
 
-#: app.py:690
+#: app.py:697
 msgid "Please select a role."
 msgstr ""
 
-#: app.py:870
+#: app.py:877
 msgid "Please fill in all required fields."
 msgstr ""
 
-#: app.py:875
+#: app.py:882
 msgid "Please enter your vehicle type and number for self-transport."
 msgstr ""
 
-#: app.py:880
+#: app.py:887
 msgid "Please fill in all required bank details."
 msgstr ""
 
-#: app.py:884
+#: app.py:891
 msgid "Please add at least one vehicle."
 msgstr ""
 
-#: app.py:889
+#: app.py:896
 #, python-format
 msgid "Vehicle number(s) already registered to another member: %(numbers)s"
 msgstr ""
 
-#: app.py:894
+#: app.py:901
 #, python-format
 msgid "Vehicle number %(number)s is already registered to another member."
 msgstr ""
 
-#: app.py:899
+#: app.py:906
 msgid "This Employee ID is already registered."
 msgstr ""
 
-#: app.py:1113
+#: app.py:1120
 msgid "Profile updated successfully."
 msgstr ""
 
-#: app.py:1151 app.py:2386
+#: app.py:1168
+#, python-format
+msgid "Switched to %(name)s."
+msgstr ""
+
+#: app.py:1202
+#, python-format
+msgid "You're already part of %(name)s."
+msgstr ""
+
+#: app.py:1237 app.py:2472
 msgid "Please enter the visitor's name."
 msgstr ""
 
-#: app.py:1153 app.py:2388
+#: app.py:1239 app.py:2474
 msgid "Please enter a valid 10-digit visitor phone number."
 msgstr ""
 
-#: app.py:1155 app.py:1352 app.py:2390
+#: app.py:1241 app.py:1438 app.py:2476
 msgid "Please select a vehicle type."
 msgstr ""
 
-#: app.py:1157 app.py:1354 app.py:2392
+#: app.py:1243 app.py:1440 app.py:2478
 msgid "Please enter the vehicle number."
 msgstr ""
 
-#: app.py:1159 app.py:1232
+#: app.py:1245 app.py:1318
 msgid "Please fill in date, from time and to time."
 msgstr ""
 
-#: app.py:1179
+#: app.py:1265
 msgid "Visitor request created and a parking slot was allocated!"
 msgstr ""
 
-#: app.py:1181
+#: app.py:1267
 msgid "Visitor request created. We'll notify you once a slot is available."
 msgstr ""
 
-#: app.py:1230
+#: app.py:1316
 msgid "Please select a valid parking slot of yours."
 msgstr ""
 
-#: app.py:1238
+#: app.py:1324
 msgid "Rent per hour must be greater than zero."
 msgstr ""
 
-#: app.py:1240
+#: app.py:1326
 msgid "Please enter a valid rent per hour."
 msgstr ""
 
-#: app.py:1257
+#: app.py:1343
 msgid "Slot listed and already matched with a waiting visitor!"
 msgstr ""
 
-#: app.py:1259
+#: app.py:1345
 msgid "Your parking slot has been listed as available."
 msgstr ""
 
-#: app.py:1292
+#: app.py:1378
 msgid "This slot isn't currently matched with a visitor."
 msgstr ""
 
-#: app.py:1296
+#: app.py:1382
 msgid "Marked as returned. We've notified everyone affected."
 msgstr ""
 
-#: app.py:1329
+#: app.py:1415
 msgid "There's no pending request for tomorrow to cancel."
 msgstr ""
 
-#: app.py:1331 templates/transport_request.html:37
+#: app.py:1417 templates/transport_request.html:37
 msgid "The 9 PM cutoff has passed; this request can no longer be changed."
 msgstr ""
 
-#: app.py:1335
+#: app.py:1421
 msgid "Transport request for tomorrow cancelled."
 msgstr ""
 
-#: app.py:1339
+#: app.py:1425
 msgid "You've already submitted a transport request for tomorrow."
 msgstr ""
 
-#: app.py:1342
+#: app.py:1428
 msgid "Requests for tomorrow's parking must be submitted before 9 PM today."
 msgstr ""
 
-#: app.py:1356
+#: app.py:1442
 msgid "Please fill in your shift start and end time."
 msgstr ""
 
-#: app.py:1372
+#: app.py:1458
 msgid ""
 "Transport request for tomorrow submitted. Slots are allocated after the 9"
 " PM cutoff."
 msgstr ""
 
-#: app.py:1441
+#: app.py:1527
 #, python-format
 msgid "Duplicate slot number '%(slot_number)s' in the table."
 msgstr ""
 
-#: app.py:1449
+#: app.py:1535
 #, python-format
 msgid "Entrance/ramp rank for slot '%(slot_number)s' must be a number."
 msgstr ""
 
-#: app.py:1479 app.py:1490
+#: app.py:1565 app.py:1576
 #, python-format
 msgid "Slot number '%(slot_number)s' is already in use."
 msgstr ""
 
-#: app.py:1510
+#: app.py:1596
 msgid "Parking layout updated."
 msgstr ""
 
-#: app.py:1659 app.py:1688
+#: app.py:1745 app.py:1774
 msgid "This request has already been processed."
 msgstr ""
 
-#: app.py:1671
+#: app.py:1757
 #, python-format
 msgid "Approved %(name)s and allocated a parking slot."
 msgstr ""
 
-#: app.py:1673
+#: app.py:1759
 #, python-format
 msgid "Approved %(name)s. We'll notify you once a slot is available."
 msgstr ""
 
-#: app.py:1700
+#: app.py:1786
 #, python-format
 msgid "Denied entry for %(name)s."
 msgstr ""
 
-#: app.py:1770
+#: app.py:1856
 msgid "This payment has already been processed."
 msgstr ""
 
-#: app.py:1781
+#: app.py:1867
 msgid "Marked as paid."
 msgstr ""
 
-#: app.py:1830
+#: app.py:1916
 msgid "You cannot remove yourself."
 msgstr ""
 
-#: app.py:1840
+#: app.py:1926
 msgid "Member removed."
 msgstr ""
 
-#: app.py:2050
+#: app.py:2136
 msgid ""
 "Sorry, I couldn't reach the AI provider. Check your AI settings and try "
 "again."
 msgstr ""
 
-#: app.py:2110
+#: app.py:2196
 #, python-format
 msgid "Connected to Ollama at %(host)s. Installed models: %(models)s"
 msgstr ""
 
-#: app.py:2111
+#: app.py:2197
 msgid "none"
 msgstr ""
 
-#: app.py:2116
+#: app.py:2202
 #, python-format
 msgid "Could not reach Ollama at %(host)s: %(error)s"
 msgstr ""
 
-#: app.py:2120
+#: app.py:2206
 msgid "AI settings saved."
 msgstr ""
 
-#: app.py:2225
+#: app.py:2311
 msgid "No pass found for that code."
 msgstr ""
 
-#: app.py:2264
+#: app.py:2350
 msgid "This visitor cannot be marked as entered right now."
 msgstr ""
 
-#: app.py:2270
+#: app.py:2356
 #, python-format
 msgid "%(name)s marked as entered."
 msgstr ""
 
-#: app.py:2285
+#: app.py:2371
 msgid "This visitor cannot be marked as exited right now."
 msgstr ""
 
-#: app.py:2291
+#: app.py:2377
 #, python-format
 msgid "%(name)s marked as exited."
 msgstr ""
 
-#: app.py:2325
+#: app.py:2411
 msgid "This pass cannot be marked as entered right now."
 msgstr ""
 
-#: app.py:2331
+#: app.py:2417
 msgid "Marked as entered."
 msgstr ""
 
-#: app.py:2346
+#: app.py:2432
 msgid "This pass cannot be marked as exited right now."
 msgstr ""
 
-#: app.py:2352
+#: app.py:2438
 msgid "Marked as exited."
 msgstr ""
 
-#: app.py:2394
+#: app.py:2480
 msgid "Please select a date."
 msgstr ""
 
-#: app.py:2402
+#: app.py:2488
 msgid "Please select who the visitor is here to see."
 msgstr ""
 
-#: app.py:2411
+#: app.py:2497
 msgid "Please enter the from and to time."
 msgstr ""
 
-#: app.py:2461
+#: app.py:2547
 msgid "Visitor logged. Waiting for resident approval."
-msgstr ""
-
-#: constants.py:4 constants.py:34 templates/property_form_residential.html:14
-msgid "Apartment"
-msgstr ""
-
-#: constants.py:5 constants.py:35 templates/property_form_residential.html:18
-msgid "Gated Community"
-msgstr ""
-
-#: constants.py:6 constants.py:36
-msgid "Office"
-msgstr ""
-
-#: constants.py:12 constants.py:25
-msgid "Owner"
-msgstr ""
-
-#: constants.py:13 constants.py:26
-msgid "Tenant"
-msgstr ""
-
-#: constants.py:14 constants.py:27
-msgid "Committee"
-msgstr ""
-
-#: constants.py:15 constants.py:20 constants.py:28
-msgid "Security"
-msgstr ""
-
-#: constants.py:19 constants.py:29 templates/security_transport.html:12
-#: templates/transport_pass.html:11
-msgid "Employee"
-msgstr ""
-
-#: constants.py:21 constants.py:30
-msgid "Manager"
-msgstr ""
-
-#: constants.py:42
-msgid "Bike"
-msgstr ""
-
-#: constants.py:43
-msgid "Car"
-msgstr ""
-
-#: constants.py:44
-msgid "Auto"
-msgstr ""
-
-#: constants.py:45
-msgid "Truck"
-msgstr ""
-
-#: constants.py:46
-msgid "Camper"
-msgstr ""
-
-#: constants.py:47
-msgid "Cycle"
-msgstr ""
-
-#: constants.py:48
-msgid "Other"
-msgstr ""
-
-#: parking_engine.py:29
-msgid "Vacant"
-msgstr ""
-
-#: parking_engine.py:29
-msgid "Booked"
-msgstr ""
-
-#: parking_engine.py:29
-msgid "Occupied"
-msgstr ""
-
-#: parking_engine.py:33
-msgid "Pending allocation"
-msgstr ""
-
-#: parking_engine.py:34
-msgid "Pending approval"
-msgstr ""
-
-#: parking_engine.py:35
-msgid "Allocated"
-msgstr ""
-
-#: parking_engine.py:36
-msgid "No slot available"
-msgstr ""
-
-#: parking_engine.py:37
-msgid "Entered"
-msgstr ""
-
-#: parking_engine.py:38
-msgid "Exited"
-msgstr ""
-
-#: parking_engine.py:39
-msgid "Rejected"
-msgstr ""
-
-#: parking_engine.py:40
-msgid "Needs reallocation"
-msgstr ""
-
-#: parking_engine.py:41 templates/dashboard.html:224
-#: templates/parking_availability.html:84
-msgid "Cancelled"
 msgstr ""
 
 #: templates/_bank_details.html:1 templates/my_profile.html:71
@@ -903,6 +803,10 @@ msgstr ""
 msgid "Completed"
 msgstr ""
 
+#: templates/dashboard.html:224 templates/parking_availability.html:84
+msgid "Cancelled"
+msgstr ""
+
 #: templates/dashboard.html:250 templates/security_visitor.html:34
 #: templates/unexpected_visitor.html:34 templates/unexpected_visitor.html:89
 msgid "Visiting"
@@ -1181,6 +1085,42 @@ msgstr ""
 
 #: templates/my_profile.html:156
 msgid "Save Changes"
+msgstr ""
+
+#: templates/my_rooms.html:6
+msgid ""
+"Switch between properties or companies you are part of, or join another "
+"using an invite link."
+msgstr ""
+
+#: templates/my_rooms.html:20
+msgid "Currently active"
+msgstr ""
+
+#: templates/my_rooms.html:23
+msgid "Switch to this room"
+msgstr ""
+
+#: templates/my_rooms.html:32
+msgid "You haven't joined any rooms yet."
+msgstr ""
+
+#: templates/my_rooms.html:39
+msgid "Join another room"
+msgstr ""
+
+#: templates/my_rooms.html:40
+msgid ""
+"Paste an invite link or code you received to join another property or "
+"company."
+msgstr ""
+
+#: templates/my_rooms.html:43
+msgid "Invite link or code"
+msgstr ""
+
+#: templates/my_rooms.html:46
+msgid "Join"
 msgstr ""
 
 #: templates/notifications.html:10
@@ -1515,6 +1455,14 @@ msgstr ""
 msgid "Property Type"
 msgstr ""
 
+#: templates/property_form_residential.html:14
+msgid "Apartment"
+msgstr ""
+
+#: templates/property_form_residential.html:18
+msgid "Gated Community"
+msgstr ""
+
 #: templates/property_form_residential.html:23
 msgid "Name of the Apartment / Community"
 msgstr ""
@@ -1698,6 +1646,10 @@ msgstr ""
 
 #: templates/security_transport.html:6
 msgid "Verify the employee's details before allowing entry or exit."
+msgstr ""
+
+#: templates/security_transport.html:12 templates/transport_pass.html:11
+msgid "Employee"
 msgstr ""
 
 #: templates/security_transport.html:34

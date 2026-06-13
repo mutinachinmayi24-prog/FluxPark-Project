@@ -280,6 +280,7 @@ def build_nav_items(role_profile):
             items.append({"endpoint": "payments", "label": _("Rent Ledger"), "icon": "bi-cash-coin"})
             items.append({"endpoint": "invite_links", "label": _("Invite Links"), "icon": "bi-person-plus-fill"})
 
+    items.append({"endpoint": "my_rooms", "label": _("My Rooms"), "icon": "bi-door-open"})
     items.append({"endpoint": "my_profile", "label": _("My Profile"), "icon": "bi-person-circle"})
     return items
 
@@ -642,7 +643,10 @@ def invite_links():
     sub_room_links = [
         (sub_room, url_for("join", token=sub_room.invite_token, _external=True)) for sub_room in prop.sub_rooms
     ]
-    onboarding = not session.get("role_profile_id")
+    onboarding = (
+        RoleProfile.query.filter_by(user_id=session["user_id"], property_id=property_id).first()
+        is None
+    )
 
     return render_template(
         "invite_links.html",
@@ -1127,6 +1131,85 @@ def my_profile():
         vehicle_types=VEHICLE_TYPES,
         show_sidebar=True,
     )
+
+
+# ---------------------------------------------------------------------------
+# My Rooms (a user can belong to more than one property/company)
+# ---------------------------------------------------------------------------
+
+
+@app.route("/rooms")
+@login_required
+def my_rooms():
+    role_profiles = (
+        RoleProfile.query.filter_by(user_id=session["user_id"])
+        .order_by(RoleProfile.id)
+        .all()
+    )
+    return render_template(
+        "my_rooms.html",
+        role_profiles=role_profiles,
+        active_id=session.get("role_profile_id"),
+        show_sidebar=True,
+    )
+
+
+@app.route("/rooms/switch/<int:role_profile_id>", methods=["POST"])
+@login_required
+def switch_room(role_profile_id):
+    role_profile = RoleProfile.query.filter_by(
+        id=role_profile_id, user_id=session["user_id"]
+    ).first()
+    if role_profile is None:
+        abort(404)
+
+    prop = Property.query.get(role_profile.property_id)
+    session["role_profile_id"] = role_profile.id
+    session["property_id"] = role_profile.property_id
+    session["property_type"] = prop.property_type
+    session["sub_room_id"] = role_profile.sub_room_id
+    flash(_("Switched to %(name)s.", name=prop.name), "success")
+    return redirect(url_for("dashboard"))
+
+
+@app.route("/rooms/join", methods=["POST"])
+@login_required
+def join_room():
+    raw = request.form.get("invite", "").strip()
+    token = raw.rstrip("/").rsplit("/", 1)[-1] if raw else ""
+    resolved = resolve_invite_token(token) if token else None
+
+    if not resolved:
+        flash(_("This invite link is invalid or has expired."), "danger")
+        return redirect(url_for("my_rooms"))
+
+    kind, obj = resolved
+    if kind == "property":
+        property_id = obj.id
+        property_type = obj.property_type
+        sub_room_id = None
+    else:
+        property_id = obj.property_id
+        property_type = "office"
+        sub_room_id = obj.id
+
+    existing = RoleProfile.query.filter_by(
+        user_id=session["user_id"], property_id=property_id
+    ).first()
+    if existing:
+        prop = Property.query.get(property_id)
+        session["role_profile_id"] = existing.id
+        session["property_id"] = existing.property_id
+        session["property_type"] = prop.property_type
+        session["sub_room_id"] = existing.sub_room_id
+        flash(_("You're already part of %(name)s.", name=prop.name), "info")
+        return redirect(url_for("dashboard"))
+
+    session["invite_token"] = token
+    session["property_id"] = property_id
+    session["property_type"] = property_type
+    session["sub_room_id"] = sub_room_id
+    return redirect(url_for("role_selection"))
 
 
 # ---------------------------------------------------------------------------
