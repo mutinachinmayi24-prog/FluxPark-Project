@@ -8,7 +8,8 @@
       <i class="bi bi-robot me-1"></i>{{ _('Back to AI Assistant') }}
     </a>
   </div>
-  <p class="text-muted mb-4">{{ _('Choose how the AI Assistant generates its answers: run a model locally with Ollama (free, private, runs on this machine), or bring your own API key for a hosted provider.') }}</p>
+  <p class="text-muted mb-1">{{ _('Choose how the AI Assistant generates its answers: run a model locally with Ollama (free, private, runs on this machine), bring your own OpenAI-compatible API key, or use Google Gemini.') }}</p>
+  <p class="text-muted mb-4 small"><i class="bi bi-robot me-1"></i>{{ _('The assistant itself runs on the Google Agent Development Kit (ADK) — it can call tools to look up your parking slots, visitor requests, and payments, no matter which provider below powers the model.') }}</p>
 
   <form method="POST">
     <div class="card border-0 shadow-sm mb-3">
@@ -16,7 +17,7 @@
         <h6 class="section-title">{{ _('Provider') }}</h6>
 
         <div class="form-check mb-2">
-          <input class="form-check-input" type="radio" name="provider" id="provider-ollama" value="ollama" {% if provider != 'byok' %}checked{% endif %}>
+          <input class="form-check-input" type="radio" name="provider" id="provider-ollama" value="ollama" {% if provider not in ('byok', 'gemini') %}checked{% endif %}>
           <label class="form-check-label" for="provider-ollama">
             <strong>{{ _('Local AI Inference (Ollama)') }}</strong>
             {% if ollama_running %}
@@ -88,6 +89,36 @@
               <div class="form-check mt-1">
                 <input class="form-check-input" type="checkbox" name="clear_byok_key" value="1" id="clear-byok-key">
                 <label class="form-check-label small text-muted" for="clear-byok-key">{{ _('A key is currently saved. Check to remove it.') }}</label>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <hr>
+
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="radio" name="provider" id="provider-gemini" value="gemini" {% if provider == 'gemini' %}checked{% endif %}>
+          <label class="form-check-label" for="provider-gemini">
+            <strong>{{ _('Google Gemini') }}</strong>
+            <div class="text-muted small">{{ _('Use a Google AI Studio API key to run the assistant on Gemini.') }}</div>
+          </label>
+        </div>
+
+        <div class="ps-4 row g-2">
+          <div class="col-12 col-md-7">
+            <label class="form-label small text-muted mb-1">{{ _('Model') }}</label>
+            <input type="text" name="gemini_model" class="form-control" value="{{ gemini_model }}" placeholder="gemini-2.0-flash">
+          </div>
+          <div class="col-12">
+            <label class="form-label small text-muted mb-1">{{ _('API key') }}</label>
+            <input type="password" name="gemini_api_key" class="form-control" placeholder="{{ _('Enter to set/replace') if has_gemini_key else 'AIza...' }}" autocomplete="off">
+            <div class="text-muted small mt-1">
+              {{ _('Get a free key from') }} <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Google AI Studio</a>.
+            </div>
+            {% if has_gemini_key %}
+              <div class="form-check mt-1">
+                <input class="form-check-input" type="checkbox" name="clear_gemini_key" value="1" id="clear-gemini-key">
+                <label class="form-check-label small text-muted" for="clear-gemini-key">{{ _('A key is currently saved. Check to remove it.') }}</label>
               </div>
             {% endif %}
           </div>

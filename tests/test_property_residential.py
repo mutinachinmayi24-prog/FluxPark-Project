@@ -1,13 +1,15 @@
-def test_residential_owner_flow(logged_in_client, app_module):
+def test_residential_owner_flow(logged_in_client):
     from models import ParkingSlot, Property
+    from database import SessionLocal
 
     client = logged_in_client
 
     response = client.post(
         "/property-setup",
         data={"property_type": "apartment"},
+        follow_redirects=False,
     )
-    assert response.status_code == 302
+    assert response.status_code in (302, 307)
     assert "/property-form" in response.headers["Location"]
 
     response = client.post(
@@ -19,17 +21,22 @@ def test_residential_owner_flow(logged_in_client, app_module):
             "num_flats": "10",
             "extra_parking": "2",
         },
+        follow_redirects=False,
     )
-    assert response.status_code == 302
+    assert response.status_code in (302, 307)
     assert "/invite-links" in response.headers["Location"]
 
-    with app_module.app.app_context():
-        prop = Property.query.filter_by(name="Test Apartments").first()
-        assert prop is not None
-        assert ParkingSlot.query.filter_by(property_id=prop.id).count() == 12
+    prop = Property.query.filter_by(name="Test Apartments").first()
+    assert prop is not None
+    assert ParkingSlot.query.filter_by(property_id=prop.id).count() == 12
+    SessionLocal.remove()
 
-    response = client.post("/role-selection", data={"role": "owner"})
-    assert response.status_code == 302
+    response = client.post(
+        "/role-selection",
+        data={"role": "owner"},
+        follow_redirects=False,
+    )
+    assert response.status_code in (302, 307)
     assert "/role-form/owner" in response.headers["Location"]
 
     response = client.post(
@@ -48,8 +55,9 @@ def test_residential_owner_flow(logged_in_client, app_module):
             "account_number": "123456789012",
             "expiry_date": "2030-01-01",
         },
+        follow_redirects=False,
     )
-    assert response.status_code == 302
+    assert response.status_code in (302, 307)
     assert "/dashboard" in response.headers["Location"]
 
     for path in (

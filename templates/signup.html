@@ -14,7 +14,7 @@
   {% endif %}
 
   <h5 class="fw-semibold mb-3">{{ _('Create your account') }}</h5>
-  <form method="POST" action="{{ url_for('signup', invite=request.args.get('invite')) }}">
+  <form method="POST" action="{{ url_for('signup', invite=request.query_params.get('invite')) }}">
     <label class="form-label">{{ _('How would you like to verify?') }}</label>
     <div class="btn-group w-100 contact-toggle mb-3" role="group">
       <input type="radio" class="btn-check" name="contact_type" id="contact_type_email" value="email" autocomplete="off" checked>

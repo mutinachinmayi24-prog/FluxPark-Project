@@ -9,10 +9,10 @@ from datetime import datetime, time, timedelta
 from types import SimpleNamespace
 from zoneinfo import ZoneInfo
 
-from flask import url_for
-from flask_babel import lazy_gettext as _l
+from i18n import lazy_gettext as _l
+from webcompat import url_for
 
-from extensions import db
+from database import db
 from models import (
     Notification,
     ParkingSlot,

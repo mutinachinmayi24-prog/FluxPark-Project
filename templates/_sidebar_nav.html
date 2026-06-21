@@ -10,7 +10,7 @@
 <ul class="nav nav-pills flex-column mb-auto gap-1">
   {% for item in nav_items %}
     <li class="nav-item">
-      <a href="{{ url_for(item.endpoint) }}" class="nav-link text-white d-flex align-items-center justify-content-between {% if request.endpoint == item.endpoint %}active{% endif %}">
+      <a href="{{ url_for(item.endpoint) }}" class="nav-link text-white d-flex align-items-center justify-content-between {% if current_endpoint == item.endpoint %}active{% endif %}">
         <span><i class="bi {{ item.icon }} me-2"></i> {{ item.label }}</span>
         {% if item.endpoint == 'notifications' and unread_notifications %}
           <span class="badge bg-danger rounded-pill">{{ unread_notifications }}</span>

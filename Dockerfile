@@ -8,16 +8,18 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 WORKDIR /app
 
 COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt gunicorn
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
 # SQLite database lives here at runtime (git-ignored, mount as a volume)
 RUN mkdir -p instance
 
-EXPOSE 5000
+EXPOSE 8000
 
 # Override with a strong, unique value at runtime (see .env.example)
 ENV SECRET_KEY=change-this-to-a-long-random-secret-key
 
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "2", "app:app"]
+# Single worker: SQLite + multiple processes racing on startup table
+# creation (and concurrent writes) isn't safe, so we don't scale workers here.
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]

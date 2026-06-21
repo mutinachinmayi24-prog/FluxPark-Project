@@ -1,7 +1,7 @@
 import secrets
 from datetime import datetime
 
-from extensions import db
+from database import db
 
 
 def generate_token():
@@ -237,17 +237,19 @@ class Transaction(db.Model):
 
 
 class AISettings(db.Model):
-    """Per-user AI provider configuration: local Ollama inference, or BYOK hosted provider."""
+    """Per-user AI provider configuration: local Ollama inference, BYOK hosted provider, or Gemini."""
 
     __tablename__ = "ai_settings"
     id = db.Column(db.Integer, primary_key=True)
     role_profile_id = db.Column(db.Integer, db.ForeignKey("role_profile.id"), unique=True, nullable=False)
-    provider = db.Column(db.String(20), nullable=False, default="ollama")  # "ollama" or "byok"
+    provider = db.Column(db.String(20), nullable=False, default="ollama")  # "ollama", "byok", or "gemini"
     ollama_host = db.Column(db.String(200), nullable=True)
     ollama_model = db.Column(db.String(100), nullable=True)
     byok_base_url = db.Column(db.String(200), nullable=True)
     byok_api_key = db.Column(db.String(200), nullable=True)
     byok_model = db.Column(db.String(100), nullable=True)
+    gemini_api_key = db.Column(db.String(200), nullable=True)
+    gemini_model = db.Column(db.String(100), nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 

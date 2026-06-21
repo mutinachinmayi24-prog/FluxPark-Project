@@ -1,4 +1,4 @@
-from flask_babel import lazy_gettext as _l
+from i18n import lazy_gettext as _l
 
 PROPERTY_TYPES = [
     ("apartment", _l("Apartment")),

@@ -2,30 +2,25 @@ import os
 import tempfile
 
 import pytest
+from fastapi.testclient import TestClient
 
 
 @pytest.fixture(scope="session")
 def app_module():
-    """Import the Flask app bound to a throwaway SQLite database.
-
-    app.py reads DATABASE_URL (falling back to instance/database.db) and
-    runs db.create_all() at import time, so the env var must be set before
-    the first import.
-    """
+    """Import the FastAPI app bound to a throwaway SQLite database."""
     fd, db_path = tempfile.mkstemp(suffix=".db")
     os.close(fd)
     os.environ["DATABASE_URL"] = f"sqlite:///{db_path}"
     os.environ.setdefault("SECRET_KEY", "test-secret-key")
 
-    import app as flux_app
+    import main as flux_main
 
-    flux_app.app.config.update(TESTING=True)
+    yield flux_main
 
-    yield flux_app
+    from database import SessionLocal, engine
 
-    with flux_app.app.app_context():
-        flux_app.db.session.remove()
-        flux_app.db.engine.dispose()
+    SessionLocal.remove()
+    engine.dispose()
 
     try:
         os.remove(db_path)
@@ -35,26 +30,35 @@ def app_module():
 
 @pytest.fixture()
 def client(app_module):
-    return app_module.app.test_client()
+    with TestClient(app_module.app, raise_server_exceptions=True) as c:
+        yield c
 
 
 @pytest.fixture(autouse=True)
 def _clean_database(app_module):
     yield
-    with app_module.app.app_context():
-        for table in reversed(app_module.db.metadata.sorted_tables):
-            app_module.db.session.execute(table.delete())
-        app_module.db.session.commit()
+    from database import Base, SessionLocal, engine
+
+    with engine.begin() as conn:
+        for table in reversed(Base.metadata.sorted_tables):
+            conn.execute(table.delete())
+    SessionLocal.remove()
 
 
 @pytest.fixture()
-def logged_in_client(client, app_module):
+def logged_in_client(client):
     """A test client that has completed signup + OTP verification."""
     from models import OTPRequest
+    from database import SessionLocal
 
     client.post("/signup", data={"contact_type": "phone", "contact": "9000000001"})
-    with app_module.app.app_context():
-        otp = OTPRequest.query.filter_by(contact="9000000001").order_by(OTPRequest.id.desc()).first()
-        code = otp.code
+    otp = (
+        OTPRequest.query.filter_by(contact="9000000001")
+        .order_by(OTPRequest.id.desc())
+        .first()
+    )
+    code = otp.code
+    SessionLocal.remove()
+
     client.post("/verify-otp", data={"code": code})
     return client

@@ -3,12 +3,15 @@
 
 {% block content %}
   <div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-1">
-    <h3 class="fw-bold mb-1"><i class="bi bi-robot me-2"></i>{{ _('AI Assistant') }}</h3>
+    <h3 class="fw-bold mb-1">
+      <i class="bi bi-robot me-2"></i>{{ _('AI Assistant') }}
+      <span class="badge bg-info-subtle text-info-emphasis ms-2 fs-6 align-middle">{{ _('Powered by Google ADK') }}</span>
+    </h3>
     <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('ai_settings') }}">
       <i class="bi bi-gear me-1"></i>{{ _('AI Settings') }}
     </a>
   </div>
-  <p class="text-muted mb-3">{{ _('Ask about your parking slots, visitor passes, transport requests, or how to use FluxPark.') }}</p>
+  <p class="text-muted mb-3">{{ _('Ask about your parking slots, visitor passes, transport requests, payments, or notifications — the assistant can look up your real data and even log a visitor for you.') }}</p>
 
   {% if provider == 'ollama' and not ollama_running %}
     <div class="alert alert-warning d-flex align-items-start gap-2">
