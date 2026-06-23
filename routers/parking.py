@@ -59,7 +59,12 @@ async def parking_slots(request: Request):
             if not slot_number:
                 continue
             if slot_number in seen_numbers:
-                errors.append(_("Duplicate slot number '%(slot_number)s' in the table.", slot_number=slot_number))
+                errors.append(
+                    _(
+                        "Duplicate slot number '%(slot_number)s' in the table.",
+                        slot_number=slot_number,
+                    )
+                )
                 continue
             seen_numbers.add(slot_number)
 
@@ -67,7 +72,12 @@ async def parking_slots(request: Request):
                 entrance_rank = int(entrance_ranks[i]) if entrance_ranks[i].strip() else 0
                 ramp_rank = int(ramp_ranks[i]) if ramp_ranks[i].strip() else 0
             except (ValueError, IndexError):
-                errors.append(_("Entrance/ramp rank for slot '%(slot_number)s' must be a number.", slot_number=slot_number))
+                errors.append(
+                    _(
+                        "Entrance/ramp rank for slot '%(slot_number)s' must be a number.",
+                        slot_number=slot_number,
+                    )
+                )
                 continue
 
             home_id = home_ids[i].strip() if i < len(home_ids) else ""
@@ -97,7 +107,12 @@ async def parking_slots(request: Request):
                         continue
                     clash = existing.get(row["slot_number"])
                     if clash is not None and clash.id != slot.id:
-                        errors.append(_("Slot number '%(slot_number)s' is already in use.", slot_number=row["slot_number"]))
+                        errors.append(
+                            _(
+                                "Slot number '%(slot_number)s' is already in use.",
+                                slot_number=row["slot_number"],
+                            )
+                        )
                         continue
                     existing.pop(slot.slot_number, None)
                     slot.slot_number = row["slot_number"]
@@ -108,7 +123,12 @@ async def parking_slots(request: Request):
                     existing[slot.slot_number] = slot
                 else:
                     if row["slot_number"] in existing:
-                        errors.append(_("Slot number '%(slot_number)s' is already in use.", slot_number=row["slot_number"]))
+                        errors.append(
+                            _(
+                                "Slot number '%(slot_number)s' is already in use.",
+                                slot_number=row["slot_number"],
+                            )
+                        )
                         continue
                     new_slot = ParkingSlot(
                         property_id=role_profile.property_id,

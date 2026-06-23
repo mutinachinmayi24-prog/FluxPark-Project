@@ -9,10 +9,8 @@ from datetime import datetime, time, timedelta
 from types import SimpleNamespace
 from zoneinfo import ZoneInfo
 
-from i18n import lazy_gettext as _l
-from webcompat import url_for
-
 from database import db
+from i18n import lazy_gettext as _l
 from models import (
     Notification,
     ParkingSlot,
@@ -22,6 +20,7 @@ from models import (
     TransportRequest,
     VisitorRequest,
 )
+from webcompat import url_for
 
 IST = ZoneInfo("Asia/Kolkata")
 BUFFER_MINUTES = 15
@@ -97,7 +96,11 @@ def _slack_minutes(avail, req):
 def _rank_candidates(candidates, req):
     return sorted(
         candidates,
-        key=lambda a: (_slack_minutes(a, req), a.parking_slot.entrance_rank, a.parking_slot.ramp_rank),
+        key=lambda a: (
+            _slack_minutes(a, req),
+            a.parking_slot.entrance_rank,
+            a.parking_slot.ramp_rank,
+        ),
     )
 
 
@@ -204,7 +207,9 @@ def committee_commission_percent(property_id):
 
 
 def create_transaction(visitor_request, availability):
-    hours = _duration_hours(visitor_request.date, visitor_request.from_time, visitor_request.to_time)
+    hours = _duration_hours(
+        visitor_request.date, visitor_request.from_time, visitor_request.to_time
+    )
     base_amount = round(availability.rent_per_hour * hours, 2)
     commission_percent = committee_commission_percent(availability.parking_slot.property_id)
     commission_amount = round(base_amount * commission_percent / 100, 2)
@@ -235,7 +240,14 @@ def _company_manager(property_id, sub_room_id):
 
 
 def create_cross_company_transaction(
-    property_id, payer_sub_room_id, payee_sub_room_id, date, from_time, to_time, description, visitor_request_id=None
+    property_id,
+    payer_sub_room_id,
+    payee_sub_room_id,
+    date,
+    from_time,
+    to_time,
+    description,
+    visitor_request_id=None,
 ):
     """Bill the payer company's manager for using the payee company's spare slot.
 
@@ -575,7 +587,9 @@ def compute_slot_status(slot, today, now_dt):
     if transport_request:
         if transport_request.status == "entered":
             return "occupied"
-        start, end = _window(transport_request.date, transport_request.from_time, transport_request.to_time)
+        start, end = _window(
+            transport_request.date, transport_request.from_time, transport_request.to_time
+        )
         if start <= now_dt <= end:
             return "occupied"
         if now_dt < start:

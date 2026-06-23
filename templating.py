@@ -48,7 +48,11 @@ def build_nav_items(role_profile):
     if prop and prop.property_type in RESIDENTIAL_PROPERTY_TYPES:
         if role in ("owner", "tenant", "committee"):
             items.append(
-                {"endpoint": "visitor_request", "label": _("Visitor Request"), "icon": "bi-person-plus"}
+                {
+                    "endpoint": "visitor_request",
+                    "label": _("Visitor Request"),
+                    "icon": "bi-person-plus",
+                }
             )
             items.append(
                 {
@@ -58,12 +62,18 @@ def build_nav_items(role_profile):
                 }
             )
 
-        items.append({"endpoint": "parking_slots", "label": _("Parking Slots"), "icon": "bi-grid-3x3-gap"})
+        items.append(
+            {"endpoint": "parking_slots", "label": _("Parking Slots"), "icon": "bi-grid-3x3-gap"}
+        )
         items.append({"endpoint": "parking_map", "label": _("Parking Map"), "icon": "bi-map"})
 
         if role == "security":
             items.append(
-                {"endpoint": "security_scan", "label": _("Scan Entry / Exit"), "icon": "bi-qr-code-scan"}
+                {
+                    "endpoint": "security_scan",
+                    "label": _("Scan Entry / Exit"),
+                    "icon": "bi-qr-code-scan",
+                }
             )
             items.append(
                 {
@@ -72,7 +82,9 @@ def build_nav_items(role_profile):
                     "icon": "bi-person-exclamation",
                 }
             )
-            items.append({"endpoint": "visitor_log", "label": _("Visitor Log"), "icon": "bi-journal-text"})
+            items.append(
+                {"endpoint": "visitor_log", "label": _("Visitor Log"), "icon": "bi-journal-text"}
+            )
 
         items.append({"endpoint": "notifications", "label": _("Notifications"), "icon": "bi-bell"})
 
@@ -81,23 +93,41 @@ def build_nav_items(role_profile):
 
         if role in ("owner", "committee"):
             items.append({"endpoint": "members", "label": _("Members"), "icon": "bi-people"})
-            items.append({"endpoint": "visitor_log", "label": _("Visitor Log"), "icon": "bi-journal-text"})
             items.append(
-                {"endpoint": "invite_links", "label": _("Invite Links"), "icon": "bi-person-plus-fill"}
+                {"endpoint": "visitor_log", "label": _("Visitor Log"), "icon": "bi-journal-text"}
+            )
+            items.append(
+                {
+                    "endpoint": "invite_links",
+                    "label": _("Invite Links"),
+                    "icon": "bi-person-plus-fill",
+                }
             )
     else:
         if role in ("employee", "manager"):
             items.append(
-                {"endpoint": "parking_slots", "label": _("Company Parking"), "icon": "bi-grid-3x3-gap"}
+                {
+                    "endpoint": "parking_slots",
+                    "label": _("Company Parking"),
+                    "icon": "bi-grid-3x3-gap",
+                }
             )
             items.append({"endpoint": "parking_map", "label": _("Parking Map"), "icon": "bi-map"})
             items.append(
-                {"endpoint": "transport_request", "label": _("Transport Request"), "icon": "bi-car-front"}
+                {
+                    "endpoint": "transport_request",
+                    "label": _("Transport Request"),
+                    "icon": "bi-car-front",
+                }
             )
 
         if role == "security":
             items.append(
-                {"endpoint": "security_scan", "label": _("Scan Entry / Exit"), "icon": "bi-qr-code-scan"}
+                {
+                    "endpoint": "security_scan",
+                    "label": _("Scan Entry / Exit"),
+                    "icon": "bi-qr-code-scan",
+                }
             )
             items.append(
                 {
@@ -106,7 +136,9 @@ def build_nav_items(role_profile):
                     "icon": "bi-person-exclamation",
                 }
             )
-            items.append({"endpoint": "visitor_log", "label": _("Visitor Log"), "icon": "bi-journal-text"})
+            items.append(
+                {"endpoint": "visitor_log", "label": _("Visitor Log"), "icon": "bi-journal-text"}
+            )
 
         items.append({"endpoint": "notifications", "label": _("Notifications"), "icon": "bi-bell"})
 
@@ -114,10 +146,18 @@ def build_nav_items(role_profile):
             items.append({"endpoint": "members", "label": _("Team"), "icon": "bi-people"})
 
         if role == "manager":
-            items.append({"endpoint": "visitor_log", "label": _("Visitor Log"), "icon": "bi-journal-text"})
-            items.append({"endpoint": "payments", "label": _("Rent Ledger"), "icon": "bi-cash-coin"})
             items.append(
-                {"endpoint": "invite_links", "label": _("Invite Links"), "icon": "bi-person-plus-fill"}
+                {"endpoint": "visitor_log", "label": _("Visitor Log"), "icon": "bi-journal-text"}
+            )
+            items.append(
+                {"endpoint": "payments", "label": _("Rent Ledger"), "icon": "bi-cash-coin"}
+            )
+            items.append(
+                {
+                    "endpoint": "invite_links",
+                    "label": _("Invite Links"),
+                    "icon": "bi-person-plus-fill",
+                }
             )
 
     items.append({"endpoint": "my_rooms", "label": _("My Rooms"), "icon": "bi-door-open"})

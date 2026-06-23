@@ -94,7 +94,7 @@ def parse_vehicle_table(form):
     numbers = form.getlist("vehicle_number[]")
     vehicles = []
     s_no = 1
-    for vtype, vnum in zip(types, numbers):
+    for vtype, vnum in zip(types, numbers, strict=False):
         vtype = vtype.strip()
         vnum = vnum.strip().upper()
         if vtype and vnum:
@@ -228,18 +228,24 @@ async def property_form_office(request: Request):
             if not company_name:
                 continue
             try:
-                num_employees = int(num_employees_list[i]) if num_employees_list[i].strip() else None
+                num_employees = (
+                    int(num_employees_list[i]) if num_employees_list[i].strip() else None
+                )
                 num_parking = int(num_parking_list[i]) if num_parking_list[i].strip() else None
                 extra = int(extra_parking_list[i]) if extra_parking_list[i].strip() else 0
             except (ValueError, IndexError):
-                errors.append(_("Please enter valid numbers for company '%(name)s'.", name=company_name))
+                errors.append(
+                    _("Please enter valid numbers for company '%(name)s'.", name=company_name)
+                )
                 continue
             companies.append(
                 {
                     "company_name": company_name,
                     "num_employees": num_employees,
                     "num_parking_spaces": num_parking,
-                    "floor_allocation": floor_alloc_list[i].strip() if i < len(floor_alloc_list) else "",
+                    "floor_allocation": floor_alloc_list[i].strip()
+                    if i < len(floor_alloc_list)
+                    else "",
                     "extra_parking": extra,
                 }
             )
@@ -287,9 +293,7 @@ async def invite_links(request: Request):
         for sub_room in prop.sub_rooms
     ]
     onboarding = (
-        RoleProfile.query.filter_by(
-            user_id=session["user_id"], property_id=property_id
-        ).first()
+        RoleProfile.query.filter_by(user_id=session["user_id"], property_id=property_id).first()
         is None
     )
 
@@ -363,7 +367,9 @@ async def role_form(request: Request, role: str):
     sub_room_id = session.get("sub_room_id")
     sub_room = SubRoom.query.get(sub_room_id) if sub_room_id else None
 
-    allowed_roles = dict(RESIDENTIAL_ROLES if prop.property_type in RESIDENTIAL_PROPERTY_TYPES else OFFICE_ROLES)
+    allowed_roles = dict(
+        RESIDENTIAL_ROLES if prop.property_type in RESIDENTIAL_PROPERTY_TYPES else OFFICE_ROLES
+    )
     if role not in allowed_roles:
         abort(404)
 
@@ -399,9 +405,12 @@ async def role_form(request: Request, role: str):
                 errors.append(_("Please fill in all required fields."))
                 break
 
-        if role in ("employee", "manager") and data.get("transport") == "self":
-            if not data.get("vehicle_type") or not data.get("vehicle_number"):
-                errors.append(_("Please enter your vehicle type and number for self-transport."))
+        if (
+            role in ("employee", "manager")
+            and data.get("transport") == "self"
+            and (not data.get("vehicle_type") or not data.get("vehicle_number"))
+        ):
+            errors.append(_("Please enter your vehicle type and number for self-transport."))
 
         if bank is not None:
             for field in REQUIRED_BANK_FIELDS:
@@ -413,19 +422,25 @@ async def role_form(request: Request, role: str):
             errors.append(_("Please add at least one vehicle."))
 
         if vehicles:
-            duplicates = find_duplicate_vehicle_numbers(property_id, [v["vehicle_number"] for v in vehicles])
+            duplicates = find_duplicate_vehicle_numbers(
+                property_id, [v["vehicle_number"] for v in vehicles]
+            )
             if duplicates:
                 errors.append(
-                    _("Vehicle number(s) already registered to another member: %(numbers)s",
-                      numbers=", ".join(duplicates))
+                    _(
+                        "Vehicle number(s) already registered to another member: %(numbers)s",
+                        numbers=", ".join(duplicates),
+                    )
                 )
 
         if role in ("employee", "manager") and data.get("transport") == "self":
             duplicates = find_duplicate_vehicle_numbers(property_id, [data["vehicle_number"]])
             if duplicates:
                 errors.append(
-                    _("Vehicle number %(number)s is already registered to another member.",
-                      number=duplicates[0])
+                    _(
+                        "Vehicle number %(number)s is already registered to another member.",
+                        number=duplicates[0],
+                    )
                 )
 
         if role in ("employee", "manager") and is_duplicate_employee_id(

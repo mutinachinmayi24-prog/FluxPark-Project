@@ -66,7 +66,9 @@ async def payments(request: Request):
     )
 
 
-@router.api_route("/payments/{transaction_id}/mark-paid", methods=["POST"], name="mark_payment_paid")
+@router.api_route(
+    "/payments/{transaction_id}/mark-paid", methods=["POST"], name="mark_payment_paid"
+)
 @login_required
 async def mark_payment_paid(request: Request, transaction_id: int):
     role_profile, redirect_resp = _require_role_profile()

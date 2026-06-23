@@ -8,6 +8,7 @@ deployments that may not have internet access to install packages).
 import json
 import urllib.error
 import urllib.request
+from urllib.parse import urlsplit
 
 DEFAULT_OLLAMA_HOST = "http://localhost:11434"
 DEFAULT_OLLAMA_MODEL = "llama3.2"
@@ -17,20 +18,30 @@ DEFAULT_BYOK_MODEL = "gpt-4o-mini"
 REQUEST_TIMEOUT_SECONDS = 60
 
 
+def _require_http_url(url):
+    """Reject non-http(s) schemes (e.g. file://) before handing a
+    user-configured host/base_url to urlopen."""
+    scheme = urlsplit(url).scheme
+    if scheme not in ("http", "https"):
+        raise ValueError(f"Unsupported URL scheme '{scheme}' for AI provider request.")
+
+
 def _post_json(url, payload, headers=None, timeout=REQUEST_TIMEOUT_SECONDS):
+    _require_http_url(url)
     req = urllib.request.Request(
         url,
         data=json.dumps(payload).encode("utf-8"),
         headers={"Content-Type": "application/json", **(headers or {})},
         method="POST",
     )
-    with urllib.request.urlopen(req, timeout=timeout) as resp:
+    with urllib.request.urlopen(req, timeout=timeout) as resp:  # nosec B310 - scheme checked above
         return json.loads(resp.read().decode("utf-8"))
 
 
 def _get_json(url, headers=None, timeout=10):
+    _require_http_url(url)
     req = urllib.request.Request(url, headers=headers or {}, method="GET")
-    with urllib.request.urlopen(req, timeout=timeout) as resp:
+    with urllib.request.urlopen(req, timeout=timeout) as resp:  # nosec B310 - scheme checked above
         return json.loads(resp.read().decode("utf-8"))
 
 

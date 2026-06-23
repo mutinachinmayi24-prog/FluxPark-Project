@@ -5,15 +5,14 @@ from datetime import datetime, timedelta
 from fastapi import APIRouter
 from starlette.requests import Request
 
-from constants import RESIDENTIAL_PROPERTY_TYPES, VEHICLE_TYPES
+from constants import VEHICLE_TYPES
 from database import db
 from helpers import (
     TRANSPORT_REQUEST_CUTOFF,
+    _role_profile_label,
     _strip,
     _today_transport_allocations,
     _today_visitor_allocations,
-    _require_role_profile,
-    _role_profile_label,
 )
 from i18n import _
 from models import (
@@ -128,7 +127,9 @@ async def dashboard(request: Request):
             .order_by(ParkingSlot.entrance_rank, ParkingSlot.slot_number)
             .all()
         )
-        company_slot_rows = [(slot, compute_slot_status(slot, today, now_dt)) for slot in company_slots]
+        company_slot_rows = [
+            (slot, compute_slot_status(slot, today, now_dt)) for slot in company_slots
+        ]
         company_vacant_count = sum(1 for _, status in company_slot_rows if status == "vacant")
         today_allocations = _today_transport_allocations(role_profile.property_id, today)
         today_visitor_allocations = _today_visitor_allocations(role_profile.property_id, today)
@@ -228,9 +229,7 @@ async def my_profile(request: Request):
 @login_required
 async def my_rooms(request: Request):
     role_profiles = (
-        RoleProfile.query.filter_by(user_id=session["user_id"])
-        .order_by(RoleProfile.id)
-        .all()
+        RoleProfile.query.filter_by(user_id=session["user_id"]).order_by(RoleProfile.id).all()
     )
     return render(
         request,

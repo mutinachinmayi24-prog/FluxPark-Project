@@ -1,6 +1,6 @@
 def test_residential_owner_flow(logged_in_client):
-    from models import ParkingSlot, Property
     from database import SessionLocal
+    from models import ParkingSlot, Property
 
     client = logged_in_client
 

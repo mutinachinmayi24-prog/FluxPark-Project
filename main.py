@@ -12,12 +12,24 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.staticfiles import StaticFiles
 
+# Import models so all tables are registered on Base.metadata before create_all().
+import models  # noqa: F401  # pylint: disable=unused-import
 from database import Base, SessionLocal, engine
 from i18n import current_locale, resolve_locale
+from routers import (
+    ai,
+    auth,
+    dashboard,
+    members,
+    notifications,
+    onboarding,
+    parking,
+    payments,
+    security,
+    transport,
+    visitors,
+)
 from webcompat import current_request
-
-# Import models so all tables are registered on Base.metadata before create_all().
-import models  # noqa: F401, E402
 
 app = FastAPI(title="FluxPark")
 
@@ -53,20 +65,6 @@ def on_startup():
 # ---------------------------------------------------------------------------
 # Routers
 # ---------------------------------------------------------------------------
-from routers import (
-    ai,
-    auth,
-    dashboard,
-    members,
-    notifications,
-    onboarding,
-    parking,
-    payments,
-    security,
-    transport,
-    visitors,
-)
-
 app.include_router(auth.router)
 app.include_router(onboarding.router)
 app.include_router(dashboard.router)

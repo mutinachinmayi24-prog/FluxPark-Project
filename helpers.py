@@ -10,15 +10,13 @@ from constants import (
     ROLE_LABELS,
 )
 from database import db
-from i18n import _
 from models import (
-    Property,
     RoleProfile,
     TransportRequest,
     Vehicle,
     VisitorRequest,
 )
-from webcompat import abort, redirect, session, url_for
+from webcompat import redirect, session, url_for
 
 # ---------------------------------------------------------------------------
 # Regex / field constants
@@ -38,10 +36,30 @@ REQUIRED_FIELDS = {
         "num_parking_slots",
         "parking_space_number",
     ],
-    "committee": ["head_name", "head_phone", "head_flat_no", "num_parking_slots", "parking_space_number"],
+    "committee": [
+        "head_name",
+        "head_phone",
+        "head_flat_no",
+        "num_parking_slots",
+        "parking_space_number",
+    ],
     "security": ["name", "phone", "shift_from", "shift_to"],
-    "employee": ["employee_name", "employee_id", "employee_address", "shift_from", "shift_to", "transport"],
-    "manager": ["employee_name", "employee_id", "employee_address", "shift_from", "shift_to", "transport"],
+    "employee": [
+        "employee_name",
+        "employee_id",
+        "employee_address",
+        "shift_from",
+        "shift_to",
+        "transport",
+    ],
+    "manager": [
+        "employee_name",
+        "employee_id",
+        "employee_address",
+        "shift_from",
+        "shift_to",
+        "transport",
+    ],
 }
 
 REQUIRED_BANK_FIELDS = ["bank_name", "branch", "ifsc_code", "account_number", "expiry_date"]

@@ -8,8 +8,11 @@ flake8
 
 # Security & dead-code analysis
 bandit[toml]
-semgrep
+# Semgrep has no native Windows build (https://github.com/semgrep/semgrep/issues/1330);
+# install it on Linux/macOS/WSL — Windows contributors rely on the CI job instead.
+semgrep; platform_system != "Windows"
 vulture
+pip-licenses
 
 # Modernize Python syntax
 pyupgrade

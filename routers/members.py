@@ -9,7 +9,7 @@ from starlette.responses import Response
 
 from constants import RESIDENTIAL_PROPERTY_TYPES
 from database import db
-from helpers import _require_role_profile, _role_profile_label
+from helpers import _require_role_profile
 from i18n import _
 from models import Notification, ParkingSlot, Property, RoleProfile, SlotAvailability
 from templating import render
@@ -97,10 +97,16 @@ async def export_members_csv(request: Request):
         for p in profiles:
             d = p.data or {}
             name = d.get("name") or d.get("employee_name") or "-"
-            writer.writerow([
-                name, p.role, d.get("employee_id", "-"), p.user.contact or "-",
-                d.get("shift_from", "-"), d.get("shift_to", "-"),
-            ])
+            writer.writerow(
+                [
+                    name,
+                    p.role,
+                    d.get("employee_id", "-"),
+                    p.user.contact or "-",
+                    d.get("shift_from", "-"),
+                    d.get("shift_to", "-"),
+                ]
+            )
     else:
         writer.writerow(["Name", "Role", "Flat / Unit", "Contact", "Vehicles"])
         for p in profiles:

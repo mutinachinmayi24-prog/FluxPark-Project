@@ -44,7 +44,9 @@ async def transport_request(request: Request):
 
     run_pending_transport_allocations(role_profile.property_id, now_dt)
 
-    existing = TransportRequest.query.filter_by(role_profile_id=role_profile.id, date=tomorrow).first()
+    existing = TransportRequest.query.filter_by(
+        role_profile_id=role_profile.id, date=tomorrow
+    ).first()
 
     form_data = {}
     if request.method == "POST":
@@ -56,7 +58,10 @@ async def transport_request(request: Request):
             if not existing or existing.status != "pending_allocation":
                 flash(_("There's no pending request for tomorrow to cancel."), "warning")
             elif cutoff_passed:
-                flash(_("The 9 PM cutoff has passed; this request can no longer be changed."), "danger")
+                flash(
+                    _("The 9 PM cutoff has passed; this request can no longer be changed."),
+                    "danger",
+                )
             else:
                 db.session.delete(existing)
                 db.session.commit()
@@ -67,7 +72,9 @@ async def transport_request(request: Request):
             flash(_("You've already submitted a transport request for tomorrow."), "warning")
             return redirect(url_for("transport_request"))
         if cutoff_passed:
-            flash(_("Requests for tomorrow's parking must be submitted before 9 PM today."), "danger")
+            flash(
+                _("Requests for tomorrow's parking must be submitted before 9 PM today."), "danger"
+            )
             return redirect(url_for("transport_request"))
 
         vehicle_type = _strip(form, "vehicle_type")
@@ -97,7 +104,12 @@ async def transport_request(request: Request):
             )
             db.session.add(tr)
             db.session.commit()
-            flash(_("Transport request for tomorrow submitted. Slots are allocated after the 9 PM cutoff."), "success")
+            flash(
+                _(
+                    "Transport request for tomorrow submitted. Slots are allocated after the 9 PM cutoff."
+                ),
+                "success",
+            )
             return redirect(url_for("transport_request"))
 
         for error in errors:

@@ -42,7 +42,9 @@ async def ai_assistant(request: Request):
 
         user_text = form.get("message", "").strip()
         if user_text:
-            db.session.add(AIChatMessage(role_profile_id=role_profile.id, role="user", content=user_text))
+            db.session.add(
+                AIChatMessage(role_profile_id=role_profile.id, role="user", content=user_text)
+            )
             db.session.commit()
 
             settings = _get_ai_settings(role_profile)
@@ -52,7 +54,9 @@ async def ai_assistant(request: Request):
                 reply = reply or _(
                     "Sorry, I couldn't reach the AI provider. Check your AI settings and try again."
                 )
-            db.session.add(AIChatMessage(role_profile_id=role_profile.id, role="assistant", content=reply))
+            db.session.add(
+                AIChatMessage(role_profile_id=role_profile.id, role="assistant", content=reply)
+            )
             db.session.commit()
         return redirect(url_for("ai_assistant"))
 
@@ -119,14 +123,20 @@ async def ai_settings(request: Request):
             is_running, models, error = ollama_status(settings.ollama_host)
             if is_running:
                 flash(
-                    _("Connected to Ollama at %(host)s. Installed models: %(models)s",
-                      host=settings.ollama_host, models=", ".join(models) or str(_("none"))),
+                    _(
+                        "Connected to Ollama at %(host)s. Installed models: %(models)s",
+                        host=settings.ollama_host,
+                        models=", ".join(models) or str(_("none")),
+                    ),
                     "success",
                 )
             else:
                 flash(
-                    _("Could not reach Ollama at %(host)s: %(error)s",
-                      host=settings.ollama_host, error=error),
+                    _(
+                        "Could not reach Ollama at %(host)s: %(error)s",
+                        host=settings.ollama_host,
+                        error=error,
+                    ),
                     "danger",
                 )
         else:
@@ -136,11 +146,17 @@ async def ai_settings(request: Request):
 
     provider = settings.provider if settings else "ollama"
     ollama_host = settings.ollama_host if settings and settings.ollama_host else DEFAULT_OLLAMA_HOST
-    ollama_model = settings.ollama_model if settings and settings.ollama_model else DEFAULT_OLLAMA_MODEL
-    byok_base_url = settings.byok_base_url if settings and settings.byok_base_url else DEFAULT_BYOK_BASE_URL
+    ollama_model = (
+        settings.ollama_model if settings and settings.ollama_model else DEFAULT_OLLAMA_MODEL
+    )
+    byok_base_url = (
+        settings.byok_base_url if settings and settings.byok_base_url else DEFAULT_BYOK_BASE_URL
+    )
     byok_model = settings.byok_model if settings and settings.byok_model else DEFAULT_BYOK_MODEL
     has_byok_key = bool(settings and settings.byok_api_key)
-    gemini_model = settings.gemini_model if settings and settings.gemini_model else DEFAULT_GEMINI_MODEL
+    gemini_model = (
+        settings.gemini_model if settings and settings.gemini_model else DEFAULT_GEMINI_MODEL
+    )
     has_gemini_key = bool(settings and settings.gemini_api_key)
 
     is_running, available_models, ollama_error = ollama_status(ollama_host)

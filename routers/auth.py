@@ -34,7 +34,7 @@ def mask_contact(contact, contact_type):
 
 
 def create_and_send_otp(contact):
-    code = f"{secrets.randbelow(10 ** 6):06d}"
+    code = f"{secrets.randbelow(10**6):06d}"
     expires_at = datetime.utcnow() + timedelta(minutes=OTP_VALIDITY_MINUTES)
     otp = OTPRequest(contact=contact, code=code, expires_at=expires_at)
     db.session.add(otp)
@@ -190,9 +190,7 @@ async def verify_otp(request: Request):
             session["user_id"] = user.id
             return route_after_login(user)
 
-    return render(
-        request, "verify_otp.html", masked_contact=mask_contact(contact, contact_type)
-    )
+    return render(request, "verify_otp.html", masked_contact=mask_contact(contact, contact_type))
 
 
 @router.api_route("/resend-otp", methods=["POST"], name="resend_otp")

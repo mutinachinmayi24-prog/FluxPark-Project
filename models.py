@@ -156,9 +156,13 @@ class VisitorRequest(db.Model):
     to_time = db.Column(db.Time, nullable=False)
     purpose = db.Column(db.String(200), nullable=True)
     is_unexpected = db.Column(db.Boolean, default=False, nullable=False)
-    created_by_role_profile_id = db.Column(db.Integer, db.ForeignKey("role_profile.id"), nullable=True)
+    created_by_role_profile_id = db.Column(
+        db.Integer, db.ForeignKey("role_profile.id"), nullable=True
+    )
     status = db.Column(db.String(20), nullable=False, default="pending_allocation")
-    slot_availability_id = db.Column(db.Integer, db.ForeignKey("slot_availability.id"), nullable=True)
+    slot_availability_id = db.Column(
+        db.Integer, db.ForeignKey("slot_availability.id"), nullable=True
+    )
     parking_slot_id = db.Column(db.Integer, db.ForeignKey("parking_slot.id"), nullable=True)
     qr_token = db.Column(db.String(32), unique=True, nullable=False, default=generate_token)
     entry_time = db.Column(db.DateTime, nullable=True)
@@ -241,8 +245,12 @@ class AISettings(db.Model):
 
     __tablename__ = "ai_settings"
     id = db.Column(db.Integer, primary_key=True)
-    role_profile_id = db.Column(db.Integer, db.ForeignKey("role_profile.id"), unique=True, nullable=False)
-    provider = db.Column(db.String(20), nullable=False, default="ollama")  # "ollama", "byok", or "gemini"
+    role_profile_id = db.Column(
+        db.Integer, db.ForeignKey("role_profile.id"), unique=True, nullable=False
+    )
+    provider = db.Column(
+        db.String(20), nullable=False, default="ollama"
+    )  # "ollama", "byok", or "gemini"
     ollama_host = db.Column(db.String(200), nullable=True)
     ollama_model = db.Column(db.String(100), nullable=True)
     byok_base_url = db.Column(db.String(200), nullable=True)
@@ -254,7 +262,8 @@ class AISettings(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     role_profile = db.relationship(
-        "RoleProfile", backref=db.backref("ai_settings", uselist=False, cascade="all, delete-orphan")
+        "RoleProfile",
+        backref=db.backref("ai_settings", uselist=False, cascade="all, delete-orphan"),
     )
 
 

@@ -1,3 +1,4 @@
+import contextlib
 import os
 import tempfile
 
@@ -22,10 +23,8 @@ def app_module():
     SessionLocal.remove()
     engine.dispose()
 
-    try:
+    with contextlib.suppress(OSError):
         os.remove(db_path)
-    except OSError:
-        pass
 
 
 @pytest.fixture()
@@ -48,15 +47,11 @@ def _clean_database(app_module):
 @pytest.fixture()
 def logged_in_client(client):
     """A test client that has completed signup + OTP verification."""
-    from models import OTPRequest
     from database import SessionLocal
+    from models import OTPRequest
 
     client.post("/signup", data={"contact_type": "phone", "contact": "9000000001"})
-    otp = (
-        OTPRequest.query.filter_by(contact="9000000001")
-        .order_by(OTPRequest.id.desc())
-        .first()
-    )
+    otp = OTPRequest.query.filter_by(contact="9000000001").order_by(OTPRequest.id.desc()).first()
     code = otp.code
     SessionLocal.remove()
 

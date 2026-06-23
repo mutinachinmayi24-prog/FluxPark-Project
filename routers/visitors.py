@@ -21,9 +21,8 @@ from helpers import (
 )
 from i18n import _
 from models import Property, VisitorRequest
-from parking_engine import now_ist, try_match_request
+from parking_engine import REQUEST_STATUS_CLASSES, REQUEST_STATUS_LABELS, try_match_request
 from templating import render
-from parking_engine import REQUEST_STATUS_CLASSES, REQUEST_STATUS_LABELS
 from webcompat import abort, first_or_404, flash, login_required, redirect, url_for
 
 try:
@@ -87,7 +86,9 @@ async def visitor_request(request: Request):
             if vr.status == "allocated":
                 flash(_("Visitor request created and a parking slot was allocated!"), "success")
             else:
-                flash(_("Visitor request created. We'll notify you once a slot is available."), "info")
+                flash(
+                    _("Visitor request created. We'll notify you once a slot is available."), "info"
+                )
             return redirect(url_for("visitor_request"))
 
         for error in errors:
@@ -137,7 +138,9 @@ async def visitor_log(request: Request):
     if status_filter:
         query = query.filter(VisitorRequest.status == status_filter)
 
-    records = query.order_by(VisitorRequest.date.desc(), VisitorRequest.from_time.desc()).limit(500).all()
+    records = (
+        query.order_by(VisitorRequest.date.desc(), VisitorRequest.from_time.desc()).limit(500).all()
+    )
 
     return render(
         request,
@@ -172,25 +175,39 @@ async def export_visitor_log_csv(request: Request):
 
     output = io.StringIO()
     writer = csv.writer(output)
-    writer.writerow([
-        "Date", "Visitor Name", "Phone", "Vehicle Type", "Vehicle Number",
-        "From", "To", "Purpose", "Host", "Status", "Entry Time", "Exit Time",
-    ])
+    writer.writerow(
+        [
+            "Date",
+            "Visitor Name",
+            "Phone",
+            "Vehicle Type",
+            "Vehicle Number",
+            "From",
+            "To",
+            "Purpose",
+            "Host",
+            "Status",
+            "Entry Time",
+            "Exit Time",
+        ]
+    )
     for r in records:
-        writer.writerow([
-            r.date.isoformat(),
-            r.visitor_name,
-            r.visitor_phone,
-            r.vehicle_type,
-            r.vehicle_number,
-            r.from_time.strftime("%H:%M"),
-            r.to_time.strftime("%H:%M"),
-            r.purpose or "-",
-            _role_profile_label(r.host_role_profile),
-            str(REQUEST_STATUS_LABELS.get(r.status, r.status)),
-            r.entry_time.strftime("%Y-%m-%d %H:%M") if r.entry_time else "-",
-            r.exit_time.strftime("%Y-%m-%d %H:%M") if r.exit_time else "-",
-        ])
+        writer.writerow(
+            [
+                r.date.isoformat(),
+                r.visitor_name,
+                r.visitor_phone,
+                r.vehicle_type,
+                r.vehicle_number,
+                r.from_time.strftime("%H:%M"),
+                r.to_time.strftime("%H:%M"),
+                r.purpose or "-",
+                _role_profile_label(r.host_role_profile),
+                str(REQUEST_STATUS_LABELS.get(r.status, r.status)),
+                r.entry_time.strftime("%Y-%m-%d %H:%M") if r.entry_time else "-",
+                r.exit_time.strftime("%Y-%m-%d %H:%M") if r.exit_time else "-",
+            ]
+        )
 
     return Response(
         content=output.getvalue(),

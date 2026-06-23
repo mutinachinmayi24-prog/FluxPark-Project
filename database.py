@@ -64,7 +64,7 @@ def _scopefunc():
         return token
 
 
-SessionLocal = scoped_session(
+SessionLocal = scoped_session(  # pylint: disable=invalid-name
     sessionmaker(bind=engine, autoflush=True, autocommit=False), scopefunc=_scopefunc
 )
 
@@ -73,8 +73,8 @@ _CAMEL_RE = re.compile(r"((?<=[a-z0-9])[A-Z]|(?!^)[A-Z](?=[a-z]))")
 
 class _BaseModel:
     @declared_attr
-    def __tablename__(cls):  # noqa: N805
-        return _CAMEL_RE.sub(r"_\1", cls.__name__).lower().lstrip("_")
+    def __tablename__(cls):  # noqa: N805  # pylint: disable=no-self-argument
+        return _CAMEL_RE.sub(r"_\1", cls.__name__).lower().lstrip("_")  # pylint: disable=no-member
 
 
 Base = declarative_base(cls=_BaseModel)

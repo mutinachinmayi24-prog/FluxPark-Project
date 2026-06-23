@@ -17,7 +17,7 @@ from helpers import (
 )
 from i18n import _
 from models import Property, RoleProfile, TransportRequest, VisitorRequest
-from parking_engine import allocate_unexpected_visitor, notify, now_ist
+from parking_engine import notify, now_ist
 from templating import render
 from webcompat import abort, first_or_404, flash, login_required, redirect, url_for
 
@@ -36,9 +36,13 @@ async def security_scan(request: Request):
     if request.method == "POST":
         form = await request.form()
         token = _strip(form, "token").rstrip("/").rsplit("/", 1)[-1]
-        if VisitorRequest.query.filter_by(qr_token=token, property_id=role_profile.property_id).first():
+        if VisitorRequest.query.filter_by(
+            qr_token=token, property_id=role_profile.property_id
+        ).first():
             return redirect(url_for("security_visitor", token=token))
-        if TransportRequest.query.filter_by(qr_token=token, property_id=role_profile.property_id).first():
+        if TransportRequest.query.filter_by(
+            qr_token=token, property_id=role_profile.property_id
+        ).first():
             return redirect(url_for("security_transport", token=token))
         flash(_("No pass found for that code."), "danger")
         return redirect(url_for("security_scan"))
@@ -55,7 +59,9 @@ async def security_visitor(request: Request, token: str):
     if role_profile.role != "security":
         abort(403)
 
-    vr = first_or_404(VisitorRequest.query.filter_by(qr_token=token, property_id=role_profile.property_id))
+    vr = first_or_404(
+        VisitorRequest.query.filter_by(qr_token=token, property_id=role_profile.property_id)
+    )
     slot = vr.slot_availability.parking_slot if vr.slot_availability else vr.parking_slot
 
     return render(
@@ -69,7 +75,9 @@ async def security_visitor(request: Request, token: str):
     )
 
 
-@router.api_route("/security/visitor/{token}/entry", methods=["POST"], name="security_visitor_entry")
+@router.api_route(
+    "/security/visitor/{token}/entry", methods=["POST"], name="security_visitor_entry"
+)
 @login_required
 async def security_visitor_entry(request: Request, token: str):
     role_profile, redirect_resp = _require_role_profile()
@@ -78,7 +86,9 @@ async def security_visitor_entry(request: Request, token: str):
     if role_profile.role != "security":
         abort(403)
 
-    vr = first_or_404(VisitorRequest.query.filter_by(qr_token=token, property_id=role_profile.property_id))
+    vr = first_or_404(
+        VisitorRequest.query.filter_by(qr_token=token, property_id=role_profile.property_id)
+    )
     if vr.status != "allocated":
         flash(_("This visitor cannot be marked as entered right now."), "warning")
         return redirect(url_for("security_visitor", token=token))
@@ -99,7 +109,9 @@ async def security_visitor_exit(request: Request, token: str):
     if role_profile.role != "security":
         abort(403)
 
-    vr = first_or_404(VisitorRequest.query.filter_by(qr_token=token, property_id=role_profile.property_id))
+    vr = first_or_404(
+        VisitorRequest.query.filter_by(qr_token=token, property_id=role_profile.property_id)
+    )
     if vr.status != "entered":
         flash(_("This visitor cannot be marked as exited right now."), "warning")
         return redirect(url_for("security_visitor", token=token))
@@ -120,7 +132,9 @@ async def security_transport(request: Request, token: str):
     if role_profile.role != "security":
         abort(403)
 
-    tr = first_or_404(TransportRequest.query.filter_by(qr_token=token, property_id=role_profile.property_id))
+    tr = first_or_404(
+        TransportRequest.query.filter_by(qr_token=token, property_id=role_profile.property_id)
+    )
 
     return render(
         request,
@@ -131,7 +145,9 @@ async def security_transport(request: Request, token: str):
     )
 
 
-@router.api_route("/security/transport/{token}/entry", methods=["POST"], name="security_transport_entry")
+@router.api_route(
+    "/security/transport/{token}/entry", methods=["POST"], name="security_transport_entry"
+)
 @login_required
 async def security_transport_entry(request: Request, token: str):
     role_profile, redirect_resp = _require_role_profile()
@@ -140,7 +156,9 @@ async def security_transport_entry(request: Request, token: str):
     if role_profile.role != "security":
         abort(403)
 
-    tr = first_or_404(TransportRequest.query.filter_by(qr_token=token, property_id=role_profile.property_id))
+    tr = first_or_404(
+        TransportRequest.query.filter_by(qr_token=token, property_id=role_profile.property_id)
+    )
     if tr.status != "allocated":
         flash(_("This pass cannot be marked as entered right now."), "warning")
         return redirect(url_for("security_transport", token=token))
@@ -152,7 +170,9 @@ async def security_transport_entry(request: Request, token: str):
     return redirect(url_for("security_transport", token=token))
 
 
-@router.api_route("/security/transport/{token}/exit", methods=["POST"], name="security_transport_exit")
+@router.api_route(
+    "/security/transport/{token}/exit", methods=["POST"], name="security_transport_exit"
+)
 @login_required
 async def security_transport_exit(request: Request, token: str):
     role_profile, redirect_resp = _require_role_profile()
@@ -161,7 +181,9 @@ async def security_transport_exit(request: Request, token: str):
     if role_profile.role != "security":
         abort(403)
 
-    tr = first_or_404(TransportRequest.query.filter_by(qr_token=token, property_id=role_profile.property_id))
+    tr = first_or_404(
+        TransportRequest.query.filter_by(qr_token=token, property_id=role_profile.property_id)
+    )
     if tr.status != "entered":
         flash(_("This pass cannot be marked as exited right now."), "warning")
         return redirect(url_for("security_transport", token=token))
@@ -173,7 +195,9 @@ async def security_transport_exit(request: Request, token: str):
     return redirect(url_for("security_transport", token=token))
 
 
-@router.api_route("/security/unexpected-visitor", methods=["GET", "POST"], name="unexpected_visitor")
+@router.api_route(
+    "/security/unexpected-visitor", methods=["GET", "POST"], name="unexpected_visitor"
+)
 @login_required
 async def unexpected_visitor(request: Request):
     role_profile, redirect_resp = _require_role_profile()
@@ -217,11 +241,7 @@ async def unexpected_visitor(request: Request):
             errors.append(_("Please select a date."))
 
         host = RoleProfile.query.get(int(host_id)) if host_id.isdigit() else None
-        if (
-            not host
-            or host.property_id != role_profile.property_id
-            or host.role not in host_roles
-        ):
+        if not host or host.property_id != role_profile.property_id or host.role not in host_roles:
             errors.append(_("Please select who the visitor is here to see."))
 
         date_val = _parse_date(date_str) if date_str else None
@@ -242,6 +262,12 @@ async def unexpected_visitor(request: Request):
             to_time = (now + timedelta(hours=1)).time().replace(second=0, microsecond=0)
 
         if not errors:
+            # `host`/`from_time`/`to_time` are only unset when one of the checks
+            # above already appended an error, so `errors` would be non-empty.
+            # Type-narrowing aid only, not a security boundary.
+            assert host is not None  # nosec B101
+            assert from_time is not None  # nosec B101
+            assert to_time is not None  # nosec B101
             vr = VisitorRequest(
                 property_id=role_profile.property_id,
                 host_role_profile_id=host.id,

@@ -10,6 +10,7 @@ all three keep working with the existing per-role-profile AISettings, while
 the agent itself — instructions, tools, reasoning loop — is genuine ADK.
 """
 
+import contextlib
 from datetime import datetime as _datetime
 
 from google.adk.agents import Agent
@@ -30,7 +31,7 @@ from database import DATABASE_URL, db
 APP_NAME = "fluxpark"
 DEFAULT_GEMINI_MODEL = "gemini-2.0-flash"
 
-_session_service = None
+_session_service = None  # pylint: disable=invalid-name
 
 
 def _async_db_url(url: str) -> str:
@@ -43,7 +44,7 @@ def _async_db_url(url: str) -> str:
 
 
 def _get_session_service():
-    global _session_service
+    global _session_service  # pylint: disable=global-statement
     if _session_service is None:
         _session_service = DatabaseSessionService(db_url=_async_db_url(DATABASE_URL))
     return _session_service
@@ -65,10 +66,16 @@ def _resolve_model(settings):
     if provider == "byok" and settings and settings.byok_api_key:
         model_name = settings.byok_model or DEFAULT_BYOK_MODEL
         base_url = settings.byok_base_url or DEFAULT_BYOK_BASE_URL
-        return LiteLlm(model=f"openai/{model_name}", api_base=base_url, api_key=settings.byok_api_key)
+        return LiteLlm(
+            model=f"openai/{model_name}", api_base=base_url, api_key=settings.byok_api_key
+        )
 
-    host = (settings.ollama_host if settings and settings.ollama_host else DEFAULT_OLLAMA_HOST).rstrip("/")
-    model_name = settings.ollama_model if settings and settings.ollama_model else DEFAULT_OLLAMA_MODEL
+    host = (
+        settings.ollama_host if settings and settings.ollama_host else DEFAULT_OLLAMA_HOST
+    ).rstrip("/")
+    model_name = (
+        settings.ollama_model if settings and settings.ollama_model else DEFAULT_OLLAMA_MODEL
+    )
     return LiteLlm(model=f"ollama_chat/{model_name}", api_base=host)
 
 
@@ -124,7 +131,11 @@ def _build_tools(role_profile):
                 property_id=role_profile.property_id, sub_room_id=role_profile.sub_room_id
             ).all()
         return [
-            {"slot_number": s.slot_number, "floor": s.floor or "-", "status": compute_slot_status(s, today, now_dt)}
+            {
+                "slot_number": s.slot_number,
+                "floor": s.floor or "-",
+                "status": compute_slot_status(s, today, now_dt),
+            }
             for s in slots
         ]
 
@@ -134,7 +145,9 @@ def _build_tools(role_profile):
         from parking_engine import now_ist
 
         today = now_ist().date()
-        rows = VisitorRequest.query.filter_by(host_role_profile_id=role_profile.id, date=today).all()
+        rows = VisitorRequest.query.filter_by(
+            host_role_profile_id=role_profile.id, date=today
+        ).all()
         return [
             {
                 "visitor_name": r.visitor_name,
@@ -150,9 +163,15 @@ def _build_tools(role_profile):
         """Look up the user's pending (unpaid) payments that they owe."""
         from models import Transaction
 
-        rows = Transaction.query.filter_by(payer_role_profile_id=role_profile.id, status="pending").all()
+        rows = Transaction.query.filter_by(
+            payer_role_profile_id=role_profile.id, status="pending"
+        ).all()
         return [
-            {"description": t.description, "amount": t.total_amount, "created_at": t.created_at.isoformat()}
+            {
+                "description": t.description,
+                "amount": t.total_amount,
+                "created_at": t.created_at.isoformat(),
+            }
             for t in rows
         ]
 
@@ -161,7 +180,9 @@ def _build_tools(role_profile):
         from models import Notification
 
         rows = Notification.query.filter_by(role_profile_id=role_profile.id, is_read=False).all()
-        return [{"title": n.title, "body": n.body, "created_at": n.created_at.isoformat()} for n in rows]
+        return [
+            {"title": n.title, "body": n.body, "created_at": n.created_at.isoformat()} for n in rows
+        ]
 
     def submit_visitor_request(
         visitor_name: str,
@@ -214,7 +235,12 @@ def _build_tools(role_profile):
             return f"Visitor request created for {visitor_name} and a parking slot was allocated."
         return f"Visitor request created for {visitor_name}. We'll notify you once a slot is available."
 
-    tools = [get_my_parking_slots, get_today_visitor_requests, get_pending_payments, get_unread_notifications]
+    tools = [
+        get_my_parking_slots,
+        get_today_visitor_requests,
+        get_pending_payments,
+        get_unread_notifications,
+    ]
     if role_profile.role in ("owner", "tenant", "committee"):
         tools.append(submit_visitor_request)
     return tools
@@ -261,7 +287,9 @@ async def get_agent_reply(role_profile, settings, user_text):
         message = types.Content(role="user", parts=[types.Part.from_text(text=user_text)])
 
         reply_text = None
-        async for event in runner.run_async(user_id=user_id, session_id=session_id, new_message=message):
+        async for event in runner.run_async(
+            user_id=user_id, session_id=session_id, new_message=message
+        ):
             if event.is_final_response() and event.content and event.content.parts:
                 reply_text = "".join(part.text for part in event.content.parts if part.text)
 
@@ -276,7 +304,5 @@ async def reset_session(role_profile):
     """Drop the agent's persistent memory for this role profile (used by 'Clear conversation')."""
     service = _get_session_service()
     user_id, session_id = _session_identity(role_profile)
-    try:
+    with contextlib.suppress(Exception):  # nothing to clear is not an error
         await service.delete_session(app_name=APP_NAME, user_id=user_id, session_id=session_id)
-    except Exception:  # noqa: BLE001 - nothing to clear is not an error
-        pass

@@ -10,8 +10,8 @@ def test_signup_page_loads(client):
 
 
 def test_signup_rejects_invalid_phone(client):
-    from models import OTPRequest
     from database import SessionLocal
+    from models import OTPRequest
 
     response = client.post(
         "/signup",
@@ -40,8 +40,8 @@ def test_dashboard_requires_login(client):
 
 
 def test_signup_and_verify_otp_creates_user(client):
-    from models import OTPRequest, User
     from database import SessionLocal
+    from models import OTPRequest, User
 
     response = client.post(
         "/signup",
@@ -51,11 +51,7 @@ def test_signup_and_verify_otp_creates_user(client):
     assert response.status_code in (302, 307)
     assert "/verify-otp" in response.headers["Location"]
 
-    otp = (
-        OTPRequest.query.filter_by(contact="9000000002")
-        .order_by(OTPRequest.id.desc())
-        .first()
-    )
+    otp = OTPRequest.query.filter_by(contact="9000000002").order_by(OTPRequest.id.desc()).first()
     assert otp is not None
     code = otp.code
     SessionLocal.remove()

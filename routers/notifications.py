@@ -11,7 +11,7 @@ from helpers import (
     _role_profile_label,
 )
 from i18n import _
-from models import Notification, Property, RoleProfile, VisitorRequest
+from models import Notification, Property, VisitorRequest
 from parking_engine import allocate_unexpected_visitor, notify, try_match_request
 from templating import render
 from webcompat import abort, flash, login_required, redirect, url_for
@@ -86,7 +86,9 @@ async def mark_all_notifications_read(request: Request):
     if redirect_resp:
         return redirect_resp
 
-    Notification.query.filter_by(role_profile_id=role_profile.id, is_read=False).update({"is_read": True})
+    Notification.query.filter_by(role_profile_id=role_profile.id, is_read=False).update(
+        {"is_read": True}
+    )
     db.session.commit()
     return redirect(url_for("notifications"))
 
@@ -122,7 +124,13 @@ async def approve_visitor_request(request: Request, request_id: int):
     if vr.status == "allocated":
         flash(_("Approved %(name)s and allocated a parking slot.", name=vr.visitor_name), "success")
     else:
-        flash(_("Approved %(name)s. We'll notify you once a slot is available.", name=vr.visitor_name), "info")
+        flash(
+            _(
+                "Approved %(name)s. We'll notify you once a slot is available.",
+                name=vr.visitor_name,
+            ),
+            "info",
+        )
     return redirect(url_for("notifications"))
 
 
