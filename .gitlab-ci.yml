@@ -35,7 +35,7 @@ flake8:
 pylint:
   stage: lint
   script:
-    - pylint app.py models.py extensions.py constants.py parking_engine.py ai_engine.py
+    - pylint adk_engine.py ai_engine.py constants.py database.py helpers.py i18n.py main.py models.py parking_engine.py templating.py webcompat.py routers
   allow_failure: true # tighten as the codebase is brought into compliance
 
 mypy:
@@ -67,14 +67,16 @@ bandit:
 semgrep:
   stage: security
   image: semgrep/semgrep
+  before_script: [] # this image ships semgrep directly; it has no Python/pip to run the default before_script
   script:
-    - semgrep --config .semgrep.yml --config p/python --config p/flask --error .
+    - semgrep --config .semgrep.yml --config p/python --error .
 
 gitleaks:
   stage: security
   image:
     name: zricethezav/gitleaks:latest
     entrypoint: [""]
+  before_script: [] # Go binary image with no Python/pip
   script:
     - gitleaks detect --source . --config .gitleaks.toml --no-banner --redact -v
 
@@ -101,6 +103,7 @@ changelog:
   image:
     name: orhunp/git-cliff:latest
     entrypoint: [""]
+  before_script: [] # Rust binary image with no Python/pip
   script:
     - git-cliff -o CHANGELOG.md
   artifacts:

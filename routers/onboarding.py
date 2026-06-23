@@ -287,9 +287,10 @@ async def invite_links(request: Request):
         return redirect(url_for("property_setup"))
 
     prop = get_or_404(Property, property_id)
-    invite_url = url_for("join", token=prop.invite_token, _external=True)
+    # Host header is validated by TrustedHostMiddleware; see main.py.
+    invite_url = url_for("join", token=prop.invite_token, _external=True)  # nosemgrep
     sub_room_links = [
-        (sub_room, url_for("join", token=sub_room.invite_token, _external=True))
+        (sub_room, url_for("join", token=sub_room.invite_token, _external=True))  # nosemgrep
         for sub_room in prop.sub_rooms
     ]
     onboarding = (

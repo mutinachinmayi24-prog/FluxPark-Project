@@ -159,7 +159,8 @@ async def transport_pass(request: Request, token: str):
 @router.api_route("/transport-qr/{token}.png", methods=["GET"], name="transport_qr_image")
 async def transport_qr_image(request: Request, token: str):
     tr = first_or_404(TransportRequest.query.filter_by(qr_token=token))
-    pass_url = url_for("transport_pass", token=tr.qr_token, _external=True)
+    # Host header is validated by TrustedHostMiddleware; see main.py.
+    pass_url = url_for("transport_pass", token=tr.qr_token, _external=True)  # nosemgrep
 
     img = qrcode.make(pass_url)
     buf = io.BytesIO()

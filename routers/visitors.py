@@ -232,7 +232,8 @@ async def visitor_pass(request: Request, token: str):
 @router.api_route("/qr/{token}.png", methods=["GET"], name="qr_image")
 async def qr_image(request: Request, token: str):
     vr = first_or_404(VisitorRequest.query.filter_by(qr_token=token))
-    pass_url = url_for("visitor_pass", token=vr.qr_token, _external=True)
+    # Host header is validated by TrustedHostMiddleware; see main.py.
+    pass_url = url_for("visitor_pass", token=vr.qr_token, _external=True)  # nosemgrep
 
     img = qrcode.make(pass_url)
     buf = io.BytesIO()

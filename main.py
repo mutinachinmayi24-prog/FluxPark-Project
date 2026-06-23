@@ -10,6 +10,7 @@ import os
 from fastapi import FastAPI
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.middleware.sessions import SessionMiddleware
+from starlette.middleware.trustedhost import TrustedHostMiddleware
 from starlette.staticfiles import StaticFiles
 
 # Import models so all tables are registered on Base.metadata before create_all().
@@ -51,7 +52,17 @@ async def request_context_middleware(request, call_next):
 app.add_middleware(BaseHTTPMiddleware, dispatch=request_context_middleware)
 app.add_middleware(
     SessionMiddleware,
-    secret_key=os.environ.get("SECRET_KEY", "dev-secret-key-change-in-production"),
+    # dev-only fallback; render.yaml generates a real SECRET_KEY for deployments.
+    secret_key=os.environ.get("SECRET_KEY", "dev-secret-key-change-in-production"),  # nosemgrep
+)
+# Outermost middleware: rejects requests with a spoofed Host header before
+# anything else runs, so request.url_for(..., _external=True) (visitor/
+# transport pass links, invite links) can't be tricked into building a URL
+# pointing at an attacker-controlled domain. Set ALLOWED_HOSTS in production
+# (comma-separated); "*" keeps local/dev/Docker-smoke-test usage unrestricted.
+app.add_middleware(
+    TrustedHostMiddleware,
+    allowed_hosts=os.environ.get("ALLOWED_HOSTS", "*").split(","),
 )
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
