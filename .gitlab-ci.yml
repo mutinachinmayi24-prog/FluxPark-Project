@@ -2,6 +2,7 @@ stages:
   - lint
   - security
   - test
+  - compliance
   - changelog
 
 variables:
@@ -94,6 +95,19 @@ pytest:
   script:
     - pytest
   coverage: '/TOTAL.+?(\d+(?:\.\d+)?%)/'
+
+# ---------------------------------------------------------------------------
+# Compliance
+# ---------------------------------------------------------------------------
+pip-licenses:
+  stage: compliance
+  before_script:
+    # Scoped to runtime deps only (requirements.txt) -- license compliance
+    # cares about what actually ships in the Docker image, not dev tooling.
+    - python -m pip install --upgrade pip
+    - pip install -r requirements.txt pip-licenses
+  script:
+    - pip-licenses --fail-on="UNKNOWN;Proprietary License;Commercial License" --partial-match
 
 # ---------------------------------------------------------------------------
 # Changelog
