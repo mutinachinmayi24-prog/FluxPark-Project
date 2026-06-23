@@ -96,6 +96,31 @@ changes.
 Non-trivial features should start with a spec under `specs/` (see `.specify/`
 for the project constitution and templates) before implementation.
 
+## CI/CD runner
+
+`.gitlab-ci.yml` jobs are untagged, so any runner with "run untagged jobs"
+enabled will pick them up. If pipelines sit in **pending** with "no matching
+runners available", this project has no runner registered/online on
+code.swecha.org yet — that's an infrastructure gap, not a YAML bug, and no
+amount of editing the pipeline file will fix it.
+
+Two things to check, in order:
+
+1. **Shared runners enabled?** Project → Settings → CI/CD → Runners. If your
+   GitLab group provides shared runners, just enabling them here is enough.
+2. **No shared runners available?** Register a project runner yourself:
+   ```bash
+   GITLAB_PAT=<your PAT with api scope> ./scripts/setup-gitlab-runner.sh
+   ```
+   Run it from inside the repo (it detects the project URL from `git remote
+   get-url origin`), or pass `--url <repo-url>` explicitly. It installs
+   `gitlab-runner` if missing, registers a runner against this project via
+   the GitLab API, and starts it (systemd/Homebrew service, or a background
+   process otherwise). On Windows, run it under WSL or Git Bash. See the
+   script's header comment (`--help`) for all options. Get a PAT from
+   *User Settings → Access Tokens* with the `api` scope — never commit it or
+   paste it into a chat/issue.
+
 ## Merge requests
 
 1. Make sure `pre-commit run --all-files` and `pytest` pass locally.
