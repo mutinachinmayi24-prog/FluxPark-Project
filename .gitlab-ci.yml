@@ -48,7 +48,10 @@ mypy:
 pyupgrade:
   stage: lint
   script:
-    - pyupgrade --py311-plus $(git ls-files '*.py')
+    # python:3.12-slim has no git binary, so `git ls-files` would silently
+    # expand to nothing and the job would "pass" without ever checking a
+    # single file -- find -not -path excludes match .gitignore instead.
+    - pyupgrade --py311-plus $(find . -name '*.py' -not -path './.git/*' -not -path '*/__pycache__/*' -not -path './instance/*' -not -path './.venv/*' -not -path './venv/*' -not -path './.specify/*')
   allow_failure: true
 
 vulture:
