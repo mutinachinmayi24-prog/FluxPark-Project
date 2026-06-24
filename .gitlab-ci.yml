@@ -101,9 +101,13 @@ pytest:
 # ---------------------------------------------------------------------------
 pip-licenses:
   stage: compliance
+  # Override the default fluxpark-ci image: it has requirements-dev.txt
+  # baked in (semgrep -> glom -> face, which has an UNKNOWN license classifier
+  # pip-licenses would otherwise flag). License compliance only cares about
+  # what actually ships in the Docker image, so scan a clean base with just
+  # requirements.txt installed, not the dev-tooling image.
+  image: python:3.12-slim
   before_script:
-    # Scoped to runtime deps only (requirements.txt) -- license compliance
-    # cares about what actually ships in the Docker image, not dev tooling.
     - python -m pip install --upgrade pip
     - pip install -r requirements.txt pip-licenses
   script:
