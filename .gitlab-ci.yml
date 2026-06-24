@@ -5,19 +5,16 @@ stages:
   - compliance
   - changelog
 
-variables:
-  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
-
-cache:
-  key: "$CI_COMMIT_REF_SLUG-pip"
-  paths:
-    - .cache/pip
-
 default:
-  image: python:3.12-slim
-  before_script:
-    - python -m pip install --upgrade pip
-    - pip install -r requirements-dev.txt
+  # Built locally on the runner host from Dockerfile.ci (deps baked in --
+  # rebuild with `docker build -f Dockerfile.ci -t fluxpark-ci:latest .`
+  # whenever requirements.txt/requirements-dev.txt change). Without this,
+  # every job reinstalls ~150 packages from scratch (~4 minutes each), and
+  # this project's `cache:` below can't persist between jobs (no S3/GCS/
+  # Azure backend configured on the runner) -- so jobs were hitting the
+  # job timeout just installing dependencies before running any checks.
+  image: fluxpark-ci:latest
+  before_script: []
 
 # ---------------------------------------------------------------------------
 # Lint / formatting / type checking

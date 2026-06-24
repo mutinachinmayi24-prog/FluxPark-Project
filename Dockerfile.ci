@@ -1,0 +1,19 @@
+# CI-only image: bakes requirements-dev.txt in so lint/security/test jobs
+# don't each spend ~4 minutes reinstalling the same ~150 packages from
+# scratch (.gitlab-ci.yml's `cache:` can't persist between jobs on this
+# runner -- no S3/GCS/Azure backend is configured -- so without this, every
+# job pays the full install cost and risks hitting the job timeout).
+#
+# Rebuild whenever requirements.txt / requirements-dev.txt change:
+#   docker build -f Dockerfile.ci -t fluxpark-ci:latest .
+# This is NOT pushed to a registry -- .gitlab-ci.yml's `pull_policy =
+# if-not-present` (config.toml) means the runner uses whatever's already
+# built locally on the runner host. Rebuild on every host that runs this
+# project's CI.
+FROM python:3.12-slim
+
+WORKDIR /app
+
+COPY requirements.txt requirements-dev.txt ./
+RUN python -m pip install --upgrade pip \
+    && pip install --no-cache-dir -r requirements-dev.txt
