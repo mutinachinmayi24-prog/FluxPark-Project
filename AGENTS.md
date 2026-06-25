@@ -127,9 +127,9 @@ pytest
 ## Commit messages
 
 Use [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`,
-`fix:`, `docs:`, `refactor:`, `test:`, `chore:`, `ci:`, ...) — the `changelog`
-CI job generates a changelog from these via git-cliff as a pipeline artifact
-(not committed to the repo).
+`fix:`, `docs:`, `refactor:`, `test:`, `chore:`, `ci:`, ...) — these drive
+`CHANGELOG.md`, generated with git-cliff. Regenerate it
+(`git-cliff -o CHANGELOG.md`) and commit it alongside any user-facing change.
 
 ## Things to avoid
 

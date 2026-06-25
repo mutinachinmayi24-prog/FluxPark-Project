@@ -28,7 +28,13 @@ support (English, Hindi, Telugu).
   Kit](https://google.github.io/adk-docs/) that can look up a user's parking
   slots, visitor requests, payments, and notifications, and submit a visitor
   request on their behalf. Supports a local Ollama provider, a Bring-Your-Own-
-  Key (BYOK) OpenAI-compatible host, or Google Gemini, configurable per user
+  Key (BYOK) OpenAI-compatible host, or Google Gemini, configurable per user.
+  Each provider's data-handling/openness is disclosed in AI Settings, and the
+  chat UI explains what's stored and how to clear it
+- **Installable PWA** — a web app manifest + service worker cache the app
+  shell and all CSS/JS/font assets (self-hosted, no third-party CDN) for
+  faster repeat loads on slow connections, plus a friendly offline page
+  instead of a browser error when navigation requests fail
 - **Internationalisation** — English, Hindi (हिन्दी) and Telugu (తెలుగు)
 
 ## Tech Stack
@@ -74,7 +80,12 @@ fluxpark-project/
 ├── translations/              # Compiled translations (hi, te)
 ├── templates/                   # Jinja2 templates
 ├── static/                         # CSS / JS / images
+│   ├── vendor/                      # Self-hosted Bootstrap, Bootstrap Icons, html5-qrcode (no CDN)
+│   ├── icons/                        # PWA app icons
+│   ├── manifest.json                  # PWA web app manifest
+│   └── js/service-worker.js            # Caches static assets, offline-page fallback
 ├── instance/                          # Local SQLite database (git-ignored)
+├── .gitlab/issue_templates/           # Bug / Feature / Documentation / Setup issue templates
 ├── Dockerfile               # Production image (uvicorn)
 ├── Dockerfile.ci              # CI-only image with requirements-dev.txt baked in
 ├── requirements.txt           # Runtime dependencies
@@ -167,6 +178,7 @@ for how to register and run a local GitLab Runner.
 - [User Manual](USER_MANUAL.md) — end-user guide to FluxPark's features
 - [Contributing Guide](CONTRIBUTING.md) — development workflow, code style, PR process
 - [AGENTS.md](AGENTS.md) — guidance for AI coding agents working in this repo
+- [Changelog](CHANGELOG.md) — generated from commit history with git-cliff
 - [Security Policy](SECURITY.md) — how to report vulnerabilities
 
 ## License

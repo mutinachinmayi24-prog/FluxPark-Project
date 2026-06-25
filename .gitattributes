@@ -1,3 +1,10 @@
 * text=auto eol=lf
 *.sh text eol=lf
 *.bat text eol=crlf
+
+# Vendored/binary assets: never run through text/EOL normalization.
+*.png binary
+*.woff binary
+*.woff2 binary
+*.ico binary
+static/vendor/** -text

@@ -1,0 +1,14 @@
+{
+  "name": "FluxPark",
+  "short_name": "FluxPark",
+  "description": "Smart parking & access management for residential and office properties",
+  "start_url": "/dashboard",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f4f4f5",
+  "theme_color": "#27272a",
+  "icons": [
+    { "src": "/static/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/static/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

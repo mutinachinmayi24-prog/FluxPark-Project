@@ -11,6 +11,7 @@ from fastapi import FastAPI
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.middleware.trustedhost import TrustedHostMiddleware
+from starlette.responses import FileResponse
 from starlette.staticfiles import StaticFiles
 
 # Import models so all tables are registered on Base.metadata before create_all().
@@ -66,6 +67,14 @@ app.add_middleware(
 )
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
+
+
+@app.get("/service-worker.js", include_in_schema=False)
+def service_worker():
+    # Served at the site root (not /static/...) so its default scope covers
+    # the whole app -- a service worker can only control paths at or below
+    # its own location unless the server sends Service-Worker-Allowed.
+    return FileResponse("static/js/service-worker.js", media_type="application/javascript")
 
 
 @app.on_event("startup")

@@ -34,9 +34,13 @@ The app starts at `http://127.0.0.1:8000` using a local SQLite database at
 - Write commit messages following
   [Conventional Commits](https://www.conventionalcommits.org/)
   (`feat:`, `fix:`, `docs:`, `chore:`, `refactor:`, `test:`, `ci:`, ...) — these
-  drive the changelog the `changelog` CI job generates with
-  [git-cliff](https://git-cliff.org/) as a pipeline artifact (`CHANGELOG.md`
-  is not committed to the repo).
+  drive `CHANGELOG.md`, generated with [git-cliff](https://git-cliff.org/).
+  Before opening a merge request, regenerate it:
+  ```bash
+  docker run --rm -v "$(pwd):/app" -w /app --entrypoint "" orhunp/git-cliff:latest git-cliff -o CHANGELOG.md
+  ```
+  (the `changelog` CI job also runs this on every push to `main` and uploads
+  the result as a pipeline artifact, as a backup/verification.)
 - Keep commits focused and the diff reviewable.
 
 ## Code style & quality
@@ -120,8 +124,8 @@ Two things to check, in order:
 ## Merge requests
 
 1. Make sure `pre-commit run --all-files` and `pytest` pass locally.
-2. Don't hand-edit a changelog — it's generated from commit messages by the
-   `changelog` CI job (git-cliff).
+2. Regenerate `CHANGELOG.md` (see Branching & commits above) and include it
+   in your commit — don't hand-edit it.
 3. Describe the change, its motivation, and how you tested it.
 4. Link any related issues.
 

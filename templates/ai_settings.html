@@ -20,12 +20,13 @@
           <input class="form-check-input" type="radio" name="provider" id="provider-ollama" value="ollama" {% if provider not in ('byok', 'gemini') %}checked{% endif %}>
           <label class="form-check-label" for="provider-ollama">
             <strong>{{ _('Local AI Inference (Ollama)') }}</strong>
+            <span class="badge bg-success-subtle text-success-emphasis ms-2">{{ _('Open-source model') }}</span>
             {% if ollama_running %}
               <span class="badge bg-success ms-2">{{ _('Connected') }}</span>
             {% else %}
               <span class="badge bg-secondary ms-2">{{ _('Not detected') }}</span>
             {% endif %}
-            <div class="text-muted small">{{ _('Runs entirely on your own machine — no data leaves your network.') }}</div>
+            <div class="text-muted small">{{ _('Runs entirely on your own machine — no data leaves your network. The model weights are openly published (e.g. Llama).') }}</div>
           </label>
         </div>
 
@@ -69,7 +70,8 @@
           <input class="form-check-input" type="radio" name="provider" id="provider-byok" value="byok" {% if provider == 'byok' %}checked{% endif %}>
           <label class="form-check-label" for="provider-byok">
             <strong>{{ _('Bring Your Own Key (BYOK)') }}</strong>
-            <div class="text-muted small">{{ _('Use a hosted, OpenAI-compatible API with your own API key.') }}</div>
+            <span class="badge bg-warning-subtle text-warning-emphasis ms-2">{{ _('Third-party — model varies') }}</span>
+            <div class="text-muted small">{{ _('Use a hosted, OpenAI-compatible API with your own API key. Your messages are sent to whatever endpoint you configure below — check the data policy of that provider.') }}</div>
           </label>
         </div>
 
@@ -100,7 +102,8 @@
           <input class="form-check-input" type="radio" name="provider" id="provider-gemini" value="gemini" {% if provider == 'gemini' %}checked{% endif %}>
           <label class="form-check-label" for="provider-gemini">
             <strong>{{ _('Google Gemini') }}</strong>
-            <div class="text-muted small">{{ _('Use a Google AI Studio API key to run the assistant on Gemini.') }}</div>
+            <span class="badge bg-warning-subtle text-warning-emphasis ms-2">{{ _('Third-party — closed model') }}</span>
+            <div class="text-muted small">{{ _('Use a Google AI Studio API key to run the assistant on Gemini. Your messages are sent to Google; Gemini is not an open-source model.') }}</div>
           </label>
         </div>
 
