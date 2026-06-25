@@ -1,11 +1,11 @@
 # FluxPark
 
-FluxPark is a Flask-based parking management platform for residential
+FluxPark is a FastAPI-based parking management platform for residential
 communities (apartments, gated communities) and office buildings. It handles
 phone/OTP-based onboarding, role-based dashboards, parking slot management and
 live availability, visitor and transport workflows, payments, in-app
-notifications, and a built-in AI assistant — with full multi-language support
-(English, Hindi, Telugu).
+notifications, and a built-in agentic AI assistant — with full multi-language
+support (English, Hindi, Telugu).
 
 ## Features
 
@@ -24,16 +24,21 @@ notifications, and a built-in AI assistant — with full multi-language support
 - **Payments** tracking
 - **Notifications** centre for all roles
 - **Invite links** for onboarding new members into a property/company
-- **AI Assistant** with a local Ollama provider or a Bring-Your-Own-Key (BYOK)
-  hosted provider, configurable per user
-- **Internationalisation** — English, Hindi (हिन्दी) and Telugu (తెలుగు) via
-  Flask-Babel
+- **AI Assistant** — an agent built on Google's [Agent Development
+  Kit](https://google.github.io/adk-docs/) that can look up a user's parking
+  slots, visitor requests, payments, and notifications, and submit a visitor
+  request on their behalf. Supports a local Ollama provider, a Bring-Your-Own-
+  Key (BYOK) OpenAI-compatible host, or Google Gemini, configurable per user
+- **Internationalisation** — English, Hindi (हिन्दी) and Telugu (తెలుగు)
 
 ## Tech Stack
 
-- **Backend**: Python 3, [Flask 3](https://flask.palletsprojects.com/)
-- **ORM / Database**: Flask-SQLAlchemy on SQLite (`instance/database.db`)
-- **i18n**: Flask-Babel / Babel
+- **Backend**: Python 3, [FastAPI](https://fastapi.tiangolo.com/) on
+  [Uvicorn](https://www.uvicorn.org/)
+- **ORM / Database**: SQLAlchemy 2.0 on SQLite (`instance/database.db`)
+- **AI**: [Google ADK](https://google.github.io/adk-docs/) with a LiteLLM
+  bridge to Ollama / any OpenAI-compatible host / Gemini
+- **i18n**: stdlib `gettext` reading Babel-compiled `.mo` translations
 - **QR codes**: `qrcode` + `Pillow`
 - **Frontend**: Jinja2 templates, Bootstrap-based UI, vanilla JS
 
@@ -41,27 +46,47 @@ notifications, and a built-in AI assistant — with full multi-language support
 
 ```
 fluxpark-project/
-├── app.py                # Flask application: config, routes/views
-├── models.py              # SQLAlchemy models (User, Property, RoleProfile, ParkingSlot, ...)
-├── extensions.py          # Shared Flask extension instances (db = SQLAlchemy())
-├── constants.py           # Shared enums/labels (roles, property types, vehicle types, ...)
-├── parking_engine.py      # Parking slot generation and allocation logic
-├── ai_engine.py           # AI provider integration (Ollama / BYOK)
-├── babel.cfg              # Babel extraction configuration
-├── messages.pot           # Translation template
-├── translations/          # Compiled translations (en, hi, te)
-├── templates/             # Jinja2 templates
-├── static/                # CSS / JS / images
-├── instance/              # Local SQLite database (git-ignored)
-├── requirements.txt       # Runtime dependencies
-└── requirements-dev.txt   # Development / tooling dependencies
+├── main.py                # FastAPI app instance, middleware, router includes, startup
+├── database.py            # SQLAlchemy engine/session/Base shim (Model.query.filter_by(...) style)
+├── i18n.py                 # gettext-based _()/_l() shim, locale contextvar
+├── templating.py            # Jinja2Templates, render(), template globals
+├── webcompat.py               # current_request, url_for, session, flash, login_required, 404 helpers
+├── adk_engine.py                # Google ADK agent: instructions, tools, Runner, session memory
+├── ai_engine.py                   # Ollama/BYOK HTTP helpers used by adk_engine.py and AI Settings
+├── helpers.py                      # Shared route helpers (role-profile guards, form parsing, ...)
+├── models.py                        # SQLAlchemy models (User, Property, RoleProfile, ParkingSlot, ...)
+├── constants.py                      # Shared enums/labels (roles, property types, vehicle types, ...)
+├── parking_engine.py                  # Parking slot generation and allocation logic
+├── routers/                            # FastAPI routers, one module per feature area
+│   ├── auth.py                          # signup, OTP, logout, invite links, language switch
+│   ├── onboarding.py                     # property setup, role forms
+│   ├── dashboard.py                       # dashboard, profile, multi-room switching
+│   ├── parking.py                          # parking slots, map, availability
+│   ├── visitors.py                          # visitor requests, visitor log + CSV, visitor pass/QR
+│   ├── transport.py                          # transport requests, transport pass/QR
+│   ├── security.py                            # QR scan, entry/exit, unexpected visitors
+│   ├── members.py                              # members list/remove, CSV export
+│   ├── notifications.py                         # notifications, visitor approve/deny
+│   ├── payments.py                                # payments list, mark paid
+│   └── ai.py                                       # AI assistant chat + AI settings
+├── babel.cfg               # Babel extraction configuration
+├── messages.pot             # Translation template
+├── translations/              # Compiled translations (hi, te)
+├── templates/                   # Jinja2 templates
+├── static/                         # CSS / JS / images
+├── instance/                          # Local SQLite database (git-ignored)
+├── Dockerfile               # Production image (uvicorn)
+├── Dockerfile.ci              # CI-only image with requirements-dev.txt baked in
+├── requirements.txt           # Runtime dependencies
+└── requirements-dev.txt        # Development / tooling dependencies
 ```
 
 ## Getting Started
 
 ### Prerequisites
 
-- Python 3.11+
+- Python 3.10–3.13 (`google-adk`'s `litellm` dependency does not yet support
+  3.14)
 - pip / venv
 
 ### Installation
@@ -82,26 +107,33 @@ Copy `.env.example` to `.env` and adjust values for your environment:
 cp .env.example .env
 ```
 
-| Variable     | Description                | Default                                  |
-|--------------|-----------------------------|-------------------------------------------|
-| `SECRET_KEY` | Flask session signing key   | `dev-secret-key-change-in-production`     |
+| Variable        | Description                                          | Default                                  |
+|------------------|-------------------------------------------------------|-------------------------------------------|
+| `SECRET_KEY`     | Session-signing key                                    | `dev-secret-key-change-in-production`     |
+| `DATABASE_URL`   | SQLAlchemy database URL                                  | `sqlite:///instance/database.db`          |
+| `ALLOWED_HOSTS`  | Comma-separated hostnames `TrustedHostMiddleware` accepts | `*` (unrestricted — set this in production) |
 
 > The SQLite database lives at `instance/database.db` and is created
-> automatically on first run.
+> automatically on startup.
+>
+> Per-user AI provider settings (Ollama host/model, BYOK base URL/key/model,
+> or Gemini key/model) are configured from the in-app "AI Settings" page and
+> stored in the database (`AISettings` in `models.py`) — they are not read
+> from environment variables.
 
 ### Running the app
 
 ```bash
-python app.py
+uvicorn main:app --reload
 ```
 
-The app starts on `http://127.0.0.1:5000` (and `0.0.0.0:5000`) in debug mode.
+The app starts on `http://127.0.0.1:8000`.
 
 ### Running with Docker
 
 ```bash
 docker build -t fluxpark .
-docker run -p 5000:5000 --env-file .env -v fluxpark-data:/app/instance fluxpark
+docker run -p 8000:8000 --env-file .env -v fluxpark-data:/app/instance fluxpark
 ```
 
 ## Internationalisation
@@ -112,7 +144,7 @@ changing translatable strings:
 ```bash
 pybabel extract -F babel.cfg -o messages.pot .
 pybabel update -i messages.pot -d translations
-# edit the .po files for en / hi / te
+# edit the .po files for hi / te
 pybabel compile -d translations
 ```
 
@@ -123,14 +155,19 @@ pip install -r requirements-dev.txt
 pytest
 ```
 
+## CI/CD
+
+`.gitlab-ci.yml` runs a 5-stage pipeline (lint, security, test, compliance,
+changelog) against `Dockerfile.ci`, a locally-built image with
+`requirements-dev.txt` baked in — see [CONTRIBUTING.md](CONTRIBUTING.md#cicd-runner)
+for how to register and run a local GitLab Runner.
+
 ## Documentation
 
 - [User Manual](USER_MANUAL.md) — end-user guide to FluxPark's features
 - [Contributing Guide](CONTRIBUTING.md) — development workflow, code style, PR process
 - [AGENTS.md](AGENTS.md) — guidance for AI coding agents working in this repo
 - [Security Policy](SECURITY.md) — how to report vulnerabilities
-- [Code of Conduct](CODE_OF_CONDUCT.md)
-- [Changelog](CHANGELOG.md)
 
 ## License
 
