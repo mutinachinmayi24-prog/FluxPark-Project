@@ -1,0 +1,252 @@
+[
+  {
+    "id": 1,
+    "category": "onboarding",
+    "question_en": "How do I sign up for FluxPark?",
+    "answer_en": "Enter your phone number or email on the signup page, then verify the 6-digit OTP sent to it. New accounts are then guided through property setup and role selection.",
+    "question_hi": "मैं FluxPark में साइन अप कैसे करूं?",
+    "answer_hi": "साइनअप पेज पर अपना फ़ोन नंबर या ईमेल दर्ज करें, फिर भेजे गए 6-अंकीय OTP को सत्यापित करें। नए खातों को इसके बाद प्रॉपर्टी सेटअप और रोल चुनने की प्रक्रिया से गुज़ारा जाता है।",
+    "question_te": "నేను FluxParkలో సైన్ అప్ ఎలా చేయాలి?",
+    "answer_te": "సైన్అప్ పేజీలో మీ ఫోన్ నంబర్ లేదా ఈమెయిల్ నమోదు చేయండి, తర్వాత పంపిన 6-అంకెల OTPని వెరిఫై చేయండి. కొత్త ఖాతాలను ఆ తర్వాత ప్రాపర్టీ సెటప్ మరియు రోల్ ఎంపిక ద్వారా నడిపిస్తారు."
+  },
+  {
+    "id": 2,
+    "category": "onboarding",
+    "question_en": "What roles can I choose for a residential property?",
+    "answer_en": "Owner, Tenant, Committee, or Security. Owner, Tenant, and Committee can park, host visitors, and rent out unused parking; Security handles entry/exit scanning.",
+    "question_hi": "रेजिडेंशियल प्रॉपर्टी के लिए मैं कौन-कौन से रोल चुन सकता हूं?",
+    "answer_hi": "मालिक, किरायेदार, कमिटी, या सुरक्षा। मालिक, किरायेदार और कमिटी पार्किंग कर सकते हैं, विज़िटर्स को होस्ट कर सकते हैं, और बिना इस्तेमाल वाली पार्किंग किराए पर दे सकते हैं; सुरक्षा एंट्री/एग्ज़िट स्कैनिंग संभालती है।",
+    "question_te": "రెసిడెన్షియల్ ప్రాపర్టీ కోసం నేను ఏ రోల్స్ ఎంచుకోవచ్చు?",
+    "answer_te": "యజమాని, అద్దెదారు, కమిటీ, లేదా సెక్యూరిటీ. యజమాని, అద్దెదారు మరియు కమిటీ పార్క్ చేయవచ్చు, విజిటర్లను హోస్ట్ చేయవచ్చు, మరియు ఖాళీ పార్కింగ్‌ను అద్దెకు ఇవ్వవచ్చు; సెక్యూరిటీ ఎంట్రీ/ఎగ్జిట్ స్కానింగ్ చూసుకుంటుంది."
+  },
+  {
+    "id": 3,
+    "category": "onboarding",
+    "question_en": "How do I join an existing property instead of creating a new one?",
+    "answer_en": "Ask an existing member for their invite link (from Invite Links), or open it from \"My Rooms\" → Join with an invite link.",
+    "question_hi": "नई प्रॉपर्टी बनाने के बजाय मैं किसी मौजूदा प्रॉपर्टी से कैसे जुड़ूं?",
+    "answer_hi": "किसी मौजूदा सदस्य से उनका इनवाइट लिंक मांगें (इनवाइट लिंक्स से), या \"मेरे रूम\" → इनवाइट लिंक से जुड़ें पर खोलें।",
+    "question_te": "కొత్త ప్రాపర్టీ సృష్టించే బదులు ఉన్న ప్రాపర్టీలో నేను ఎలా చేరాలి?",
+    "answer_te": "ఉన్న సభ్యుడిని వారి ఇన్వైట్ లింక్ అడగండి (ఇన్వైట్ లింక్స్ నుండి), లేదా \"నా రూమ్‌లు\" → ఇన్వైట్ లింక్‌తో చేరండి నుండి తెరవండి."
+  },
+  {
+    "id": 4,
+    "category": "multi-room",
+    "question_en": "I belong to more than one property. How do I switch between them?",
+    "answer_en": "Go to \"My Rooms\" and click Switch on the property/company you want to view; the dashboard and sidebar update to that room immediately.",
+    "question_hi": "मैं एक से अधिक प्रॉपर्टी से जुड़ा हूं। मैं उनके बीच कैसे स्विच करूं?",
+    "answer_hi": "\"मेरे रूम\" पर जाएं और जिस प्रॉपर्टी/कंपनी को देखना चाहते हैं उस पर स्विच पर क्लिक करें; डैशबोर्ड और साइडबार तुरंत उस रूम के लिए अपडेट हो जाते हैं।",
+    "question_te": "నేను ఒకటి కంటే ఎక్కువ ప్రాపర్టీలకు చెందినవాడు. వాటి మధ్య ఎలా మారాలి?",
+    "answer_te": "\"నా రూమ్‌లు\"కి వెళ్లి, మీరు చూడాలనుకుంటున్న ప్రాపర్టీ/కంపెనీపై స్విచ్ క్లిక్ చేయండి; డాష్‌బోర్డ్ మరియు సైడ్‌బార్ వెంటనే ఆ రూమ్‌కి అప్‌డేట్ అవుతాయి."
+  },
+  {
+    "id": 5,
+    "category": "parking",
+    "question_en": "How are parking slots assigned to a new owner or tenant?",
+    "answer_en": "During the role form, you enter your parking space number; FluxPark links your role profile to that slot as its \"home\" slot, which you can later rent out when unused.",
+    "question_hi": "नए मालिक या किरायेदार को पार्किंग स्लॉट कैसे दिए जाते हैं?",
+    "answer_hi": "रोल फ़ॉर्म के दौरान आप अपना पार्किंग स्पेस नंबर दर्ज करते हैं; FluxPark आपकी रोल प्रोफ़ाइल को उस स्लॉट से \"होम\" स्लॉट के रूप में जोड़ता है, जिसे आप बाद में इस्तेमाल न होने पर किराए पर दे सकते हैं।",
+    "question_te": "కొత్త యజమాని లేదా అద్దెదారుకు పార్కింగ్ స్లాట్‌లు ఎలా కేటాయించబడతాయి?",
+    "answer_te": "రోల్ ఫారమ్ సమయంలో మీరు మీ పార్కింగ్ స్పేస్ నంబర్ నమోదు చేస్తారు; FluxPark మీ రోల్ ప్రొఫైల్‌ను ఆ స్లాట్‌తో \"హోమ్\" స్లాట్‌గా లింక్ చేస్తుంది, దీన్ని ఉపయోగించనప్పుడు మీరు తర్వాత అద్దెకు ఇవ్వవచ్చు."
+  },
+  {
+    "id": 6,
+    "category": "parking",
+    "question_en": "What does a parking slot's status (vacant, occupied, rented) mean?",
+    "answer_en": "Vacant means free right now; occupied means the home owner/tenant or an allocated visitor/transport vehicle is parked there; rented means it's listed as available and matched with someone else for a time window.",
+    "question_hi": "पार्किंग स्लॉट की स्थिति (खाली, ऑक्यूपाइड, किराए पर) का क्या मतलब है?",
+    "answer_hi": "खाली का मतलब है अभी कोई गाड़ी नहीं है; ऑक्यूपाइड का मतलब है होम मालिक/किरायेदार या किसी आवंटित विज़िटर/ट्रांसपोर्ट गाड़ी का वहां पार्क होना; किराए पर का मतलब है कि इसे उपलब्ध के रूप में सूचीबद्ध किया गया है और किसी और के साथ एक समय के लिए मैच किया गया है।",
+    "question_te": "పార్కింగ్ స్లాట్ స్థితి (ఖాళీ, ఆక్యుపైడ్, అద్దెకు) అంటే ఏమిటి?",
+    "answer_te": "ఖాళీ అంటే ఇప్పుడు ఎవరూ లేరు; ఆక్యుపైడ్ అంటే హోమ్ యజమాని/అద్దెదారు లేదా కేటాయించిన విజిటర్/ట్రాన్స్‌పోర్ట్ వాహనం అక్కడ పార్క్ చేయబడింది; అద్దెకు అంటే అది అందుబాటులో ఉన్నట్లు లిస్ట్ చేయబడి, కొంత సమయం కోసం మరొకరితో సరిపోల్చబడింది."
+  },
+  {
+    "id": 7,
+    "category": "parking",
+    "question_en": "How do I list my parking slot as available when I'm not using it?",
+    "answer_en": "Go to Parking Availability, select your slot, choose the date/time window and rent per hour, and submit. If a waiting visitor request matches, it's allocated automatically.",
+    "question_hi": "जब मैं इस्तेमाल नहीं कर रहा हूं तो मैं अपना पार्किंग स्लॉट उपलब्ध के रूप में कैसे सूचीबद्ध करूं?",
+    "answer_hi": "पार्किंग उपलब्धता पर जाएं, अपना स्लॉट चुनें, तारीख/समय और प्रति घंटा किराया चुनें, और सबमिट करें। यदि कोई प्रतीक्षारत विज़िटर रिक्वेस्ट मैच करती है, तो वह स्वचालित रूप से आवंटित हो जाती है।",
+    "question_te": "నేను ఉపయోగించనప్పుడు నా పార్కింగ్ స్లాట్‌ను అందుబాటులో ఉన్నట్లు ఎలా లిస్ట్ చేయాలి?",
+    "answer_te": "పార్కింగ్ లభ్యతకు వెళ్లి, మీ స్లాట్‌ను ఎంచుకుని, తేదీ/సమయం మరియు గంటకు అద్దె ఎంచుకుని సమర్పించండి. వేచి ఉన్న విజిటర్ రిక్వెస్ట్ సరిపోతే, అది ఆటోమేటిక్‌గా కేటాయించబడుతుంది."
+  },
+  {
+    "id": 8,
+    "category": "parking",
+    "question_en": "I shared my slot but need it back urgently. What do I do?",
+    "answer_en": "On Parking Availability, find the matched listing and click \"Return\". This is the emergency-return flow and notifies everyone affected.",
+    "question_hi": "मैंने अपना स्लॉट शेयर किया लेकिन मुझे तुरंत वापस चाहिए। मैं क्या करूं?",
+    "answer_hi": "पार्किंग उपलब्धता पर, मैच की गई लिस्टिंग ढूंढें और \"रिटर्न\" पर क्लिक करें। यह इमरजेंसी-रिटर्न फ़्लो है और सभी प्रभावित लोगों को सूचित करता है।",
+    "question_te": "నేను నా స్లాట్‌ను షేర్ చేశాను కానీ అర్జెంటుగా అది తిరిగి కావాలి. నేను ఏమి చేయాలి?",
+    "answer_te": "పార్కింగ్ లభ్యతలో, సరిపోలిన లిస్టింగ్‌ను కనుగొని \"రిటర్న్\" క్లిక్ చేయండి. ఇది ఎమర్జెన్సీ-రిటర్న్ ఫ్లో మరియు ప్రభావితమైన అందరికీ తెలియజేస్తుంది."
+  },
+  {
+    "id": 9,
+    "category": "visitors",
+    "question_en": "How do I invite a visitor and get them a parking slot?",
+    "answer_en": "On Visitor Request, fill in the visitor's name, phone, vehicle details, and date/time. If a slot is free or someone lists one, it's allocated immediately and a QR pass is generated.",
+    "question_hi": "मैं विज़िटर को कैसे आमंत्रित करूं और उन्हें पार्किंग स्लॉट कैसे दूं?",
+    "answer_hi": "विज़िटर रिक्वेस्ट पर, विज़िटर का नाम, फ़ोन, गाड़ी का विवरण और तारीख/समय भरें। यदि कोई स्लॉट खाली है या कोई इसे सूचीबद्ध करता है, तो यह तुरंत आवंटित हो जाता है और एक QR पास जनरेट होता है।",
+    "question_te": "నేను విజిటర్‌ను ఎలా ఆహ్వానించాలి మరియు వారికి పార్కింగ్ స్లాట్ ఎలా ఇవ్వాలి?",
+    "answer_te": "విజిటర్ రిక్వెస్ట్‌లో, విజిటర్ పేరు, ఫోన్, వాహన వివరాలు మరియు తేదీ/సమయం నమోదు చేయండి. ఒక స్లాట్ ఖాళీగా ఉంటే లేదా ఎవరైనా దాన్ని లిస్ట్ చేస్తే, అది వెంటనే కేటాయించబడి QR పాస్ సృష్టించబడుతుంది."
+  },
+  {
+    "id": 10,
+    "category": "visitors",
+    "question_en": "My visitor request shows \"pending\". What does that mean?",
+    "answer_en": "No parking slot was free yet. You'll get a notification and the request updates automatically once a slot becomes available, or you can wait for a host's approval if it needed one.",
+    "question_hi": "मेरी विज़िटर रिक्वेस्ट \"पेंडिंग\" दिखा रही है। इसका क्या मतलब है?",
+    "answer_hi": "अभी कोई पार्किंग स्लॉट खाली नहीं था। स्लॉट उपलब्ध होने पर आपको सूचना मिलेगी और रिक्वेस्ट स्वचालित रूप से अपडेट हो जाती है, या यदि इसे होस्ट की मंज़ूरी चाहिए थी तो आप उसका इंतज़ार कर सकते हैं।",
+    "question_te": "నా విజిటర్ రిక్వెస్ట్ \"పెండింగ్\" చూపిస్తోంది. దాని అర్థం ఏమిటి?",
+    "answer_te": "ఇంకా ఏ పార్కింగ్ స్లాట్ ఖాళీగా లేదు. స్లాట్ అందుబాటులోకి వచ్చిన తర్వాత మీకు నోటిఫికేషన్ వస్తుంది మరియు రిక్వెస్ట్ ఆటోమేటిక్‌గా అప్‌డేట్ అవుతుంది, లేదా దానికి హోస్ట్ ఆమోదం అవసరమైతే మీరు వేచి ఉండవచ్చు."
+  },
+  {
+    "id": 11,
+    "category": "visitors",
+    "question_en": "How does a visitor actually use their pass at the gate?",
+    "answer_en": "They show the QR code (from the visitor pass link, e.g. by SMS/WhatsApp) to security, who scans it on the Security Scan page to mark entry, and later exit.",
+    "question_hi": "विज़िटर गेट पर अपने पास का इस्तेमाल वास्तव में कैसे करता है?",
+    "answer_hi": "वे QR कोड (विज़िटर पास लिंक से, जैसे SMS/WhatsApp द्वारा) सुरक्षा को दिखाते हैं, जो उसे सिक्योरिटी स्कैन पेज पर स्कैन करके एंट्री, और बाद में एग्ज़िट दर्ज करते हैं।",
+    "question_te": "విజిటర్ గేటు వద్ద తమ పాస్‌ను ఎలా ఉపయోగిస్తారు?",
+    "answer_te": "వారు QR కోడ్‌ను (విజిటర్ పాస్ లింక్ నుండి, ఉదా. SMS/WhatsApp ద్వారా) సెక్యూరిటీకి చూపిస్తారు, వారు దాన్ని సెక్యూరిటీ స్కాన్ పేజీలో స్కాన్ చేసి ఎంట్రీని, తర్వాత ఎగ్జిట్‌ను నమోదు చేస్తారు."
+  },
+  {
+    "id": 12,
+    "category": "visitors",
+    "question_en": "Security logged a visitor I didn't expect. What should I do?",
+    "answer_en": "Check Notifications — an unexpected-visitor entry waits for your approval or denial there before any parking slot is allocated.",
+    "question_hi": "सुरक्षा ने एक विज़िटर लॉग किया जिसकी मुझे उम्मीद नहीं थी। मुझे क्या करना चाहिए?",
+    "answer_hi": "सूचनाएं देखें — कोई पार्किंग स्लॉट आवंटित होने से पहले एक अनपेक्षित-विज़िटर एंट्री वहां आपकी मंज़ूरी या अस्वीकृति का इंतज़ार करती है।",
+    "question_te": "సెక్యూరిటీ నేను ఊహించని విజిటర్‌ను లాగ్ చేసింది. నేను ఏమి చేయాలి?",
+    "answer_te": "నోటిఫికేషన్లు చూడండి — ఏ పార్కింగ్ స్లాట్ కేటాయించబడే ముందు ఊహించని-విజిటర్ ఎంట్రీ అక్కడ మీ ఆమోదం లేదా తిరస్కరణ కోసం వేచి ఉంటుంది."
+  },
+  {
+    "id": 13,
+    "category": "transport",
+    "question_en": "I'm an office employee. How do I request a parking slot for tomorrow?",
+    "answer_en": "On Transport Request, submit your vehicle and shift timing before the 9 PM cutoff tonight; slots are allocated automatically after the cutoff.",
+    "question_hi": "मैं एक ऑफिस कर्मचारी हूं। मैं कल के लिए पार्किंग स्लॉट कैसे रिक्वेस्ट करूं?",
+    "answer_hi": "ट्रांसपोर्ट रिक्वेस्ट पर, आज रात 9 बजे की कटऑफ से पहले अपनी गाड़ी और शिफ़्ट टाइमिंग सबमिट करें; कटऑफ के बाद स्लॉट स्वचालित रूप से आवंटित होते हैं।",
+    "question_te": "నేను ఆఫీస్ ఉద్యోగిని. రేపటి కోసం పార్కింగ్ స్లాట్ ఎలా రిక్వెస్ట్ చేయాలి?",
+    "answer_te": "ట్రాన్స్‌పోర్ట్ రిక్వెస్ట్‌లో, ఈ రాత్రి 9 గంటల కటాఫ్‌కు ముందు మీ వాహనం మరియు షిఫ్ట్ టైమింగ్ సమర్పించండి; కటాఫ్ తర్వాత స్లాట్‌లు ఆటోమేటిక్‌గా కేటాయించబడతాయి."
+  },
+  {
+    "id": 14,
+    "category": "transport",
+    "question_en": "Can I cancel tomorrow's transport request?",
+    "answer_en": "Yes, as long as the 9 PM cutoff hasn't passed yet — use the Cancel action on Transport Request.",
+    "question_hi": "क्या मैं कल की ट्रांसपोर्ट रिक्वेस्ट कैंसल कर सकता हूं?",
+    "answer_hi": "हां, जब तक रात 9 बजे की कटऑफ नहीं हुई है — ट्रांसपोर्ट रिक्वेस्ट पर कैंसल एक्शन का इस्तेमाल करें।",
+    "question_te": "నేను రేపటి ట్రాన్స్‌పోర్ట్ రిక్వెస్ట్‌ను రద్దు చేయవచ్చా?",
+    "answer_te": "అవును, రాత్రి 9 గంటల కటాఫ్ ఇంకా దాటకపోతే — ట్రాన్స్‌పోర్ట్ రిక్వెస్ట్‌లో రద్దు చేయి ఎంపికను ఉపయోగించండి."
+  },
+  {
+    "id": 15,
+    "category": "payments",
+    "question_en": "How does payment work when I rent out my parking slot?",
+    "answer_en": "A transaction is created automatically when a slot-sharing match happens. View what you owe or are owed on the Payments page, and mark a payment paid once it's settled.",
+    "question_hi": "जब मैं अपना पार्किंग स्लॉट किराए पर देता हूं तो पेमेंट कैसे काम करता है?",
+    "answer_hi": "जब स्लॉट-शेयरिंग मैच होता है तो एक ट्रांज़ैक्शन स्वचालित रूप से बनाई जाती है। पेमेंट्स पेज पर देखें कि आप पर क्या बकाया है या आपको क्या मिलना है, और सेटल होने पर पेमेंट को पेड के रूप में मार्क करें।",
+    "question_te": "నేను నా పార్కింగ్ స్లాట్‌ను అద్దెకు ఇచ్చినప్పుడు చెల్లింపు ఎలా పనిచేస్తుంది?",
+    "answer_te": "స్లాట్-షేరింగ్ సరిపోలిక జరిగినప్పుడు ట్రాన్సాక్షన్ ఆటోమేటిక్‌గా సృష్టించబడుతుంది. చెల్లింపుల పేజీలో మీరు ఎంత బాకీ ఉన్నారో లేదా మీకు ఎంత రావాలో చూడండి, మరియు సెటిల్ అయిన తర్వాత చెల్లింపును చెల్లించినట్లు మార్క్ చేయండి."
+  },
+  {
+    "id": 16,
+    "category": "payments",
+    "question_en": "What is the committee's commission on parking rentals?",
+    "answer_en": "Committee role profiles configure a commission percentage during onboarding; it's deducted automatically from each slot-rental transaction and shown on the dashboard and Payments.",
+    "question_hi": "पार्किंग किराए पर कमिटी का कमीशन क्या है?",
+    "answer_hi": "कमिटी रोल प्रोफ़ाइल ऑनबोर्डिंग के दौरान एक कमीशन प्रतिशत सेट करती हैं; यह हर स्लॉट-रेंटल ट्रांज़ैक्शन से स्वचालित रूप से काटा जाता है और डैशबोर्ड और पेमेंट्स पर दिखाया जाता है।",
+    "question_te": "పార్కింగ్ అద్దెలపై కమిటీ కమీషన్ ఎంత?",
+    "answer_te": "కమిటీ రోల్ ప్రొఫైల్‌లు ఆన్‌బోర్డింగ్ సమయంలో కమీషన్ శాతాన్ని సెట్ చేస్తాయి; ఇది ప్రతి స్లాట్-రెంటల్ ట్రాన్సాక్షన్ నుండి ఆటోమేటిక్‌గా తీసివేయబడి డాష్‌బోర్డ్ మరియు చెల్లింపులలో చూపబడుతుంది."
+  },
+  {
+    "id": 17,
+    "category": "notifications",
+    "question_en": "How do I clear my unread notifications?",
+    "answer_en": "Open Notifications and use \"Mark all as read\", or mark individual ones as you read them.",
+    "question_hi": "मैं अपनी अनरीड सूचनाएं कैसे साफ़ करूं?",
+    "answer_hi": "सूचनाएं खोलें और \"सभी को पढ़ा हुआ मार्क करें\" का इस्तेमाल करें, या पढ़ते समय अलग-अलग को मार्क करें।",
+    "question_te": "నా చదవని నోటిఫికేషన్లను ఎలా క్లియర్ చేయాలి?",
+    "answer_te": "నోటిఫికేషన్లు తెరిచి \"అన్నీ చదివినట్లు మార్క్ చేయి\" ఉపయోగించండి, లేదా చదివినప్పుడు వ్యక్తిగతంగా మార్క్ చేయండి."
+  },
+  {
+    "id": 18,
+    "category": "members",
+    "question_en": "How do I remove a member from my property?",
+    "answer_en": "Owners, Committee, and Managers can remove a member from the Members page; this frees up any parking slot they owned as their home slot.",
+    "question_hi": "मैं अपनी प्रॉपर्टी से किसी सदस्य को कैसे हटाऊं?",
+    "answer_hi": "मालिक, कमिटी और मैनेजर मेंबर्स पेज से किसी सदस्य को हटा सकते हैं; इससे उनके होम स्लॉट के रूप में रखी गई कोई भी पार्किंग स्लॉट खाली हो जाती है।",
+    "question_te": "నా ప్రాపర్టీ నుండి సభ్యుడిని ఎలా తీసివేయాలి?",
+    "answer_te": "యజమానులు, కమిటీ మరియు మేనేజర్లు మెంబర్స్ పేజీ నుండి సభ్యుడిని తీసివేయవచ్చు; దీనివల్ల వారు హోమ్ స్లాట్‌గా కలిగి ఉన్న ఏ పార్కింగ్ స్లాట్ అయినా ఖాళీ అవుతుంది."
+  },
+  {
+    "id": 19,
+    "category": "members",
+    "question_en": "How can I export the member list or visitor log?",
+    "answer_en": "Both the Members and Visitor Log pages have an \"Export CSV\" button for owners, committee, managers, and security.",
+    "question_hi": "मैं मेंबर लिस्ट या विज़िटर लॉग एक्सपोर्ट कैसे करूं?",
+    "answer_hi": "मेंबर्स और विज़िटर लॉग दोनों पेजों पर मालिक, कमिटी, मैनेजर और सुरक्षा के लिए \"CSV एक्सपोर्ट करें\" बटन है।",
+    "question_te": "నేను మెంబర్ లిస్ట్ లేదా విజిటర్ లాగ్‌ను ఎలా ఎక్స్‌పోర్ట్ చేయాలి?",
+    "answer_te": "మెంబర్స్ మరియు విజిటర్ లాగ్ రెండు పేజీలలో యజమానులు, కమిటీ, మేనేజర్లు మరియు సెక్యూరిటీ కోసం \"CSV ఎక్స్‌పోర్ట్ చేయి\" బటన్ ఉంది."
+  },
+  {
+    "id": 20,
+    "category": "ai-assistant",
+    "question_en": "What can the AI assistant actually do?",
+    "answer_en": "It can look up your parking slots, today's visitor requests, pending payments, and unread notifications, and submit a new visitor request for you — all by calling real FluxPark data, not guessing.",
+    "question_hi": "AI असिस्टेंट वास्तव में क्या कर सकता है?",
+    "answer_hi": "यह आपके पार्किंग स्लॉट, आज की विज़िटर रिक्वेस्ट, पेंडिंग पेमेंट्स, और अनरीड सूचनाएं देख सकता है, और आपके लिए एक नई विज़िटर रिक्वेस्ट सबमिट कर सकता है — यह सब असली FluxPark डेटा का इस्तेमाल करके, अनुमान लगाए बिना करता है।",
+    "question_te": "AI అసిస్టెంట్ నిజంగా ఏమి చేయగలదు?",
+    "answer_te": "ఇది మీ పార్కింగ్ స్లాట్‌లు, నేటి విజిటర్ రిక్వెస్ట్‌లు, పెండింగ్ చెల్లింపులు మరియు చదవని నోటిఫికేషన్లను చూడగలదు, మరియు మీ కోసం కొత్త విజిటర్ రిక్వెస్ట్‌ను సమర్పించగలదు — ఇదంతా నిజమైన FluxPark డేటాను ఉపయోగించి, ఊహించకుండా చేస్తుంది."
+  },
+  {
+    "id": 21,
+    "category": "ai-assistant",
+    "question_en": "Is my AI assistant chat private?",
+    "answer_en": "Only you can see it. It's stored so the assistant remembers context between turns, and you can erase that memory at any time with \"Clear conversation\".",
+    "question_hi": "क्या मेरी AI असिस्टेंट चैट प्राइवेट है?",
+    "answer_hi": "इसे केवल आप देख सकते हैं। यह इसलिए सेव होती है ताकि असिस्टेंट को बातचीत के बीच का संदर्भ याद रहे, और आप \"बातचीत साफ़ करें\" से कभी भी इस याददाश्त को मिटा सकते हैं।",
+    "question_te": "నా AI అసిస్టెంట్ చాట్ ప్రైవేట్‌గా ఉంటుందా?",
+    "answer_te": "దీన్ని మీరు మాత్రమే చూడగలరు. అసిస్టెంట్‌కు టర్న్‌ల మధ్య సందర్భం గుర్తుండేలా ఇది సేవ్ చేయబడుతుంది, మరియు మీరు ఎప్పుడైనా \"సంభాషణను తుడిచివేయి\"తో ఈ మెమరీని తుడిచివేయవచ్చు."
+  },
+  {
+    "id": 22,
+    "category": "ai-assistant",
+    "question_en": "Which AI providers can I choose for the assistant, and which is most private?",
+    "answer_en": "Ollama (runs locally, open-weight model, nothing leaves your machine), Bring-Your-Own-Key (your own OpenAI-compatible endpoint), or Google Gemini. Ollama is the most private option.",
+    "question_hi": "असिस्टेंट के लिए मैं कौन-कौन से AI प्रोवाइडर चुन सकता हूं, और कौन सबसे प्राइवेट है?",
+    "answer_hi": "Ollama (लोकली चलता है, ओपन-वेट मॉडल, कुछ भी आपकी मशीन से बाहर नहीं जाता), Bring-Your-Own-Key (आपका अपना OpenAI-कम्पैटिबल एंडपॉइंट), या Google Gemini। Ollama सबसे प्राइवेट विकल्प है।",
+    "question_te": "అసిస్టెంట్ కోసం నేను ఏ AI ప్రొవైడర్లను ఎంచుకోవచ్చు, మరియు ఏది చాలా ప్రైవేట్?",
+    "answer_te": "Ollama (స్థానికంగా నడుస్తుంది, ఓపెన్-వెయిట్ మోడల్, ఏమీ మీ మిషన్ నుండి బయటకు వెళ్లదు), Bring-Your-Own-Key (మీ స్వంత OpenAI-కంపాటిబుల్ ఎండ్‌పాయింట్), లేదా Google Gemini. Ollama అత్యంత ప్రైవేట్ ఎంపిక."
+  },
+  {
+    "id": 23,
+    "category": "language",
+    "question_en": "How do I change FluxPark's language?",
+    "answer_en": "Use the language switcher in the navigation — English, Hindi (हिंदी), and Telugu (తెలుగు) are supported, and your choice is remembered for your session.",
+    "question_hi": "मैं FluxPark की भाषा कैसे बदलूं?",
+    "answer_hi": "नेविगेशन में भाषा स्विचर का इस्तेमाल करें — अंग्रेज़ी, हिन्दी, और तेलुगु सपोर्टेड हैं, और आपकी पसंद आपके सेशन के लिए याद रखी जाती है।",
+    "question_te": "నేను FluxPark భాషను ఎలా మార్చాలి?",
+    "answer_te": "నావిగేషన్‌లో భాష స్విచర్‌ను ఉపయోగించండి — ఇంగ్లీష్, హిందీ, మరియు తెలుగు సపోర్ట్ చేయబడతాయి, మరియు మీ ఎంపిక మీ సెషన్ కోసం గుర్తుంచుకోబడుతుంది."
+  },
+  {
+    "id": 24,
+    "category": "security",
+    "question_en": "As a security guard, how do I check someone in?",
+    "answer_en": "On Security Scan, scan the visitor's or vehicle's QR code (or paste the token), then mark Entry on the visitor/transport detail page that opens. Mark Exit the same way when they leave.",
+    "question_hi": "एक सुरक्षा गार्ड के रूप में, मैं किसी को कैसे चेक-इन करूं?",
+    "answer_hi": "सिक्योरिटी स्कैन पर, विज़िटर या गाड़ी का QR कोड स्कैन करें (या टोकन पेस्ट करें), फिर खुलने वाले विज़िटर/ट्रांसपोर्ट डिटेल पेज पर एंट्री मार्क करें। जाने पर वैसे ही एग्ज़िट मार्क करें।",
+    "question_te": "సెక్యూరిటీ గార్డ్‌గా, నేను ఎవరినైనా ఎలా చెక్-ఇన్ చేయాలి?",
+    "answer_te": "సెక్యూరిటీ స్కాన్‌లో, విజిటర్ లేదా వాహనం యొక్క QR కోడ్‌ను స్కాన్ చేయండి (లేదా టోకెన్‌ను పేస్ట్ చేయండి), తర్వాత తెరుచుకునే విజిటర్/ట్రాన్స్‌పోర్ట్ వివరాల పేజీలో ఎంట్రీని మార్క్ చేయండి. వారు వెళ్లినప్పుడు అదే విధంగా ఎగ్జిట్‌ను మార్క్ చేయండి."
+  },
+  {
+    "id": 25,
+    "category": "security",
+    "question_en": "A walk-in visitor has no pre-existing pass. What does security do?",
+    "answer_en": "Use \"Unexpected Visitor\" to log their details and who they're visiting; it's sent to the host for approval before any parking slot is allocated.",
+    "question_hi": "किसी वॉक-इन विज़िटर के पास पहले से कोई पास नहीं है। सुरक्षा क्या करे?",
+    "answer_hi": "\"अनपेक्षित विज़िटर\" का इस्तेमाल करके उनका विवरण और वे किससे मिलने आए हैं दर्ज करें; किसी भी पार्किंग स्लॉट के आवंटित होने से पहले इसे होस्ट की मंज़ूरी के लिए भेजा जाता है।",
+    "question_te": "వాక్-ఇన్ విజిటర్‌కు ముందుగా పాస్ లేదు. సెక్యూరిటీ ఏమి చేయాలి?",
+    "answer_te": "\"ఊహించని విజిటర్\" ఉపయోగించి వారి వివరాలు మరియు వారు ఎవరిని కలవడానికి వచ్చారో నమోదు చేయండి; ఏ పార్కింగ్ స్లాట్ కేటాయించబడే ముందు ఇది ఆమోదం కోసం హోస్ట్‌కు పంపబడుతుంది."
+  }
+]

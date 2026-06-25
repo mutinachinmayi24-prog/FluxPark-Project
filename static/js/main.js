@@ -134,4 +134,20 @@ document.addEventListener('DOMContentLoaded', function () {
     transportSelf.addEventListener('change', updateTransportFields);
     updateTransportFields();
   }
+
+  // ------------------------------------------------------------------
+  // Offline banner: dashboard/parking-map/notifications/my-profile/
+  // my-rooms are cached network-first by the service worker, so a page
+  // shown while offline is the last-known state, not live data. Make
+  // that visible instead of letting it look like a normal fresh load.
+  // ------------------------------------------------------------------
+  var offlineBanner = document.getElementById('offline-banner');
+  if (offlineBanner) {
+    var updateOfflineBanner = function () {
+      offlineBanner.classList.toggle('d-none', navigator.onLine);
+    };
+    window.addEventListener('online', updateOfflineBanner);
+    window.addEventListener('offline', updateOfflineBanner);
+    updateOfflineBanner();
+  }
 });

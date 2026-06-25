@@ -13,3 +13,7 @@ htmlcov/
 # Linter / type-checker caches
 .ruff_cache/
 .mypy_cache/
+
+# Fine-tuned model weights (~470MB) -- regenerate with
+# scripts/finetune_faq_retriever.py instead of committing binaries.
+models/

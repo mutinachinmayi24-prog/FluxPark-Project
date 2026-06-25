@@ -1,0 +1,74 @@
+Q: How do I sign up for FluxPark?
+A: Enter your phone number or email on the signup page, then verify the 6-digit OTP sent to it. New accounts are then guided through property setup and role selection.
+
+Q: What roles can I choose for a residential property?
+A: Owner, Tenant, Committee, or Security. Owner, Tenant, and Committee can park, host visitors, and rent out unused parking; Security handles entry/exit scanning.
+
+Q: How do I join an existing property instead of creating a new one?
+A: Ask an existing member for their invite link (from Invite Links), or open it from "My Rooms" → Join with an invite link.
+
+Q: I belong to more than one property. How do I switch between them?
+A: Go to "My Rooms" and click Switch on the property/company you want to view; the dashboard and sidebar update to that room immediately.
+
+Q: How are parking slots assigned to a new owner or tenant?
+A: During the role form, you enter your parking space number; FluxPark links your role profile to that slot as its "home" slot, which you can later rent out when unused.
+
+Q: What does a parking slot's status (vacant, occupied, rented) mean?
+A: Vacant means free right now; occupied means the home owner/tenant or an allocated visitor/transport vehicle is parked there; rented means it's listed as available and matched with someone else for a time window.
+
+Q: How do I list my parking slot as available when I'm not using it?
+A: Go to Parking Availability, select your slot, choose the date/time window and rent per hour, and submit. If a waiting visitor request matches, it's allocated automatically.
+
+Q: I shared my slot but need it back urgently. What do I do?
+A: On Parking Availability, find the matched listing and click "Return". This is the emergency-return flow and notifies everyone affected.
+
+Q: How do I invite a visitor and get them a parking slot?
+A: On Visitor Request, fill in the visitor's name, phone, vehicle details, and date/time. If a slot is free or someone lists one, it's allocated immediately and a QR pass is generated.
+
+Q: My visitor request shows "pending". What does that mean?
+A: No parking slot was free yet. You'll get a notification and the request updates automatically once a slot becomes available, or you can wait for a host's approval if it needed one.
+
+Q: How does a visitor actually use their pass at the gate?
+A: They show the QR code (from the visitor pass link, e.g. by SMS/WhatsApp) to security, who scans it on the Security Scan page to mark entry, and later exit.
+
+Q: Security logged a visitor I didn't expect. What should I do?
+A: Check Notifications — an unexpected-visitor entry waits for your approval or denial there before any parking slot is allocated.
+
+Q: I'm an office employee. How do I request a parking slot for tomorrow?
+A: On Transport Request, submit your vehicle and shift timing before the 9 PM cutoff tonight; slots are allocated automatically after the cutoff.
+
+Q: Can I cancel tomorrow's transport request?
+A: Yes, as long as the 9 PM cutoff hasn't passed yet — use the Cancel action on Transport Request.
+
+Q: How does payment work when I rent out my parking slot?
+A: A transaction is created automatically when a slot-sharing match happens. View what you owe or are owed on the Payments page, and mark a payment paid once it's settled.
+
+Q: What is the committee's commission on parking rentals?
+A: Committee role profiles configure a commission percentage during onboarding; it's deducted automatically from each slot-rental transaction and shown on the dashboard and Payments.
+
+Q: How do I clear my unread notifications?
+A: Open Notifications and use "Mark all as read", or mark individual ones as you read them.
+
+Q: How do I remove a member from my property?
+A: Owners, Committee, and Managers can remove a member from the Members page; this frees up any parking slot they owned as their home slot.
+
+Q: How can I export the member list or visitor log?
+A: Both the Members and Visitor Log pages have an "Export CSV" button for owners, committee, managers, and security.
+
+Q: What can the AI assistant actually do?
+A: It can look up your parking slots, today's visitor requests, pending payments, and unread notifications, and submit a new visitor request for you — all by calling real FluxPark data, not guessing.
+
+Q: Is my AI assistant chat private?
+A: Only you can see it. It's stored so the assistant remembers context between turns, and you can erase that memory at any time with "Clear conversation".
+
+Q: Which AI providers can I choose for the assistant, and which is most private?
+A: Ollama (runs locally, open-weight model, nothing leaves your machine), Bring-Your-Own-Key (your own OpenAI-compatible endpoint), or Google Gemini. Ollama is the most private option.
+
+Q: How do I change FluxPark's language?
+A: Use the language switcher in the navigation — English, Hindi (हिंदी), and Telugu (తెలుగు) are supported, and your choice is remembered for your session.
+
+Q: As a security guard, how do I check someone in?
+A: On Security Scan, scan the visitor's or vehicle's QR code (or paste the token), then mark Entry on the visitor/transport detail page that opens. Mark Exit the same way when they leave.
+
+Q: A walk-in visitor has no pre-existing pass. What does security do?
+A: Use "Unexpected Visitor" to log their details and who they're visiting; it's sent to the host for approval before any parking slot is allocated.

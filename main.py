@@ -9,6 +9,7 @@ import os
 
 from fastapi import FastAPI
 from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.middleware.gzip import GZipMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 from starlette.responses import FileResponse
@@ -65,6 +66,11 @@ app.add_middleware(
     TrustedHostMiddleware,
     allowed_hosts=os.environ.get("ALLOWED_HOSTS", "*").split(","),
 )
+# Outermost of all: compresses every response (HTML pages and the static
+# vendor assets alike) when the client sends Accept-Encoding: gzip --
+# meaningful savings on low-bandwidth connections (e.g. bootstrap.min.css
+# and html5-qrcode.min.js shrink by roughly 70-80%).
+app.add_middleware(GZipMiddleware, minimum_size=500)
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 

@@ -1,0 +1,4 @@
+file_path,title,description,language,category_ids,release_rights,media_type,latitude,longitude,source_label,creator
+corpus-export/fluxpark_faq_en.txt,FluxPark FAQ Corpus (English),25 question/answer pairs about using the FluxPark parking-management app,en,FILL_IN_AFTER_LOGIN,FILL_IN,text,,,FluxPark hackathon project,FILL_IN_YOUR_NAME
+corpus-export/fluxpark_faq_hi.txt,FluxPark FAQ Corpus (Hindi),Same 25 question/answer pairs translated to Hindi,hi,FILL_IN_AFTER_LOGIN,FILL_IN,text,,,FluxPark hackathon project,FILL_IN_YOUR_NAME
+corpus-export/fluxpark_faq_te.txt,FluxPark FAQ Corpus (Telugu),Same 25 question/answer pairs translated to Telugu,te,FILL_IN_AFTER_LOGIN,FILL_IN,text,,,FluxPark hackathon project,FILL_IN_YOUR_NAME

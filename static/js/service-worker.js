@@ -10,6 +10,21 @@
 //     browser's default error when there truly is no connection
 
 const STATIC_CACHE = "fluxpark-static-v1";
+const PAGE_CACHE = "fluxpark-pages-v1";
+
+// Personalized GET pages that are safe and useful to show from cache when
+// offline (no CSRF tokens, no payment/financial detail). Cached network-first
+// so you always see live data when online -- the cache is only ever a
+// fallback for "no connection at all", refreshed on every successful visit.
+const CACHEABLE_PAGES = [
+  "/dashboard",
+  "/parking-map",
+  "/parking-slots",
+  "/notifications",
+  "/my-profile",
+  "/my-rooms",
+];
+
 const STATIC_ASSETS = [
   "/static/css/style.css",
   "/static/js/main.js",
@@ -30,10 +45,12 @@ self.addEventListener("install", (event) => {
   self.skipWaiting();
 });
 
+const CURRENT_CACHES = [STATIC_CACHE, PAGE_CACHE];
+
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
-      Promise.all(keys.filter((key) => key !== STATIC_CACHE).map((key) => caches.delete(key)))
+      Promise.all(keys.filter((key) => !CURRENT_CACHES.includes(key)).map((key) => caches.delete(key)))
     )
   );
   self.clients.claim();
@@ -63,7 +80,24 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Page navigations: network-first, offline-page fallback.
+  // Allowlisted personalized pages: network-first, falling back to the last
+  // cached copy of that exact page (not the generic offline page) when
+  // there's truly no connection.
+  if (request.mode === "navigate" && CACHEABLE_PAGES.includes(url.pathname)) {
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          if (response.ok) {
+            caches.open(PAGE_CACHE).then((cache) => cache.put(request, response.clone()));
+          }
+          return response;
+        })
+        .catch(() => caches.match(request).then((cached) => cached || caches.match("/static/offline.html")))
+    );
+    return;
+  }
+
+  // Everything else: network-first, generic offline-page fallback.
   if (request.mode === "navigate") {
     event.respondWith(
       fetch(request).catch(() => caches.match("/static/offline.html"))

@@ -33,8 +33,12 @@ support (English, Hindi, Telugu).
   chat UI explains what's stored and how to clear it
 - **Installable PWA** — a web app manifest + service worker cache the app
   shell and all CSS/JS/font assets (self-hosted, no third-party CDN) for
-  faster repeat loads on slow connections, plus a friendly offline page
-  instead of a browser error when navigation requests fail
+  faster repeat loads on slow connections, network-first caching of
+  dashboard/parking/notifications pages (with an offline banner) so the
+  last-known state is still visible with no connection, and a friendly
+  offline page instead of a browser error when navigation requests fail
+- **Gzip response compression** on every response — ~70-87% smaller
+  transfers for HTML pages and vendored CSS/JS on slow connections
 - **Internationalisation** — English, Hindi (हिन्दी) and Telugu (తెలుగు)
 
 ## Tech Stack
@@ -85,6 +89,10 @@ fluxpark-project/
 │   ├── manifest.json                  # PWA web app manifest
 │   └── js/service-worker.js            # Caches static assets, offline-page fallback
 ├── instance/                          # Local SQLite database (git-ignored)
+├── data/                               # FAQ corpus (en/hi/te), held-out eval set, fine-tuning report
+├── scripts/                             # Standalone ML/corpus scripts, see scripts/README.md
+├── corpus-export/                        # FAQ corpus exported for Swecha Corpus CLI upload
+├── docs/lighthouse/                       # Lighthouse performance/accessibility reports
 ├── .gitlab/issue_templates/           # Bug / Feature / Documentation / Setup issue templates
 ├── Dockerfile               # Production image (uvicorn)
 ├── Dockerfile.ci              # CI-only image with requirements-dev.txt baked in
@@ -179,6 +187,10 @@ for how to register and run a local GitLab Runner.
 - [Contributing Guide](CONTRIBUTING.md) — development workflow, code style, PR process
 - [AGENTS.md](AGENTS.md) — guidance for AI coding agents working in this repo
 - [Changelog](CHANGELOG.md) — generated from commit history with git-cliff
+- [ML/corpus scripts](scripts/README.md) — FAQ-retrieval fine-tuning (with
+  before/after metrics) and Swecha Corpus CLI export
+- [Lighthouse report](docs/lighthouse/README.md) — performance/accessibility
+  audit under simulated mobile + slow-network conditions
 - [Security Policy](SECURITY.md) — how to report vulnerabilities
 
 ## License
