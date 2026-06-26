@@ -193,6 +193,8 @@ for how to register and run a local GitLab Runner.
 - [Changelog](CHANGELOG.md) — generated from commit history with git-cliff
 - [Growth Strategy](GROWTH.md) — outreach plan, week-wise plan, and
   geographical/linguistic expansion plans for growing the contributor base
+- [User Feedback Loop](FEEDBACK.md) — how AI assistant ratings and issue
+  reports actually turn into changes
 - [ML/corpus scripts](scripts/README.md) — FAQ-retrieval fine-tuning (with
   before/after metrics) and Swecha Corpus CLI export
 - [Lighthouse report](docs/lighthouse/README.md) — performance/accessibility
