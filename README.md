@@ -26,11 +26,14 @@ support (English, Hindi, Telugu).
 - **Invite links** for onboarding new members into a property/company
 - **AI Assistant** — an agent built on Google's [Agent Development
   Kit](https://google.github.io/adk-docs/) that can look up a user's parking
-  slots, visitor requests, payments, and notifications, and submit a visitor
-  request on their behalf. Supports a local Ollama provider, a Bring-Your-Own-
-  Key (BYOK) OpenAI-compatible host, or Google Gemini, configurable per user.
-  Each provider's data-handling/openness is disclosed in AI Settings, and the
-  chat UI explains what's stored and how to clear it
+  slots, visitor requests, payments, and notifications, submit a visitor
+  request on their behalf, and answer "how do I...?" questions by searching
+  FluxPark's own FAQ corpus (`faq_search.py`) instead of guessing. Supports a
+  local Ollama provider, a Bring-Your-Own-Key (BYOK) OpenAI-compatible host,
+  or Google Gemini, configurable per user. Each provider's data-handling/
+  openness is disclosed in AI Settings, and the chat UI explains what's
+  stored and how to clear it. Thumbs up/down feedback on each reply is saved
+  too, building a real, organically-collected record of which answers help
 - **Installable PWA** — a web app manifest + service worker cache the app
   shell and all CSS/JS/font assets (self-hosted, no third-party CDN) for
   faster repeat loads on slow connections, network-first caching of
@@ -63,6 +66,7 @@ fluxpark-project/
 ├── webcompat.py               # current_request, url_for, session, flash, login_required, 404 helpers
 ├── adk_engine.py                # Google ADK agent: instructions, tools, Runner, session memory
 ├── ai_engine.py                   # Ollama/BYOK HTTP helpers used by adk_engine.py and AI Settings
+├── faq_search.py                   # Lightweight (no ML deps) FAQ corpus search, used as an agent tool
 ├── helpers.py                      # Shared route helpers (role-profile guards, form parsing, ...)
 ├── models.py                        # SQLAlchemy models (User, Property, RoleProfile, ParkingSlot, ...)
 ├── constants.py                      # Shared enums/labels (roles, property types, vehicle types, ...)

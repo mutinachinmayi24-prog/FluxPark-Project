@@ -31,10 +31,21 @@
     <div class="card-body" style="min-height: 320px; max-height: 55vh; overflow-y: auto;" id="chat-scroll">
       {% if chat_messages %}
         {% for m in chat_messages %}
-          <div class="d-flex mb-3 {{ 'justify-content-end' if m.role == 'user' else 'justify-content-start' }}">
+          <div class="d-flex flex-column mb-3 {{ 'align-items-end' if m.role == 'user' else 'align-items-start' }}">
             <div class="p-2 px-3 rounded-3 {{ 'bg-brand text-white' if m.role == 'user' else 'bg-light border' }}" style="max-width: 75%; white-space: pre-wrap;">
               {{ m.content }}
             </div>
+            {% if m.role == 'assistant' %}
+              <form method="POST" action="{{ url_for('ai_assistant_feedback') }}" class="d-flex gap-1 mt-1">
+                <input type="hidden" name="message_id" value="{{ m.id }}">
+                <button type="submit" name="rating" value="up" class="btn btn-sm {{ 'btn-success' if m.feedback == 'up' else 'btn-outline-secondary' }} py-0 px-1" title="{{ _('Helpful') }}">
+                  <i class="bi bi-hand-thumbs-up{{ '-fill' if m.feedback == 'up' else '' }}"></i>
+                </button>
+                <button type="submit" name="rating" value="down" class="btn btn-sm {{ 'btn-danger' if m.feedback == 'down' else 'btn-outline-secondary' }} py-0 px-1" title="{{ _('Not helpful') }}">
+                  <i class="bi bi-hand-thumbs-down{{ '-fill' if m.feedback == 'down' else '' }}"></i>
+                </button>
+              </form>
+            {% endif %}
           </div>
         {% endfor %}
       {% else %}
@@ -53,7 +64,7 @@
   </form>
   <p class="text-muted small mt-2 mb-0">
     <i class="bi bi-shield-lock me-1"></i>
-    {{ _('Only you can see this conversation. Messages are stored so the assistant remembers context between turns; clearing the conversation also erases that memory.') }}
+    {{ _('Only you can see this conversation. Messages are stored so the assistant remembers context between turns; clearing the conversation also erases that memory. Thumbs up/down on a reply is stored too, to help us see which answers are actually useful.') }}
   </p>
 
   <script>

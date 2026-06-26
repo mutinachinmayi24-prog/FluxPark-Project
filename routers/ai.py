@@ -82,6 +82,30 @@ async def ai_assistant(request: Request):
     )
 
 
+@router.api_route("/ai-assistant/feedback", methods=["POST"], name="ai_assistant_feedback")
+@login_required
+async def ai_assistant_feedback(request: Request):
+    role_profile, redirect_resp = _require_role_profile()
+    if redirect_resp:
+        return redirect_resp
+
+    form = await request.form()
+    rating = form.get("rating")
+    try:
+        message_id = int(form.get("message_id", ""))
+    except ValueError:
+        return redirect(url_for("ai_assistant"))
+
+    if rating in ("up", "down"):
+        message = AIChatMessage.query.filter_by(
+            id=message_id, role_profile_id=role_profile.id, role="assistant"
+        ).first()
+        if message:
+            message.feedback = rating
+            db.session.commit()
+    return redirect(url_for("ai_assistant"))
+
+
 @router.api_route("/ai-settings", methods=["GET", "POST"], name="ai_settings")
 @login_required
 async def ai_settings(request: Request):

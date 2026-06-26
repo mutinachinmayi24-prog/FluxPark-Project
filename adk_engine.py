@@ -27,6 +27,8 @@ from ai_engine import (
 )
 from constants import PROPERTY_TYPE_LABELS, ROLE_LABELS, VEHICLE_TYPES
 from database import DATABASE_URL, db
+from faq_search import search_faq
+from i18n import get_locale
 
 APP_NAME = "fluxpark"
 DEFAULT_GEMINI_MODEL = "gemini-2.0-flash"
@@ -93,6 +95,9 @@ def _build_instruction(role_profile):
         "Use your tools to look up real data (parking slots, visitor requests, "
         "payments, notifications) before answering instead of guessing — never "
         "make up slot numbers, statuses, or amounts.",
+        "For 'how do I...' or 'what does ... mean' questions about using FluxPark "
+        "itself, call search_faq_corpus first and base your answer on its result "
+        "if found=true, rather than guessing at how a feature works.",
         "Keep answers short, friendly, and practical.",
     ]
     if role_profile.role in ("owner", "tenant", "committee"):
@@ -184,6 +189,18 @@ def _build_tools(role_profile):
             {"title": n.title, "body": n.body, "created_at": n.created_at.isoformat()} for n in rows
         ]
 
+    def search_faq_corpus(query: str) -> dict:
+        """Search FluxPark's own FAQ corpus for a question close to `query`
+        (e.g. "how do I switch rooms", "what does pending mean") and return
+        its vetted question/answer. Returns {"found": false} if nothing in
+        the corpus is a close enough match -- in that case, answer from your
+        own knowledge of the app instead of guessing at FluxPark specifics.
+        """
+        match = search_faq(query, lang=get_locale())
+        if match is None:
+            return {"found": False}
+        return {"found": True, **match}
+
     def submit_visitor_request(
         visitor_name: str,
         visitor_phone: str,
@@ -240,6 +257,7 @@ def _build_tools(role_profile):
         get_today_visitor_requests,
         get_pending_payments,
         get_unread_notifications,
+        search_faq_corpus,
     ]
     if role_profile.role in ("owner", "tenant", "committee"):
         tools.append(submit_visitor_request)

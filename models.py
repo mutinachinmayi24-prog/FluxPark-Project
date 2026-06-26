@@ -275,6 +275,10 @@ class AIChatMessage(db.Model):
     role_profile_id = db.Column(db.Integer, db.ForeignKey("role_profile.id"), nullable=False)
     role = db.Column(db.String(10), nullable=False)  # "user" or "assistant"
     content = db.Column(db.Text, nullable=False)
+    # User-given rating of an assistant reply: "up", "down", or unrated (None).
+    # A real, organically-collected record of which answers actually helped --
+    # the honest seed of a primary dataset, as opposed to a hand-authored one.
+    feedback = db.Column(db.String(10), nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     role_profile = db.relationship("RoleProfile", backref="ai_chat_messages")

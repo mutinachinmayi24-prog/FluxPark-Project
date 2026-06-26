@@ -61,6 +61,50 @@ def test_ai_settings_page_loads_and_saves(logged_in_client):
     SessionLocal.remove()
 
 
+def test_ai_assistant_feedback(logged_in_client):
+    _onboard_owner(logged_in_client)
+
+    from database import SessionLocal, db
+    from models import AIChatMessage, RoleProfile
+
+    role_profile_id = RoleProfile.query.first().id
+    message = AIChatMessage(
+        role_profile_id=role_profile_id, role="assistant", content="Test reply."
+    )
+    db.session.add(message)
+    db.session.commit()
+    message_id = message.id
+    SessionLocal.remove()
+
+    response = logged_in_client.post(
+        "/ai-assistant/feedback",
+        data={"message_id": str(message_id), "rating": "up"},
+        follow_redirects=False,
+    )
+    assert response.status_code in (302, 307)
+
+    updated = AIChatMessage.query.get(message_id)
+    assert updated.feedback == "up"
+    SessionLocal.remove()
+
+    # A user-role message can't be rated even if the ids happen to collide --
+    # the route filters on role="assistant" as well as message ownership.
+    user_message = AIChatMessage(role_profile_id=role_profile_id, role="user", content="Hi")
+    db.session.add(user_message)
+    db.session.commit()
+    user_message_id = user_message.id
+    SessionLocal.remove()
+
+    logged_in_client.post(
+        "/ai-assistant/feedback",
+        data={"message_id": str(user_message_id), "rating": "down"},
+        follow_redirects=False,
+    )
+    untouched = AIChatMessage.query.get(user_message_id)
+    assert untouched.feedback is None
+    SessionLocal.remove()
+
+
 def test_ai_assistant_chat_with_ollama(logged_in_client):
     from ai_engine import ollama_status
 
