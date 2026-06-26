@@ -69,3 +69,21 @@ corpus-client upload-files --csv corpus-export/upload_metadata.csv
 
 `corpus-client languages` confirms `en`, `hi`, and `te` are all supported
 language codes on the platform.
+
+## `browser_smoke_test.js` — cross-engine browser compatibility check
+
+Loads `/signup` in Chromium, Firefox, and WebKit (the actual rendering
+engines behind Chrome/Edge, Firefox, and Safari respectively), and checks
+the HTTP status, console errors, and service worker registration in each.
+Real Safari isn't installable on Windows, so WebKit is the closest available
+proxy — it's genuinely Safari's engine, just not Apple's exact browser build.
+
+```bash
+npm install playwright
+npx playwright install chromium firefox webkit
+uvicorn main:app --host 127.0.0.1 --port 8000 &
+node scripts/browser_smoke_test.js http://127.0.0.1:8000
+```
+
+**Result (2026-06-26):** all three engines passed — HTTP 200, zero console
+errors, service worker registered successfully in each.
